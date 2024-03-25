@@ -1,36 +1,77 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { TextField, Button, Container, Box } from '@mui/material';
 
 function Profile({ fields }) {
 
 
   const fieldsByProfiles = {
-    company: ['ID', 'UEN No.', 'Name', 'Address', 'Company Description'],
+    company: ['ID', 'UEN', 'Name', 'Address', 'Company Description'],
     school: ['ID', 'Name', 'Email', 'Address', 'School Description'],
     person: ['ID', 'Name', 'Nationality', 'NRIC', 'Passport', 'Address']
   };
 
   const choosenProfile = fieldsByProfiles[fields] || [];
 
-  // const initialFormData = choosenProfile.reduce((acc, field) => ({ ...acc, [field]: '' }), {});
   const initialFormData = choosenProfile.reduce((acc, field) => ({
-    ...acc, 
-    [field]: { value: '', isValid: true, errorMessage: '' }
-  }), {});
+    ...acc, [field]: { value: '', isValid: true, errorMessage: '' }}), {}
+    );
 
   const [formData, setFormData] = React.useState(initialFormData);
+  const [isEditable, setIsEditable] = useState(false);
+  const [buttonLabel, setButtonLabel] = useState("Update");
+
+
+
+    // useEffect(() => {
+    //   const fetchData = async () => {
+    //     try {
+    //       // const response = await axios.get(`/api/formData/${fields}`);
+    //       const response = {'ID': 999, 'UEN':"999", 'Name':"James", 'Address':"Kane road", 'Company':"swiss"};
+    //       console.log(response);
+    //       const profileFields = fieldsByProfiles[fields] || [];
+    //       const initialFormData = profileFields.reduce((acc, field) => ({
+    //         ...acc,
+    //         [field]: { 
+    //           value: response.data[field] || '', // Populate with fetched data or default to empty string
+    //           isValid: true, 
+    //           errorMessage: '' 
+    //         }
+    //       }), {});
+    //       setFormData(initialFormData);
+    //     } catch (error) {
+    //       console.error('Error fetching form data:', error);
+    //       // Handle error or set fallback state
+    //     }
+    //   };
+    //   fetchData();
+    // }, []);
+
+
+
 
   const isValidInput = value => value.trim().length >= 2;
 
 
+  const toggleEdit = () => {
+    if(isEditable) {
+      handleSubmit();
+    } else {
+      setIsEditable(true);
+      setButtonLabel("Submit");
+    }
+  };
 
-  // const handleChange = (e) => {
-  //   const { name, value } = e.target;
-  //   setFormData(prevFormData => ({
-  //     ...prevFormData,
-  //     [name]: value,
-  //   }));
-  // };
+  const toggleCancel = () => {
+      setIsEditable(false);
+      setButtonLabel("Update");
+      setFormData(prevFormData => ({
+        ...prevFormData,
+        [name]: { ...prevFormData[name], isValid: true},
+      }));
+      setFormData(initialFormData);
+    }
+
+
 
   const handleChange = (e) => {
     const { name, value } = e.target;
@@ -46,7 +87,7 @@ function Profile({ fields }) {
   
 
   const handleSubmit = (e) => {
-    e.preventDefault();
+    // e.preventDefault();
   
     let isFormValid = true;
     const updatedFormData = Object.keys(formData).reduce((acc, field) => {
@@ -60,6 +101,8 @@ function Profile({ fields }) {
   
     if (isFormValid) {
       console.log("Form data:", formData);
+      setIsEditable(false);
+      setButtonLabel("Update");
       // Proceed with form submission or further processing
     } else {
       console.log("Validation failed");
@@ -76,17 +119,23 @@ function Profile({ fields }) {
             <TextField
               key={field}
               label={field.charAt(0).toUpperCase() + field.slice(1)}
-              variant="outlined"
+              // variant="filled"
+              variant={isEditable?'outlined' : 'filled'}
               name={field}
+              disabled={!isEditable}
               value={formData[field].value}
               onChange={handleChange}
               error={!formData[field].isValid}
               helperText={formData[field].errorMessage}
             />
           ))}
-          <Button type="submit" variant="contained" color="primary">
-            Submit
+          <Button onClick={toggleEdit} variant="contained" color="primary">
+            {buttonLabel}
           </Button>
+
+          {isEditable && <Button onClick={toggleCancel} variant="contained" color="warning">
+            Cancel
+          </Button>}
         </Box>
       </form>
     </Container>
