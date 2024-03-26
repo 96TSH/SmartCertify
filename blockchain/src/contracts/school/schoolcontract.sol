@@ -7,6 +7,24 @@ import "../commoncontracts/iofficecontract.sol";
 import "./ischoolsourcecontract.sol";
 import "./iverificationcontract.sol";
 import "../library/schoolhashlib.sol";
+import "@openzeppelin/contracts/token/ERC20/IERC20.sol";
+
+/*
+the school smart contract should create after software release
+
+company contract deploy sequence.
+1. deploy office contract
+2. deploy school source contract (need office contract address)
+3. deploy verificationcontract (need school source contact)
+4. deploy school smart contract with office, source, and verification contract, and ERC20 also.
+
+ADDITIONAL:
+the website should add register page and login page.
+register function should follow above deploy sequence.
+
+login page need user provide company smart contract address. we can return error if cannot get anything.
+
+*/
 
 contract School_Smart_Contract
 {
@@ -16,12 +34,14 @@ contract School_Smart_Contract
     Interface_Verification_Smart_Contract private verifyContract;
     uint private verifyFee;
     School_Info public schoolInfo;
+    IERC20 private tokenContract;
 
-    constructor(address _off, address _source, address _verify)
+    constructor(address _off, address _source, address _verify, address _tokenContract)
     {
         officeContract = Interface_Office_Smart_Contract(_off);
         sourceContract = Interface_School_Source_Smart_Contract(_source);
         verifyContract = Interface_Verification_Smart_Contract(_verify);
+        tokenContract = IERC20(_tokenContract);
     }
 
     modifier onlyAdmin()
@@ -88,15 +108,17 @@ contract School_Smart_Contract
         return address(newStudentContract);
     }
 
-    function verifyGraduatedStudentCertificate(Certificate_Info memory _cert) external payable returns (bool)
+    function verifyGraduatedStudentCertificate(Certificate_Info memory _cert) external returns (bool)
     {
-        require(msg.value >= verifyFee, "Insufficient fee for verification");
+        require(tokenContract.transferFrom(msg.sender, address(this), 1*10**18), "Failed to transfer token for verification fee");
+        // require(tokenContract.approve(address(msg.sender), 1*10**18), "Token transfer for verification fee failed");
         return verifyContract.verifyGraduatedStudentCertificate(_cert);
     }
 
-    function verifyGraduateStudentTranscript(Transcript_Info memory  _trans) external payable returns (bool)
+    function verifyGraduateStudentTranscript(Transcript_Info memory  _trans) external returns (bool)
     {
-        require(msg.value >= verifyFee, "Insufficient fee for verification");
+        require(tokenContract.transferFrom(msg.sender, address(this), 2*10**18), "Failed to transfer token for verification fee");
+        // require(tokenContract.approve(address(msg.sender), 2*10**18), "Token transfer for verification fee failed");
         return verifyContract.verifyGraduateStudentTranscript(_trans);
     }
 }
