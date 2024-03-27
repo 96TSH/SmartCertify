@@ -1,19 +1,25 @@
 import { BrowserRouter, Routes, Route, Navigate } from "react-router-dom";
-import Homepage from "./pages/homepage";
+import Homepage from "./pages/Homepage";
 import Navbar from "./components/Navbar";
 import './App.css'
+import MainMenu from "./components/sidebar/MainMenu";
+import { createBrowserRouter, RouterProvider} from 'react-router-dom';
 
 function App() {
 
+  
   return (
-    <BrowserRouter>
-    <Routes>
-      <Route path="/" element={<Navbar />}>
-        <Route index element={<Homepage />} />
-        <Route path="*" element={<Navigate to="/" />} />
-      </Route>
-    </Routes>
-  </BrowserRouter>
+    <div>
+      <MainMenu/>
+      <BrowserRouter>
+      <Routes>
+        <Route path="/" element={<Homepage />}>
+          <Route index element={<Homepage />} />
+          <Route path="*" element={<Navigate to="/" />} />
+        </Route>
+      </Routes>
+    </BrowserRouter>
+  </div>
   )
 }
 
