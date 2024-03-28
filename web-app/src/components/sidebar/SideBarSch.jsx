@@ -49,29 +49,12 @@ export default function SideBarSch() {
         <ListItemText primary="Admin" />
       </ListItemButton>
 
-      <ListItemButton onClick={handleClickA}>
+      <ListItemButton component={Link} to="/School/Students">
         <ListItemIcon>
           <SchoolIcon />
         </ListItemIcon>
         <ListItemText primary="Student" />
-        {openA ? <ExpandLess /> : <ExpandMore />}
       </ListItemButton>
-      <Collapse in={openA} timeout="auto" unmountOnExit>
-        <List component="div" disablePadding>
-          <ListItemButton sx={{ pl: 4 }} component={Link} to="/School/Studentadmission">
-            <ListItemIcon>
-              <LooksOneOutlinedIcon />
-            </ListItemIcon>
-            <ListItemText primary="Admission" />
-          </ListItemButton>
-          <ListItemButton sx={{ pl: 4 }} component={Link} to="/School/Studentgraduation">
-          <ListItemIcon>
-              <LooksTwoOutlinedIcon />
-            </ListItemIcon>
-            <ListItemText primary="Graduation" />
-          </ListItemButton>
-        </List>
-      </Collapse>
 
     </List>
   );

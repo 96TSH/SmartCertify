@@ -28,7 +28,7 @@ import { useState } from 'react';
    // const sideBarName = pathname === '/' ? 'empty' : pathname;
 
 
-const menuItems=['Government','Company','School','Person',]; //TopRighMenu list items
+const menuItems=['Government','Company','School','Person',]; //TopRightMenu list items
 
 const drawerWidth = 240;
 

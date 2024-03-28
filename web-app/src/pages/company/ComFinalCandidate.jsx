@@ -1,8 +1,8 @@
-import TableTemplate from "../components/TableTemplate";
+import TableTemplate from "../../components/TableTemplate";
 
-const ComAdmin = () => {
-  const title = "Admin";
-  const headers = ["No.", "Name", "Email"];
+const ComFinalCandidate = () => {
+  const title = "Final Candidate";
+  const headers = ["No.", "Name", "Email", "Status"];
   const adminDetails = [
     {
       name: "Name 1",
@@ -25,7 +25,7 @@ const ComAdmin = () => {
       email: "name5@gmail.com",
     },
   ];
-  const actions = ["create", "update", "delete"];
+  const actions = ["create", "delete", "verify"];
 
   return (
     <TableTemplate
@@ -37,4 +37,4 @@ const ComAdmin = () => {
   );
 };
 
-export default ComAdmin;
+export default ComFinalCandidate;

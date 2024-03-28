@@ -23,6 +23,7 @@ import EditIcon from "@mui/icons-material/Edit";
 import DeleteIcon from "@mui/icons-material/Delete";
 import { styled } from "@mui/material/styles";
 import PropTypes from "prop-types";
+import Profile from "./Profile";
 
 const TableTemplate = ({ headers, data, title, actions }) => {
   const StyledTableCell = styled(TableCell)(({ theme }) => ({
@@ -67,6 +68,7 @@ const TableTemplate = ({ headers, data, title, actions }) => {
   const [updateOpen, setUpdateOpen] = useState(false);
   const [createOpen, setCreateOpen] = useState(false);
   const [verifyOpen, setVerifyOpen] = useState(false);
+  const [admissionOpen, setAdmissionOpen] = useState(false);
 
   const deleteItem = async () => {
     return;
@@ -81,6 +83,10 @@ const TableTemplate = ({ headers, data, title, actions }) => {
   };
 
   const verifyItem = async () => {
+    return;
+  };
+
+  const graduateItem = async () => {
     return;
   };
 
@@ -131,13 +137,28 @@ const TableTemplate = ({ headers, data, title, actions }) => {
 
   const handleVerification = () => {
     setVerifyOpen(true);
-    verifyItem()
-      // .then(() => fetchItem())
+    verifyItem();
+    // .then(() => fetchItem())
   };
 
   const handleVerificationClose = () => {
     setVerifyOpen(false);
-  }
+  };
+
+  const handleGraduationOpen = () => {
+    setAdmissionOpen(true);
+  };
+
+  const handleGraduationClose = () => {
+    setAdmissionOpen(false);
+  };
+
+  const handleGraduationItem = (event) => {
+    event.preventDefault();
+    graduateItem()
+      // .then(() => fetchItem())
+      .then(() => setAdmissionOpen(false));
+  };
 
   return (
     <Box
@@ -214,11 +235,64 @@ const TableTemplate = ({ headers, data, title, actions }) => {
                           },
                         }}
                       >
-                        <DialogTitle>
-                          Verification Successful!
-                        </DialogTitle>
+                        <DialogTitle>Verification Successful!</DialogTitle>
                         <DialogActions>
-                          <Button onClick={handleVerificationClose}>Close</Button>
+                          <Button onClick={handleVerificationClose}>
+                            Close
+                          </Button>
+                        </DialogActions>
+                      </Dialog>
+                    </StyledTableCell>
+                  )}
+                  {/* button for graduation */}
+                  {actions.includes("graduate") && (
+                    <StyledTableCell align="center" width="10%">
+                      <Button
+                        variant="outlined"
+                        sx={{
+                          backgroundColor: "darkslategray",
+                          color: "white",
+                        }}
+                        onClick={handleGraduationOpen}
+                      >
+                        View
+                      </Button>
+                      <Dialog
+                        open={admissionOpen}
+                        onClose={handleGraduationClose}
+                        componentsProps={{
+                          backdrop: {
+                            style: {
+                              backgroundColor: "rgba(0, 0, 0, 0.2)",
+                            },
+                          },
+                        }}
+                        PaperProps={{
+                          component: "form",
+                          onSubmit: (event) => {
+                            event.preventDefault();
+                            handleGraduationItem(event);
+                          },
+                        }}
+                      >
+                        <DialogTitle>Student</DialogTitle>
+                        <DialogContent>
+                          {Object.entries(item).map(([key, value]) => (
+                            <TextField
+                              key={key}
+                              id={key}
+                              defaultValue={value}
+                              name={key}
+                              label={key.toUpperCase()}
+                              fullWidth
+                              margin="normal"
+                              color="primary"
+                            />
+                          ))}
+                        </DialogContent>
+                        <DialogActions>
+                          <Button onClick={handleGraduationClose}>Cancel</Button>
+                          <Button type="submit">Graduate</Button>
                         </DialogActions>
                       </Dialog>
                     </StyledTableCell>
@@ -378,6 +452,10 @@ TableTemplate.propTypes = {
   data: PropTypes.array.isRequired,
   title: PropTypes.string.isRequired,
   actions: PropTypes.array,
+};
+
+TableTemplate.defaultProps = {
+  actions: [],
 };
 
 export default TableTemplate;

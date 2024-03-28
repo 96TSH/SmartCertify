@@ -1,6 +1,6 @@
-import TableTemplate from "../components/TableTemplate";
+import TableTemplate from "../../components/TableTemplate";
 
-const GovAdmin = () => {
+const ComAdmin = () => {
   const title = "Admin";
   const headers = ["No.", "Name", "Email"];
   const adminDetails = [
@@ -37,4 +37,4 @@ const GovAdmin = () => {
   );
 };
 
-export default GovAdmin;
+export default ComAdmin;

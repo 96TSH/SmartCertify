@@ -56,13 +56,13 @@ export default function SideBarPer() {
       </ListItemButton>
       <Collapse in={openA} timeout="auto" unmountOnExit>
         <List component="div" disablePadding>
-          <ListItemButton sx={{ pl: 4 }} component={Link} to="/Person/Certificateviewall" >
+          <ListItemButton sx={{ pl: 4 }} component={Link} to="/Person/ViewCertificates" >
             <ListItemIcon>
               <LooksOneOutlinedIcon />
             </ListItemIcon>
             <ListItemText primary="View All" />
           </ListItemButton>
-          <ListItemButton sx={{ pl: 4 }} component={Link} to="/Person/CertificateCollectnew">
+          <ListItemButton sx={{ pl: 4 }} component={Link} to="/Person/CollectCertificate">
             <ListItemIcon>
               <LooksTwoOutlinedIcon />
             </ListItemIcon>
@@ -71,29 +71,12 @@ export default function SideBarPer() {
         </List>
       </Collapse>
 
-      <ListItemButton onClick={handleClickB}>
+      <ListItemButton component={Link} to="/Person/Viewers">
         <ListItemIcon>
           <RemoveRedEyeIcon />
         </ListItemIcon>
         <ListItemText primary="Viewer" />
-        {openB ? <ExpandLess /> : <ExpandMore />}
       </ListItemButton>
-      <Collapse in={openB} timeout="auto" unmountOnExit>
-        <List component="div" disablePadding>
-          <ListItemButton sx={{ pl: 4 }} component={Link} to="/Person/Viewerviewall">
-            <ListItemIcon>
-              <LooksOneOutlinedIcon />
-            </ListItemIcon>
-            <ListItemText primary="View All" />
-          </ListItemButton>
-          <ListItemButton sx={{ pl: 4 }} component={Link} to="/Person/Vieweraddview">
-            <ListItemIcon>
-              <LooksTwoOutlinedIcon />
-            </ListItemIcon>
-            <ListItemText primary="Add viewer" />
-          </ListItemButton>
-        </List>
-      </Collapse>
 
     </List>
   );
