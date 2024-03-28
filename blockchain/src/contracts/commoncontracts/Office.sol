@@ -1,8 +1,9 @@
 //SPDX-License-Identifier: MIT
 pragma solidity ^0.8.0;
-
+import "./IOffice.sol";
 // use to manage admin rights.
-contract Office_Smart_Contract
+
+contract Office is IOffice
 {
     address owner;
     address[] officerList;

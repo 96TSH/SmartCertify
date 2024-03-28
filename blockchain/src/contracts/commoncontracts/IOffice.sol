@@ -2,7 +2,7 @@
 pragma solidity ^0.8.0;
 
 // use to manager admin rights.
-interface Interface_Office_Smart_Contract
+interface IOffice
 {
     function transferOwnership(address newOwner) external;
     function isOwner() external view returns (bool);
