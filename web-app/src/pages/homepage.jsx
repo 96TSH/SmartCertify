@@ -1,10 +1,17 @@
+
+import MainMenu from "../components/sidebar/MainMenu";
+
+
 const Homepage = () => {
+
+  // const company = ['ID', 'UEN No.', 'Name', 'Address', 'Company Description'];
+
   return (
-    <div>
+    <MainMenu>
       <h2>
-        <b>SMARTCERTIFY</b>
+        <b>Welcome to Smart Certify</b>
       </h2>
-    </div>
+    </MainMenu>
   );
 };
 
