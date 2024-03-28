@@ -6,6 +6,8 @@ import ListItemText from "@mui/material/ListItemText";
 import Collapse from "@mui/material/Collapse";
 import ExpandLess from "@mui/icons-material/ExpandLess";
 import ExpandMore from "@mui/icons-material/ExpandMore";
+import { Link } from "react-router-dom";
+import HomeIcon from '@mui/icons-material/Home'; //home icon
 
 import ContactPageIcon from '@mui/icons-material/ContactPage'; //profile icon
 import WorkspacePremiumIcon from '@mui/icons-material/WorkspacePremium'; //certificate icon
@@ -15,13 +17,13 @@ import LooksTwoOutlinedIcon from '@mui/icons-material/LooksTwoOutlined';//2
 //import Looks3OutlinedIcon from '@mui/icons-material/Looks3Outlined'; //3
 
 export default function SideBarPer() {
-  const [openA, setOpenA] = React.useState(true);
+  const [openA, setOpenA] = React.useState(false);
 
   const handleClickA = () => {
     setOpenA(!openA);
   };
 
-  const [openB, setOpenB] = React.useState(true);
+  const [openB, setOpenB] = React.useState(false);
 
   const handleClickB = () => {
     setOpenB(!openB);
@@ -32,7 +34,13 @@ export default function SideBarPer() {
       sx={{ width: "100%", maxWidth: 360, bgcolor: "background.paper" }}
       component="nav"
     >
-      <ListItemButton>
+      <ListItemButton component={Link} to="/Person" >
+        <ListItemIcon>
+          <HomeIcon/>
+        </ListItemIcon>
+        <ListItemText primary="Home" />
+      </ListItemButton>
+      <ListItemButton component={Link} to="/Person/Profile">
         <ListItemIcon>
           <ContactPageIcon />
         </ListItemIcon>
@@ -48,13 +56,13 @@ export default function SideBarPer() {
       </ListItemButton>
       <Collapse in={openA} timeout="auto" unmountOnExit>
         <List component="div" disablePadding>
-          <ListItemButton sx={{ pl: 4 }}>
+          <ListItemButton sx={{ pl: 4 }} component={Link} to="/Person/Certificateviewall" >
             <ListItemIcon>
               <LooksOneOutlinedIcon />
             </ListItemIcon>
             <ListItemText primary="View All" />
           </ListItemButton>
-          <ListItemButton sx={{ pl: 4 }}>
+          <ListItemButton sx={{ pl: 4 }} component={Link} to="/Person/CertificateCollectnew">
             <ListItemIcon>
               <LooksTwoOutlinedIcon />
             </ListItemIcon>
@@ -72,13 +80,13 @@ export default function SideBarPer() {
       </ListItemButton>
       <Collapse in={openB} timeout="auto" unmountOnExit>
         <List component="div" disablePadding>
-          <ListItemButton sx={{ pl: 4 }}>
+          <ListItemButton sx={{ pl: 4 }} component={Link} to="/Person/Viewerviewall">
             <ListItemIcon>
               <LooksOneOutlinedIcon />
             </ListItemIcon>
             <ListItemText primary="View All" />
           </ListItemButton>
-          <ListItemButton sx={{ pl: 4 }}>
+          <ListItemButton sx={{ pl: 4 }} component={Link} to="/Person/Vieweraddview">
             <ListItemIcon>
               <LooksTwoOutlinedIcon />
             </ListItemIcon>

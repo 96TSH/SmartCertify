@@ -6,6 +6,8 @@ import ListItemText from "@mui/material/ListItemText";
 import Collapse from "@mui/material/Collapse";
 import ExpandLess from "@mui/icons-material/ExpandLess";
 import ExpandMore from "@mui/icons-material/ExpandMore";
+import { Link } from "react-router-dom";
+import HomeIcon from '@mui/icons-material/Home'; //home icon
 
 import SupervisorAccountIcon from '@mui/icons-material/SupervisorAccount'; //admin icon
 import ContactPageIcon from '@mui/icons-material/ContactPage'; //profile icon
@@ -15,7 +17,7 @@ import LooksTwoOutlinedIcon from '@mui/icons-material/LooksTwoOutlined';//2
 //import Looks3OutlinedIcon from '@mui/icons-material/Looks3Outlined'; //3
 
 export default function SideBarSch() {
-  const [openA, setOpenA] = React.useState(true);
+  const [openA, setOpenA] = React.useState(false);
 
   const handleClickA = () => {
     setOpenA(!openA);
@@ -27,14 +29,20 @@ export default function SideBarSch() {
       sx={{ width: "100%", maxWidth: 360, bgcolor: "background.paper" }}
       component="nav"
     >
-      <ListItemButton>
+      <ListItemButton component={Link} to="/School" >
+        <ListItemIcon>
+          <HomeIcon/>
+        </ListItemIcon>
+        <ListItemText primary="Home" />
+      </ListItemButton>
+      <ListItemButton component={Link} to="/School/Profile">
         <ListItemIcon>
           <ContactPageIcon />
         </ListItemIcon>
         <ListItemText primary="Profile" />
       </ListItemButton>
 
-      <ListItemButton>
+      <ListItemButton component={Link} to="/School/Admin">
         <ListItemIcon>
           <SupervisorAccountIcon />
         </ListItemIcon>
@@ -50,13 +58,13 @@ export default function SideBarSch() {
       </ListItemButton>
       <Collapse in={openA} timeout="auto" unmountOnExit>
         <List component="div" disablePadding>
-          <ListItemButton sx={{ pl: 4 }}>
+          <ListItemButton sx={{ pl: 4 }} component={Link} to="/School/Studentadmission">
             <ListItemIcon>
               <LooksOneOutlinedIcon />
             </ListItemIcon>
             <ListItemText primary="Admission" />
           </ListItemButton>
-          <ListItemButton sx={{ pl: 4 }}>
+          <ListItemButton sx={{ pl: 4 }} component={Link} to="/School/Studentgraduation">
           <ListItemIcon>
               <LooksTwoOutlinedIcon />
             </ListItemIcon>
