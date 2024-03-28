@@ -9,6 +9,7 @@ import SupervisorAccountIcon from '@mui/icons-material/SupervisorAccount'; //adm
 import ContactPageIcon from '@mui/icons-material/ContactPage'; //profile icon
 import ThumbUpAltIcon from '@mui/icons-material/ThumbUpAlt'; //final candidate icon
 import HomeIcon from '@mui/icons-material/Home'; //home icon
+//import { NavLink } from "react-router-dom";
 
 export default function SideBarCom() {
 
@@ -23,25 +24,25 @@ export default function SideBarCom() {
       sx={{ width: "100%", maxWidth: 360, bgcolor: "background.paper" }}
       component="nav"
     >
-      <ListItemButton >
+      <ListItemButton component={Link} to="/Company" >
         <ListItemIcon>
           <HomeIcon/>
         </ListItemIcon>
         <ListItemText primary="Home" />
       </ListItemButton>
-      <ListItemButton >
+      <ListItemButton component={Link} to="/Company/Profile" >
         <ListItemIcon>
           <ContactPageIcon/>
         </ListItemIcon>
         <ListItemText primary="Profile" />
       </ListItemButton>
-      <ListItemButton>
+      <ListItemButton component={Link} to="/Company/Admin">
         <ListItemIcon>
           <SupervisorAccountIcon />
         </ListItemIcon>
         <ListItemText primary="Admin" />
       </ListItemButton>
-      <ListItemButton > 
+      <ListItemButton component={Link} to="/Company/Finalcandidate"> 
         <ListItemIcon>
           <ThumbUpAltIcon />
         </ListItemIcon>

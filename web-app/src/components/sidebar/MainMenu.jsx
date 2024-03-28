@@ -20,7 +20,12 @@ import SideBarSch from './SideBarSch';
 // 1 single top right menu
 import TopRightMenu from './TopRightMenu';
 
+
 import { useState } from 'react';
+
+    
+    // If the pathname is empty, set page to "select", otherwise set it to the pathname
+   // const sideBarName = pathname === '/' ? 'empty' : pathname;
 
 
 const menuItems=['Government','Company','School','Person',]; //TopRighMenu list items
@@ -93,7 +98,8 @@ const Drawer = styled(MuiDrawer, { shouldForwardProp: (prop) => prop !== 'open' 
 );
 
 
-export default function MainMenu({children}) {
+export default function MainMenu({Entity, children}) {
+
   const theme = useTheme();
   const [open, setOpen] = React.useState(false);
 
@@ -107,11 +113,11 @@ export default function MainMenu({children}) {
 
 
 //get the button value from TopRightMenu
-  const [selectedButton, setSelectedButton] = useState("select");
+  // const [selectedButton, setSelectedButton] = useState("select");
 
-  const handleButtonSelect = (buttonName) => {
-          setSelectedButton(buttonName);
-  };
+  // const handleButtonSelect = (buttonName) => {
+  //         setSelectedButton(buttonName);
+  // };
 
 
   return (
@@ -135,9 +141,11 @@ export default function MainMenu({children}) {
             Smart Certify
           </Typography>
 
-            {/* display top right menu, and get the button value */}
+            {/* display top right menu, must be wrap by BrowserRouter element if using navigate instead of href */}
           <div>
-          <TopRightMenu onButtonSelected={handleButtonSelect} menuItems={menuItems} />
+          
+          <TopRightMenu menuItems={menuItems} />
+    
           </div>
         </Toolbar>
       </AppBar>
@@ -149,10 +157,10 @@ export default function MainMenu({children}) {
         </DrawerHeader>
         <Divider />
         {/* display side bar menu based on button value */}
-        {selectedButton === 'Government' && <SideBarGov />}
-        {selectedButton === 'Company' && <SideBarCom />}
-        {selectedButton === 'School' && <SideBarSch />}
-        {selectedButton === 'Person' && <SideBarPer />}
+        {Entity === 'Government' && <SideBarGov />}
+        {Entity === 'Company' && <SideBarCom />}
+        {Entity === 'School' && <SideBarSch />}
+        {Entity === 'Person' && <SideBarPer />}
       </Drawer>
 
       {/* page content */}

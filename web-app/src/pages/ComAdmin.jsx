@@ -1,4 +1,4 @@
-
+import Profile from "../components/Profile";
 import MainMenu from "../components/sidebar/MainMenu";
 
 
@@ -7,11 +7,10 @@ const Homepage = () => {
   // const company = ['ID', 'UEN No.', 'Name', 'Address', 'Company Description'];
 
   return (
-    <MainMenu>
-      <h2>
-        <b>Welcom to Smart Certify</b>
-      </h2>
-    </MainMenu>
+    <>
+      {/* <Profile fields={company}/> */}
+      <Profile fields="company"/>
+    </>
   );
 };
 
