@@ -9,7 +9,7 @@ const Homepage = () => {
   return (
     <MainMenu>
       <h2>
-        <b>Welcom to Smart Certify</b>
+        <b>Welcome to Smart Certify</b>
       </h2>
     </MainMenu>
   );

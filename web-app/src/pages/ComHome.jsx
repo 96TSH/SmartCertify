@@ -7,7 +7,7 @@ export default function ComHome(){
 
     return(
     <MainMenu Entity={"Company"}>
-    <h2>Smart Certiry x Company </h2>
+    <h2>Smart Certify x Company </h2>
     <Outlet/>
     </MainMenu>
     )

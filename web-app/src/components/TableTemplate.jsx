@@ -66,6 +66,7 @@ const TableTemplate = ({ headers, data, title, actions }) => {
   const [deleteOpen, setDeleteOpen] = useState(false);
   const [updateOpen, setUpdateOpen] = useState(false);
   const [createOpen, setCreateOpen] = useState(false);
+  const [verifyOpen, setVerifyOpen] = useState(false);
 
   const deleteItem = async () => {
     return;
@@ -76,6 +77,10 @@ const TableTemplate = ({ headers, data, title, actions }) => {
   };
 
   const createItem = async () => {
+    return;
+  };
+
+  const verifyItem = async () => {
     return;
   };
 
@@ -124,13 +129,23 @@ const TableTemplate = ({ headers, data, title, actions }) => {
       .then(() => setDeleteOpen(false));
   };
 
+  const handleVerification = () => {
+    setVerifyOpen(true);
+    verifyItem()
+      // .then(() => fetchItem())
+  };
+
+  const handleVerificationClose = () => {
+    setVerifyOpen(false);
+  }
+
   return (
     <Box
       sx={{
-        bgcolor: "lightgrey",
+        // bgcolor: "lightgrey",
         height: "100%",
         width: "100%",
-        padding: "5%",
+        padding: "2%",
       }}
     >
       <CssBaseline />
@@ -142,6 +157,7 @@ const TableTemplate = ({ headers, data, title, actions }) => {
           <Table>
             <TableHead>
               <TableRow>
+                {/* map table headers */}
                 {headers &&
                   headers.map((header) => (
                     <StyledTableCell key={header} sx={{ textAlign: "center" }}>
@@ -163,6 +179,7 @@ const TableTemplate = ({ headers, data, title, actions }) => {
               </TableRow>
             </TableHead>
             <TableBody>
+              {/* map table data */}
               {data.map((item, index) => (
                 <StyledTableRow key={index}>
                   <StyledTableCell component="th" scope="row" align="center">
@@ -173,6 +190,40 @@ const TableTemplate = ({ headers, data, title, actions }) => {
                       {value}
                     </StyledTableCell>
                   ))}
+                  {/* button for verification */}
+                  {actions.includes("verify") && (
+                    <StyledTableCell align="center" width="10%">
+                      <Button
+                        variant="outlined"
+                        sx={{
+                          backgroundColor: "darkslategray",
+                          color: "white",
+                        }}
+                        onClick={handleVerification}
+                      >
+                        Verify
+                      </Button>
+                      <Dialog
+                        open={verifyOpen}
+                        onClose={handleVerificationClose}
+                        componentsProps={{
+                          backdrop: {
+                            style: {
+                              backgroundColor: "rgba(0, 0, 0, 0.2)", // Adjust this value to lighten or darken the backdrop
+                            },
+                          },
+                        }}
+                      >
+                        <DialogTitle>
+                          Verification Successful!
+                        </DialogTitle>
+                        <DialogActions>
+                          <Button onClick={handleVerificationClose}>Close</Button>
+                        </DialogActions>
+                      </Dialog>
+                    </StyledTableCell>
+                  )}
+                  {/* buttons for update and delete */}
                   {(actions.includes("update") ||
                     actions.includes("delete")) && (
                     <StyledTableCell align="center" width="10%">
@@ -192,6 +243,7 @@ const TableTemplate = ({ headers, data, title, actions }) => {
                           <DeleteIcon />
                         </IconButton>
                       )}
+                      {/* update dialog */}
                       <Dialog
                         open={updateOpen}
                         onClose={handleUpdateClose}
@@ -230,6 +282,7 @@ const TableTemplate = ({ headers, data, title, actions }) => {
                           <Button type="submit">Update</Button>
                         </DialogActions>
                       </Dialog>
+                      {/* delete dialog */}
                       <Dialog
                         open={deleteOpen}
                         onClose={handleDeleteClose}
@@ -257,6 +310,7 @@ const TableTemplate = ({ headers, data, title, actions }) => {
           </Table>
         </TableContainer>
       </Paper>
+      {/* button for create */}
       {actions.includes("create") && (
         <Box sx={{ textAlign: "right", padding: "30px" }}>
           <Button
@@ -266,6 +320,7 @@ const TableTemplate = ({ headers, data, title, actions }) => {
           >
             Add New
           </Button>
+          {/* create dialog */}
           <Dialog
             open={createOpen}
             onClose={handleCreateClose}
@@ -297,6 +352,15 @@ const TableTemplate = ({ headers, data, title, actions }) => {
                   color="primary"
                 />
               ))}
+              <TextField
+                key="address"
+                id="address"
+                name="address"
+                label="ADDRESS"
+                fullWidth
+                margin="normal"
+                color="primary"
+              />
             </DialogContent>
             <DialogActions>
               <Button onClick={handleCreateClose}>Cancel</Button>

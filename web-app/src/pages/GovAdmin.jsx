@@ -1,6 +1,6 @@
 import TableTemplate from "../components/TableTemplate";
 
-const Admin = () => {
+const GovAdmin = () => {
   const title = "Admin";
   const headers = ["No.", "Name", "Email"];
   const adminDetails = [
@@ -37,4 +37,4 @@ const Admin = () => {
   );
 };
 
-export default Admin;
+export default GovAdmin;

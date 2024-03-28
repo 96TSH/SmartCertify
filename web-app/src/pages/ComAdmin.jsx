@@ -1,17 +1,40 @@
-import Profile from "../components/Profile";
-import MainMenu from "../components/sidebar/MainMenu";
+import TableTemplate from "../components/TableTemplate";
 
-
-const Homepage = () => {
-
-  // const company = ['ID', 'UEN No.', 'Name', 'Address', 'Company Description'];
+const ComAdmin = () => {
+  const title = "Admin";
+  const headers = ["No.", "Name", "Email"];
+  const adminDetails = [
+    {
+      name: "Name 1",
+      email: "name1@gmail.com",
+    },
+    {
+      name: "Name 2",
+      email: "name2@gmail.com",
+    },
+    {
+      name: "Name 3",
+      email: "name3@gmail.com",
+    },
+    {
+      name: "Name 4",
+      email: "name4@gmail.com",
+    },
+    {
+      name: "Name 5",
+      email: "name5@gmail.com",
+    },
+  ];
+  const actions = ["create", "update", "delete"];
 
   return (
-    <>
-      {/* <Profile fields={company}/> */}
-      <Profile fields="company"/>
-    </>
+    <TableTemplate
+      headers={headers}
+      data={adminDetails}
+      title={title}
+      actions={actions}
+    />
   );
 };
 
-export default Homepage;
+export default ComAdmin;
