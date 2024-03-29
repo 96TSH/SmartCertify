@@ -2,13 +2,16 @@ import Button from "@mui/material/Button";
 import Menu from "@mui/material/Menu";
 import MenuItem from "@mui/material/MenuItem";
 import PopupState, { bindTrigger, bindMenu } from "material-ui-popup-state"; //npm install material-ui-popup-state
-import { useState } from "react";
+import { useState, useContext } from "react";
 import { useNavigate } from "react-router-dom";
+import AuthContext from "../../stores/authContext";
 
 export default function TopRightMenu({ menuItems }) {
-  const navigate = useNavigate();
+  const { selectedButton, setSelectedButton } = useContext(AuthContext);
 
-  const [selectedButton, setSelectedButton] = useState("select");
+  // const [selectedButton, setSelectedButton] = useState('select');
+
+  const navigate = useNavigate();
 
   const handleMenuItemClick = (item) => {
     navigate(`/${item}`);
@@ -16,7 +19,7 @@ export default function TopRightMenu({ menuItems }) {
   }
 
   return (
-    <PopupState>
+    <PopupState variant="popover">
       {(popupState) => (
         <>
           <Button

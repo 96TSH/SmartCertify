@@ -1,7 +1,7 @@
 import { useState, useEffect } from "react";
 import { TextField, Button, Container, Box, Typography } from "@mui/material";
 
-function Profile({ fields, title, action }) {
+function Profile({ type, fields, title, action }) {
   const styles = {
     title: {
       color: "black",
@@ -124,6 +124,18 @@ function Profile({ fields, title, action }) {
     }
   };
 
+  const handleLogin = (e) => {
+    if (type === "government") {
+      localStorage.setItem("govAddress", formData["Address"].value);
+    } else if (type === "company") {
+      localStorage.setItem("comAddress", formData["Address"].value);
+    } else if (type === "school") {
+      localStorage.setItem("schAddress", formData["Address"].value);
+    } else if (type === "person") {
+      localStorage.setItem("perAddress", formData["Address"].value);
+    }
+  };
+
   return (
     <Container maxWidth="sm">
       {title && (
@@ -202,6 +214,27 @@ function Profile({ fields, title, action }) {
             ))}
             <Button onClick={toggleEdit} variant="contained" color="primary">
               Verify
+            </Button>
+          </Box>
+        </form>
+      )}
+      {action === "login" && (
+        <form onSubmit={handleLogin}>
+          <Box display="flex" flexDirection="column" gap={4}>
+            {choosenProfile.map((field) => (
+              <TextField
+                key={field}
+                label={field.charAt(0).toUpperCase() + field.slice(1)}
+                variant="outlined"
+                name={field}
+                value={formData[field].value}
+                onChange={handleChange}
+                error={!formData[field].isValid}
+                helperText={formData[field].errorMessage}
+              />
+            ))}
+            <Button onClick={handleLogin} variant="contained" color="primary">
+              Login
             </Button>
           </Box>
         </form>
