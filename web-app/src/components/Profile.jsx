@@ -1,7 +1,10 @@
-import { useState, useEffect } from "react";
+import { useState, useEffect, useContext } from "react";
 import { TextField, Button, Container, Box, Typography } from "@mui/material";
+import AuthContext from "../stores/authContext";
 
 function Profile({ type, fields, title, action }) {
+  const { Government, web3, governmentAddress } = useContext(AuthContext);
+
   const styles = {
     title: {
       color: "black",
@@ -15,7 +18,7 @@ function Profile({ type, fields, title, action }) {
     company: ["ID", "UEN", "Name", "Address", "Company Description"],
     school: ["ID", "Name", "Email", "Address", "School Description"],
     person: ["ID", "Name", "Nationality", "NRIC", "Passport", "Address"],
-    register: ["Address", "Name"],
+    register: ["Address"],
     verify: ["Address"],
   };
 
@@ -136,6 +139,75 @@ function Profile({ type, fields, title, action }) {
     }
   };
 
+  const handleRegister = async(e) => {
+    // try {
+    //   const accounts = await window.ethereum.request({ method: 'eth_requestAccounts' }); // Get the selected account from the metamask plugin.
+		// 	console.log(accounts);
+
+    //   if (title === "Register Company") {
+    //     console.log(formData["Address"].value)
+    //     Government.methods.registerCompany(accounts[0],formData["Address"].value).send(accounts[0]);
+    //   }
+    // } catch (error) {
+      
+    // }
+    try{
+      const accounts = await window.ethereum.request({ method: 'eth_requestAccounts' });
+			console.log("Accounts:", accounts);
+      console.log("Register:", formData["Address"].value);
+      console.log("deployed address =>", governmentAddress);
+      if (title === "Register Company"){
+        await Government.methods.registerCompany(formData["Address"].value).send(
+          {
+            from: accounts[0],
+            gas: 100000,
+            gasPrice: web3.utils.toWei('50', 'gwei')
+          }
+          );
+      } else if (title === "Register Person") {
+        await Government.methods.registerPerson(formData["Address"].value).send(
+          {
+            from: accounts[0],
+            gas: 100000,
+            gasPrice: web3.utils.toWei('50', 'gwei')
+          }
+          );
+      }
+			
+    }
+    catch(error)
+    {
+      console.log(error)
+    }
+   
+  }
+
+  const handleVerify = async(e) => {
+    try {      
+      if (title === "Verify Company") {
+        console.log(formData["Address"].value);
+        const accounts = await window.ethereum.enable();
+        console.log("Accounts:", accounts);
+        console.log("Register:", formData["Address"].value);
+        // await Government.methods.isRegisterCompany(formData["Address"].value).send({from: accounts[0]});
+        console.log("deployed address =>", governmentAddress);
+        const isRegistered = await Government.methods.isRegisterCompany(formData["Address"].value).call({from: accounts[0]});
+        console.log("Is registered:", isRegistered);
+      } else if (title === "Verify Person") {
+        console.log(formData["Address"].value);
+        const accounts = await window.ethereum.enable();
+        console.log("Accounts:", accounts);
+        console.log("Register:", formData["Address"].value);
+        // await Government.methods.isRegisterCompany(formData["Address"].value).send({from: accounts[0]});
+        console.log("deployed address =>", governmentAddress);
+        const isRegistered = await Government.methods.isRegisterPerson(formData["Address"].value).call({from: accounts[0]});
+        console.log("Is registered:", isRegistered);
+      }
+    } catch (error) {
+      
+    }
+  }
+
   return (
     <Container maxWidth="sm">
       {title && (
@@ -177,7 +249,7 @@ function Profile({ type, fields, title, action }) {
         </form>
       )}
       {action === "create" && (
-        <form onSubmit={handleSubmit}>
+        <form onSubmit={handleRegister}>
           <Box display="flex" flexDirection="column" gap={4}>
             {choosenProfile.map((field) => (
               <TextField
@@ -191,14 +263,14 @@ function Profile({ type, fields, title, action }) {
                 helperText={formData[field].errorMessage}
               />
             ))}
-            <Button onClick={toggleEdit} variant="contained" color="primary">
+            <Button onClick={handleRegister} variant="contained" color="primary">
               Create
             </Button>
           </Box>
         </form>
       )}
       {action === "verify" && (
-        <form onSubmit={handleSubmit}>
+        <form onSubmit={handleVerify}>
           <Box display="flex" flexDirection="column" gap={4}>
             {choosenProfile.map((field) => (
               <TextField
@@ -212,7 +284,7 @@ function Profile({ type, fields, title, action }) {
                 helperText={formData[field].errorMessage}
               />
             ))}
-            <Button onClick={toggleEdit} variant="contained" color="primary">
+            <Button onClick={handleVerify} variant="contained" color="primary">
               Verify
             </Button>
           </Box>
