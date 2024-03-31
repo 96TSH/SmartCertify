@@ -61,7 +61,7 @@ struct School_Info
 
 struct Student_Info
 {
-    address studentAdd;
+    // address studentAdd;
     uint256 id; //provided by school
     string nationality;
     string nric;
