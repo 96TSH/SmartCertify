@@ -23,5 +23,6 @@ module.exports = async function (deployer, network, accounts) {
   const name = "Nanyang Technological University";
   const add = "50 Nanyang Ave, Singapore 639798";
   const email = "ntu@edu.sg";
-  await deployer.deploy(contract, id, name, add, email);
+  const eToken = "0x12F4DA9EA5bFb53F81Ce9d4FE2D247b1c136cF75";
+  await deployer.deploy(contract, id, name, add, email, eToken);
 };

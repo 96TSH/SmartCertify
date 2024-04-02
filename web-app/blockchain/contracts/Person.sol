@@ -33,7 +33,8 @@ contract Person is IPerson
     function addCertificateContract(address _add) public onlyOwner()
     {
         ICertificate certContract = ICertificate(_add);
-        certificates.push(certContract.getCertificate(msg.sender));
+        Certificate_Info memory cert = certContract.getCertificate(msg.sender);
+        certificates.push(cert);
     }
 
     function setPersonalInfo(Personal_Info memory _info) public onlyOwner()

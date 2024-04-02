@@ -13,6 +13,7 @@
     "@emotion/styled": "^11.11.0",
     "@mui/icons-material": "^5.15.14",
     "@mui/material": "^5.15.14",
+    "@openzeppelin/contracts": "^5.0.2",
     "material-ui-popup-state": "^5.1.0",
     "react": "^18.2.0",
     "react-dom": "^18.2.0",
