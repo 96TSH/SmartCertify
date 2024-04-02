@@ -21,8 +21,7 @@ export default function SideBarSch() {
 
   const handleClickA = () => {
     setOpenA(!openA);
-  };
-
+  }
 
   return (
     <List
@@ -42,12 +41,37 @@ export default function SideBarSch() {
         <ListItemText primary="Profile" />
       </ListItemButton>
 
-      <ListItemButton component={Link} to="/School/Admin">
+      <ListItemButton onClick={handleClickA}>
         <ListItemIcon>
           <SupervisorAccountIcon />
         </ListItemIcon>
         <ListItemText primary="Admin" />
+        {openA ? <ExpandLess /> : <ExpandMore />}
       </ListItemButton>
+      <Collapse in={openA} timeout="auto" unmountOnExit>
+        <List component="div" disablePadding>
+          <ListItemButton
+            sx={{ pl: 4 }}
+            component={Link}
+            to="/School/Addadmin"
+          >
+            <ListItemIcon>
+              <LooksOneOutlinedIcon />
+            </ListItemIcon>
+            <ListItemText primary="Add Admin" />
+          </ListItemButton>
+          <ListItemButton
+            sx={{ pl: 4 }}
+            component={Link}
+            to="/School/Removeadmin"
+          >
+            <ListItemIcon>
+              <LooksTwoOutlinedIcon />
+            </ListItemIcon>
+            <ListItemText primary="Remove Admin" />
+          </ListItemButton>
+        </List>
+      </Collapse>
 
       <ListItemButton component={Link} to="/School/Students">
         <ListItemIcon>

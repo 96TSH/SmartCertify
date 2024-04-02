@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useState, useContext } from "react";
 import {
   Typography,
   Box,
@@ -21,9 +21,11 @@ import {
 } from "@mui/material";
 import EditIcon from "@mui/icons-material/Edit";
 import DeleteIcon from "@mui/icons-material/Delete";
+import VerifiedIcon from "@mui/icons-material/Verified";
+import CancelIcon from "@mui/icons-material/Cancel";
 import { styled } from "@mui/material/styles";
 import PropTypes from "prop-types";
-import Profile from "./Profile";
+import AuthContext from "../stores/authContext";
 
 const TableTemplate = ({ headers, data, title, actions }) => {
   const StyledTableCell = styled(TableCell)(({ theme }) => ({
@@ -64,26 +66,80 @@ const TableTemplate = ({ headers, data, title, actions }) => {
     },
   };
 
+  const { Company, web3, companyAddress, School, schoolAddress } = useContext(AuthContext);
+
   const [deleteOpen, setDeleteOpen] = useState(false);
   const [updateOpen, setUpdateOpen] = useState(false);
   const [createOpen, setCreateOpen] = useState(false);
-  const [verifyOpen, setVerifyOpen] = useState(false);
   const [admissionOpen, setAdmissionOpen] = useState(false);
+  const [verifiedStatus, setVerifiedStatus] = useState(false);
 
-  const deleteItem = async () => {
-    return;
+  const deleteItem = async (id) => {
+    try {
+      // const accounts = await window.ethereum.request({
+      //   method: "eth_requestAccounts",
+      // });
+      // console.log(accounts);
+      if (title === "Final Candidate") {
+        await Company.methods.removeCandicator(id).send({
+          from: companyAddress,
+          gas: 100000,
+          gasPrice: web3.utils.toWei("50", "gwei"),
+        });
+      }
+    } catch (error) {
+      console.log(error);
+    }
   };
 
   const updateItem = async () => {
     return;
   };
 
-  const createItem = async () => {
-    return;
+  const createItem = async (item, address) => {
+    try {
+      // const accounts = await window.ethereum.request({
+      //   method: "eth_requestAccounts",
+      // });
+      // console.log(accounts);
+      if (title === "Final Candidate") {
+        await Company.methods.addCandicator(item, address).send({
+          from: companyAddress,
+          gas: 100000,
+          gasPrice: web3.utils.toWei("50", "gwei"),
+        });
+      } else if (title === "Admission") {
+        await School.methods.studentAdmission(item).send({
+          from: schoolAddress,
+          gas: 100000,
+          gasPrice: web3.utils.toWei("50", "gwei"),
+        });
+      }
+    } catch (error) {
+      console.log(error);
+    }
   };
 
-  const verifyItem = async () => {
-    return;
+  const verifyItem = async (id) => {
+    try {
+      // const accounts = await window.ethereum.request({
+      //   method: "eth_requestAccounts",
+      // });
+      // console.log(accounts);
+      const response = await Company.methods
+        .verifyStaffAllCertificate(id)
+        .send({
+          from: companyAddress,
+          gas: 100000,
+          gasPrice: web3.utils.toWei("50", "gwei"),
+        });
+      console.log(response);
+      if (response && response.status) {
+        setVerifiedStatus(true);
+      }
+    } catch (error) {
+      console.log(error);
+    }
   };
 
   const graduateItem = async () => {
@@ -100,7 +156,16 @@ const TableTemplate = ({ headers, data, title, actions }) => {
 
   const handleCreateItem = (event) => {
     event.preventDefault();
-    createItem()
+    const item = {
+      name: event.target.name.value,
+      id: event.target.id.value,
+      nationality: "",
+      nric: "",
+      add: "",
+      passport: "",
+    };
+    console.log(item);
+    createItem(item, event.target.address.value)
       // .then(() => fetchItem())
       .then(() => setCreateOpen(false));
   };
@@ -128,21 +193,15 @@ const TableTemplate = ({ headers, data, title, actions }) => {
     setDeleteOpen(false);
   };
 
-  const handleDeleteItem = (event) => {
-    event.preventDefault();
-    deleteItem()
+  const handleDeleteItem = (item) => {
+    deleteItem(item.id)
       // .then(() => fetchItem())
       .then(() => setDeleteOpen(false));
   };
 
-  const handleVerification = () => {
-    setVerifyOpen(true);
-    verifyItem();
+  const handleVerification = (item) => {
+    verifyItem(item.id);
     // .then(() => fetchItem())
-  };
-
-  const handleVerificationClose = () => {
-    setVerifyOpen(false);
   };
 
   const handleGraduationOpen = () => {
@@ -213,35 +272,26 @@ const TableTemplate = ({ headers, data, title, actions }) => {
                   ))}
                   {/* button for verification */}
                   {actions.includes("verify") && (
-                    <StyledTableCell align="center" width="10%">
+                    <StyledTableCell align="center" width="20%">
                       <Button
                         variant="outlined"
                         sx={{
                           backgroundColor: "darkslategray",
                           color: "white",
                         }}
-                        onClick={handleVerification}
+                        onClick={() => handleVerification(item)}
                       >
                         Verify
                       </Button>
-                      <Dialog
-                        open={verifyOpen}
-                        onClose={handleVerificationClose}
-                        componentsProps={{
-                          backdrop: {
-                            style: {
-                              backgroundColor: "rgba(0, 0, 0, 0.2)", // Adjust this value to lighten or darken the backdrop
-                            },
-                          },
-                        }}
-                      >
-                        <DialogTitle>Verification Successful!</DialogTitle>
-                        <DialogActions>
-                          <Button onClick={handleVerificationClose}>
-                            Close
-                          </Button>
-                        </DialogActions>
-                      </Dialog>
+                      {verifiedStatus ? (
+                        <IconButton>
+                          <VerifiedIcon />
+                        </IconButton>
+                      ) : (
+                        <IconButton>
+                          <CancelIcon />
+                        </IconButton>
+                      )}
                     </StyledTableCell>
                   )}
                   {/* button for graduation */}
@@ -291,7 +341,9 @@ const TableTemplate = ({ headers, data, title, actions }) => {
                           ))}
                         </DialogContent>
                         <DialogActions>
-                          <Button onClick={handleGraduationClose}>Cancel</Button>
+                          <Button onClick={handleGraduationClose}>
+                            Cancel
+                          </Button>
                           <Button type="submit">Graduate</Button>
                         </DialogActions>
                       </Dialog>
@@ -373,7 +425,9 @@ const TableTemplate = ({ headers, data, title, actions }) => {
                         </DialogTitle>
                         <DialogActions>
                           <Button onClick={handleDeleteClose}>No</Button>
-                          <Button onClick={handleDeleteItem}>Yes</Button>
+                          <Button onClick={() => handleDeleteItem(item)}>
+                            Yes
+                          </Button>
                         </DialogActions>
                       </Dialog>
                     </StyledTableCell>

@@ -142,7 +142,7 @@
       "type": "function"
     }
   ],
-  "metadata": "{\"compiler\":{\"version\":\"0.8.19+commit.7dd6d404\"},\"language\":\"Solidity\",\"output\":{\"abi\":[{\"inputs\":[{\"components\":[{\"components\":[{\"internalType\":\"address\",\"name\":\"schoolContractAddress\",\"type\":\"address\"},{\"internalType\":\"string\",\"name\":\"id\",\"type\":\"string\"},{\"internalType\":\"string\",\"name\":\"name\",\"type\":\"string\"},{\"internalType\":\"string\",\"name\":\"add\",\"type\":\"string\"},{\"internalType\":\"string\",\"name\":\"email\",\"type\":\"string\"}],\"internalType\":\"struct School_Info\",\"name\":\"schoolInfo\",\"type\":\"tuple\"},{\"internalType\":\"enum ECertificateCategory\",\"name\":\"category\",\"type\":\"uint8\"},{\"internalType\":\"enum EHonor\",\"name\":\"honor\",\"type\":\"uint8\"},{\"internalType\":\"enum EStudyStatus\",\"name\":\"status\",\"type\":\"uint8\"},{\"internalType\":\"string\",\"name\":\"major\",\"type\":\"string\"},{\"internalType\":\"string\",\"name\":\"description\",\"type\":\"string\"},{\"internalType\":\"uint256\",\"name\":\"certificateId\",\"type\":\"uint256\"},{\"internalType\":\"uint256\",\"name\":\"admissionTimestamp\",\"type\":\"uint256\"},{\"internalType\":\"uint256\",\"name\":\"graduationTimestamp\",\"type\":\"uint256\"},{\"components\":[{\"internalType\":\"address\",\"name\":\"studentAdd\",\"type\":\"address\"},{\"internalType\":\"uint256\",\"name\":\"id\",\"type\":\"uint256\"},{\"internalType\":\"string\",\"name\":\"nationality\",\"type\":\"string\"},{\"internalType\":\"string\",\"name\":\"nric\",\"type\":\"string\"},{\"internalType\":\"string\",\"name\":\"passport\",\"type\":\"string\"},{\"internalType\":\"string\",\"name\":\"name\",\"type\":\"string\"},{\"internalType\":\"string\",\"name\":\"add\",\"type\":\"string\"}],\"internalType\":\"struct Student_Info\",\"name\":\"studentDetails\",\"type\":\"tuple\"},{\"internalType\":\"uint256\",\"name\":\"signature\",\"type\":\"uint256\"}],\"internalType\":\"struct Certificate_Info\",\"name\":\"_cert\",\"type\":\"tuple\"}],\"name\":\"verifyGraduatedStudentCertificate\",\"outputs\":[{\"internalType\":\"bool\",\"name\":\"\",\"type\":\"bool\"}],\"stateMutability\":\"nonpayable\",\"type\":\"function\"}],\"devdoc\":{\"kind\":\"dev\",\"methods\":{},\"version\":1},\"userdoc\":{\"kind\":\"user\",\"methods\":{},\"version\":1}},\"settings\":{\"compilationTarget\":{\"project:/contracts/ISchool.sol\":\"ISchool\"},\"evmVersion\":\"paris\",\"libraries\":{},\"metadata\":{\"bytecodeHash\":\"ipfs\"},\"optimizer\":{\"enabled\":false,\"runs\":200},\"remappings\":[]},\"sources\":{\"project:/contracts/Definition.sol\":{\"keccak256\":\"0x28d6385b17de286b600cf36f0b04af6dff21b277709e8f47b8460393b4930575\",\"license\":\"MIT\",\"urls\":[\"bzz-raw://f318e78d97a57d59f4970ffc4785d1ddffe08d8e95754ed754142b0e122fbcf3\",\"dweb:/ipfs/QmaFKHF112RyGfkdF6jDHZs9PfTYQ2NF4odDzuJdREKcJQ\"]},\"project:/contracts/ISchool.sol\":{\"keccak256\":\"0x107e7e9e2d08bbdba46f03cec59a5745b5df3e0f94bc81bb4dd83a767ab81a81\",\"license\":\"MIT\",\"urls\":[\"bzz-raw://f9da1a147460ddec3e10299f0fe852c31e143e1ef533aaa1df323f9075e1ebfd\",\"dweb:/ipfs/QmTA2kj8DkK2SKNhQ5oXeUDeNu4H6Hm18GgJnUcJEXhaB6\"]}},\"version\":1}",
+  "metadata": "{\"compiler\":{\"version\":\"0.8.19+commit.7dd6d404\"},\"language\":\"Solidity\",\"output\":{\"abi\":[{\"inputs\":[{\"components\":[{\"components\":[{\"internalType\":\"address\",\"name\":\"schoolContractAddress\",\"type\":\"address\"},{\"internalType\":\"string\",\"name\":\"id\",\"type\":\"string\"},{\"internalType\":\"string\",\"name\":\"name\",\"type\":\"string\"},{\"internalType\":\"string\",\"name\":\"add\",\"type\":\"string\"},{\"internalType\":\"string\",\"name\":\"email\",\"type\":\"string\"}],\"internalType\":\"struct School_Info\",\"name\":\"schoolInfo\",\"type\":\"tuple\"},{\"internalType\":\"enum ECertificateCategory\",\"name\":\"category\",\"type\":\"uint8\"},{\"internalType\":\"enum EHonor\",\"name\":\"honor\",\"type\":\"uint8\"},{\"internalType\":\"enum EStudyStatus\",\"name\":\"status\",\"type\":\"uint8\"},{\"internalType\":\"string\",\"name\":\"major\",\"type\":\"string\"},{\"internalType\":\"string\",\"name\":\"description\",\"type\":\"string\"},{\"internalType\":\"uint256\",\"name\":\"certificateId\",\"type\":\"uint256\"},{\"internalType\":\"uint256\",\"name\":\"admissionTimestamp\",\"type\":\"uint256\"},{\"internalType\":\"uint256\",\"name\":\"graduationTimestamp\",\"type\":\"uint256\"},{\"components\":[{\"internalType\":\"address\",\"name\":\"studentAdd\",\"type\":\"address\"},{\"internalType\":\"uint256\",\"name\":\"id\",\"type\":\"uint256\"},{\"internalType\":\"string\",\"name\":\"nationality\",\"type\":\"string\"},{\"internalType\":\"string\",\"name\":\"nric\",\"type\":\"string\"},{\"internalType\":\"string\",\"name\":\"passport\",\"type\":\"string\"},{\"internalType\":\"string\",\"name\":\"name\",\"type\":\"string\"},{\"internalType\":\"string\",\"name\":\"add\",\"type\":\"string\"}],\"internalType\":\"struct Student_Info\",\"name\":\"studentDetails\",\"type\":\"tuple\"},{\"internalType\":\"uint256\",\"name\":\"signature\",\"type\":\"uint256\"}],\"internalType\":\"struct Certificate_Info\",\"name\":\"_cert\",\"type\":\"tuple\"}],\"name\":\"verifyGraduatedStudentCertificate\",\"outputs\":[{\"internalType\":\"bool\",\"name\":\"\",\"type\":\"bool\"}],\"stateMutability\":\"nonpayable\",\"type\":\"function\"}],\"devdoc\":{\"kind\":\"dev\",\"methods\":{},\"version\":1},\"userdoc\":{\"kind\":\"user\",\"methods\":{},\"version\":1}},\"settings\":{\"compilationTarget\":{\"project:/contracts/ISchool.sol\":\"ISchool\"},\"evmVersion\":\"paris\",\"libraries\":{},\"metadata\":{\"bytecodeHash\":\"ipfs\"},\"optimizer\":{\"enabled\":false,\"runs\":200},\"remappings\":[]},\"sources\":{\"project:/contracts/Definition.sol\":{\"keccak256\":\"0x27770986b7b3f29870a7c2327181a4760a6be8aa800300ada6d4bc66b80499f2\",\"license\":\"MIT\",\"urls\":[\"bzz-raw://646b051224bbac1f013343af50d99ad90ab359e24ef50041385abb7cdb278167\",\"dweb:/ipfs/QmZjSpA8AYL4XsDkS57yf9DdU7U62JhkRQJ7AbYuvKXeNM\"]},\"project:/contracts/ISchool.sol\":{\"keccak256\":\"0xbf29621e23eb171ed4d520e79462bd551922b32570bd613634c1fda094dd561c\",\"license\":\"MIT\",\"urls\":[\"bzz-raw://deb8018d4e28f1310432e3cbb632813ba7c11700591edf6add3eb02b98b787ff\",\"dweb:/ipfs/QmaNNUmqugaEbVfbd2hccPVMcc59G2pJK5SKigguRFPqyV\"]}},\"version\":1}",
   "bytecode": "0x",
   "deployedBytecode": "0x",
   "immutableReferences": {},
@@ -150,45 +150,45 @@
   "deployedGeneratedSources": [],
   "sourceMap": "",
   "deployedSourceMap": "",
-  "source": "//SPDX-License-Identifier: MIT\npragma solidity ^0.8.0;\n\nimport \"./Definition.sol\";\n\ninterface ISchool\n{\n    // function getVerifyFee(address _verify) external view returns (uint);\n    function verifyGraduatedStudentCertificate(Certificate_Info memory _cert) external returns (bool);\n    // function verifyGraduateStudentTranscript(Transcript_Info memory  _trans) external returns (bool);\n}\n",
-  "sourcePath": "/Users/zhougaoqiang/Documents/GitHub/SmartCertify/web-app/blockchain/contracts/ISchool.sol",
+  "source": "//SPDX-License-Identifier: MIT\r\npragma solidity ^0.8.0;\r\n\r\nimport \"./Definition.sol\";\r\n\r\ninterface ISchool\r\n{\r\n    // function getVerifyFee(address _verify) external view returns (uint);\r\n    function verifyGraduatedStudentCertificate(Certificate_Info memory _cert) external returns (bool);\r\n    // function verifyGraduateStudentTranscript(Transcript_Info memory  _trans) external returns (bool);\r\n}\r\n",
+  "sourcePath": "C:\\Users\\Si Heng\\Documents\\NTU\\IN6236 - Blockchain System Software Engineering\\Assignments\\Smart Contract Assignment\\SmartCertify\\web-app\\blockchain\\contracts\\ISchool.sol",
   "ast": {
     "absolutePath": "project:/contracts/ISchool.sol",
     "exportedSymbols": {
       "Certificate_Info": [
-        568
+        596
       ],
       "Company_Info": [
-        481
+        509
       ],
       "ECertificateCategory": [
-        504
+        532
       ],
       "EHonor": [
-        511
+        539
       ],
       "EStudyStatus": [
-        514
+        542
       ],
       "ISchool": [
-        665
+        1169
       ],
       "Personal_Info": [
-        494
+        522
       ],
       "School_Info": [
-        525
+        553
       ],
       "Student_Info": [
-        540
+        568
       ]
     },
-    "id": 666,
+    "id": 1170,
     "license": "MIT",
     "nodeType": "SourceUnit",
     "nodes": [
       {
-        "id": 655,
+        "id": 1159,
         "literals": [
           "solidity",
           "^",
@@ -196,17 +196,17 @@
           ".0"
         ],
         "nodeType": "PragmaDirective",
-        "src": "31:23:6"
+        "src": "32:23:10"
       },
       {
         "absolutePath": "project:/contracts/Definition.sol",
         "file": "./Definition.sol",
-        "id": 656,
+        "id": 1160,
         "nameLocation": "-1:-1:-1",
         "nodeType": "ImportDirective",
-        "scope": 666,
-        "sourceUnit": 569,
-        "src": "56:26:6",
+        "scope": 1170,
+        "sourceUnit": 597,
+        "src": "59:26:10",
         "symbolAliases": [],
         "unitAlias": ""
       },
@@ -217,80 +217,80 @@
         "contractDependencies": [],
         "contractKind": "interface",
         "fullyImplemented": false,
-        "id": 665,
+        "id": 1169,
         "linearizedBaseContracts": [
-          665
+          1169
         ],
         "name": "ISchool",
-        "nameLocation": "94:7:6",
+        "nameLocation": "99:7:10",
         "nodeType": "ContractDefinition",
         "nodes": [
           {
             "functionSelector": "9e07a0b6",
-            "id": 664,
+            "id": 1168,
             "implemented": false,
             "kind": "function",
             "modifiers": [],
             "name": "verifyGraduatedStudentCertificate",
-            "nameLocation": "193:33:6",
+            "nameLocation": "201:33:10",
             "nodeType": "FunctionDefinition",
             "parameters": {
-              "id": 660,
+              "id": 1164,
               "nodeType": "ParameterList",
               "parameters": [
                 {
                   "constant": false,
-                  "id": 659,
+                  "id": 1163,
                   "mutability": "mutable",
                   "name": "_cert",
-                  "nameLocation": "251:5:6",
+                  "nameLocation": "259:5:10",
                   "nodeType": "VariableDeclaration",
-                  "scope": 664,
-                  "src": "227:29:6",
+                  "scope": 1168,
+                  "src": "235:29:10",
                   "stateVariable": false,
                   "storageLocation": "memory",
                   "typeDescriptions": {
-                    "typeIdentifier": "t_struct$_Certificate_Info_$568_memory_ptr",
+                    "typeIdentifier": "t_struct$_Certificate_Info_$596_memory_ptr",
                     "typeString": "struct Certificate_Info"
                   },
                   "typeName": {
-                    "id": 658,
+                    "id": 1162,
                     "nodeType": "UserDefinedTypeName",
                     "pathNode": {
-                      "id": 657,
+                      "id": 1161,
                       "name": "Certificate_Info",
                       "nameLocations": [
-                        "227:16:6"
+                        "235:16:10"
                       ],
                       "nodeType": "IdentifierPath",
-                      "referencedDeclaration": 568,
-                      "src": "227:16:6"
+                      "referencedDeclaration": 596,
+                      "src": "235:16:10"
                     },
-                    "referencedDeclaration": 568,
-                    "src": "227:16:6",
+                    "referencedDeclaration": 596,
+                    "src": "235:16:10",
                     "typeDescriptions": {
-                      "typeIdentifier": "t_struct$_Certificate_Info_$568_storage_ptr",
+                      "typeIdentifier": "t_struct$_Certificate_Info_$596_storage_ptr",
                       "typeString": "struct Certificate_Info"
                     }
                   },
                   "visibility": "internal"
                 }
               ],
-              "src": "226:31:6"
+              "src": "234:31:10"
             },
             "returnParameters": {
-              "id": 663,
+              "id": 1167,
               "nodeType": "ParameterList",
               "parameters": [
                 {
                   "constant": false,
-                  "id": 662,
+                  "id": 1166,
                   "mutability": "mutable",
                   "name": "",
                   "nameLocation": "-1:-1:-1",
                   "nodeType": "VariableDeclaration",
-                  "scope": 664,
-                  "src": "276:4:6",
+                  "scope": 1168,
+                  "src": "284:4:10",
                   "stateVariable": false,
                   "storageLocation": "default",
                   "typeDescriptions": {
@@ -298,10 +298,10 @@
                     "typeString": "bool"
                   },
                   "typeName": {
-                    "id": 661,
+                    "id": 1165,
                     "name": "bool",
                     "nodeType": "ElementaryTypeName",
-                    "src": "276:4:6",
+                    "src": "284:4:10",
                     "typeDescriptions": {
                       "typeIdentifier": "t_bool",
                       "typeString": "bool"
@@ -310,21 +310,21 @@
                   "visibility": "internal"
                 }
               ],
-              "src": "275:6:6"
+              "src": "283:6:10"
             },
-            "scope": 665,
-            "src": "184:98:6",
+            "scope": 1169,
+            "src": "192:98:10",
             "stateMutability": "nonpayable",
             "virtual": false,
             "visibility": "external"
           }
         ],
-        "scope": 666,
-        "src": "84:305:6",
+        "scope": 1170,
+        "src": "89:310:10",
         "usedErrors": []
       }
     ],
-    "src": "31:359:6"
+    "src": "32:369:10"
   },
   "compiler": {
     "name": "solc",
@@ -332,7 +332,7 @@
   },
   "networks": {},
   "schemaVersion": "3.4.16",
-  "updatedAt": "2024-03-30T13:50:19.377Z",
+  "updatedAt": "2024-03-31T15:59:57.881Z",
   "devdoc": {
     "kind": "dev",
     "methods": {},

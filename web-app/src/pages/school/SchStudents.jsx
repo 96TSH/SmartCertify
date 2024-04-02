@@ -1,41 +1,53 @@
 import TableTemplate from "../../components/TableTemplate";
+import { useContext, useEffect, useState } from "react";
+import AuthContext from "../../stores/authContext";
 
-const ComFinalCandidate = () => {
-  const title = "Admission";
-  const headers = ["No.", "ID No.", "Name", "Degree", "Faculty", "Major", "View"];
-  const adminDetails = [
+const SchStudents = () => {
+  const { web3, School, schoolAddress } = useContext(AuthContext);
+  const [students, setStudents] = useState([
     {
       id: 123,
       name: "Name 1",
-      degree: "Degree 1",
-      faculty: "Faculty 1",
-      major: "Major 1",
     },
-    {
-      id: 456,
-      name: "Name 2",
-      degree: "Degree 2",
-      faculty: "Faculty 2",
-      major: "Major 2",
-    },
-    {
-      id: 789,
-      name: "Name 3",
-      degree: "Degree 3",
-      faculty: "Faculty 3",
-      major: "Major 3",
+  ]);
+
+  const title = "Admission";
+  const headers = ["No.", "ID No.", "Name", "Status"];
+
+  const fetchData = async () => {
+    try {
+      // const accounts = await window.ethereum.request({
+      //   method: "eth_requestAccounts",
+      // });
+      // console.log(accounts);
+      const data = await School.methods.getAllStudent().call({
+        from: schoolAddress,
+        gas: 100000,
+        gasPrice: web3.utils.toWei("50", "gwei"),
+      });
+      console.log(data);
+      if (data && data.length > 0) {
+        setStudents(data);
+      }
+    } catch (error) {
+      console.log(error);
     }
-  ];
+  };
+
+  useEffect(() => {
+    fetchData();
+  }, []);
+
   const actions = ["create", "graduate"];
 
   return (
     <TableTemplate
       headers={headers}
-      data={adminDetails}
+      data={students}
       title={title}
       actions={actions}
     />
   );
 };
 
-export default ComFinalCandidate;
+export default SchStudents;
