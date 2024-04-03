@@ -36,7 +36,7 @@ function Profile({ type, fields, title, action }) {
 
 
   const [modalOpen, setModalOpen] = useState(false);
-  const [formData, setFormData] = useState(initialFormData);
+  const [formData, setFormData] = useState(choosenProfile);
   const [isEditable, setIsEditable] = useState(false);
   const [buttonLabel, setButtonLabel] = useState("Update");
 
@@ -94,7 +94,7 @@ function Profile({ type, fields, title, action }) {
         //  isValid: true 
         },
     }));
-    setFormData(initialFormData);
+    setFormData(choosenProfile);
   };
 
   const handleChange = (e) => {
