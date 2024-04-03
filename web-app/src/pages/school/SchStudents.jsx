@@ -12,7 +12,7 @@ const SchStudents = () => {
   ]);
 
   const title = "Admission";
-  const headers = ["No.", "ID No.", "Name", "Status"];
+  const headers = ["No.", "ID No.", "Name"];
 
   const fetchData = async () => {
     try {

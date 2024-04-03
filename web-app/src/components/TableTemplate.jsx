@@ -18,11 +18,10 @@ import {
   DialogTitle,
   DialogContent,
   TextField,
+  Alert,
 } from "@mui/material";
 import EditIcon from "@mui/icons-material/Edit";
 import DeleteIcon from "@mui/icons-material/Delete";
-import VerifiedIcon from "@mui/icons-material/Verified";
-import CancelIcon from "@mui/icons-material/Cancel";
 import { styled } from "@mui/material/styles";
 import PropTypes from "prop-types";
 import AuthContext from "../stores/authContext";
@@ -66,12 +65,16 @@ const TableTemplate = ({ headers, data, title, actions }) => {
     },
   };
 
-  const { Company, web3, companyAddress, School, schoolAddress } = useContext(AuthContext);
+  const { Company, web3, companyAddress, School, schoolAddress } =
+    useContext(AuthContext);
 
   const [deleteOpen, setDeleteOpen] = useState(false);
   const [updateOpen, setUpdateOpen] = useState(false);
   const [createOpen, setCreateOpen] = useState(false);
+  const [verifyOpen, setVerifyOpen] = useState(false);
+  const [verifyResult, setVerifyResult] = useState(false);
   const [admissionOpen, setAdmissionOpen] = useState(false);
+  const [step, setStep] = useState(0);
   const [verifiedStatus, setVerifiedStatus] = useState(false);
 
   const deleteItem = async (id) => {
@@ -96,20 +99,20 @@ const TableTemplate = ({ headers, data, title, actions }) => {
     return;
   };
 
-  const createItem = async (item, address) => {
+  const createItem = async (item, candidateContract, category, major) => {
     try {
       // const accounts = await window.ethereum.request({
       //   method: "eth_requestAccounts",
       // });
       // console.log(accounts);
       if (title === "Final Candidate") {
-        await Company.methods.addCandicator(item, address).send({
+        await Company.methods.addCandicator(item, candidateContract).send({
           from: companyAddress,
           gas: 100000,
           gasPrice: web3.utils.toWei("50", "gwei"),
         });
       } else if (title === "Admission") {
-        await School.methods.studentAdmission(item).send({
+        await School.methods.studentAdmission(item, category, major).send({
           from: schoolAddress,
           gas: 100000,
           gasPrice: web3.utils.toWei("50", "gwei"),
@@ -120,30 +123,84 @@ const TableTemplate = ({ headers, data, title, actions }) => {
     }
   };
 
-  const verifyItem = async (id) => {
+  const verifyItem = async (id, index) => {
     try {
       // const accounts = await window.ethereum.request({
       //   method: "eth_requestAccounts",
       // });
       // console.log(accounts);
-      const response = await Company.methods
-        .verifyStaffAllCertificate(id)
-        .send({
-          from: companyAddress,
-          gas: 100000,
-          gasPrice: web3.utils.toWei("50", "gwei"),
-        });
-      console.log(response);
-      if (response && response.status) {
-        setVerifiedStatus(true);
+      const response1 = await Company.methods.fetchCertificate(id, index).send({
+        from: companyAddress,
+        gas: 100000,
+        gasPrice: web3.utils.toWei("50", "gwei"),
+      });
+
+      if (response1) {
+        const response2 = await Company.methods
+          .verifyCertificateIssuedSchool()
+          .send({
+            from: companyAddress,
+            gas: 100000,
+            gasPrice: web3.utils.toWei("50", "gwei"),
+          });
+
+        if (response2) {
+          const response3 = await Company.methods
+            .verifyStaffCertificate()
+            .send({
+              from: companyAddress,
+              gas: 100000,
+              gasPrice: web3.utils.toWei("50", "gwei"),
+            });
+
+          if (response3) {
+            setVerifiedStatus(true);
+          } else {
+            setVerifiedStatus(false);
+          }
+        }
       }
     } catch (error) {
       console.log(error);
     }
   };
 
-  const graduateItem = async () => {
-    return;
+  const graduateItem = async (id, studAdd, certAdd) => {
+    try {
+      // const accounts = await window.ethereum.request({
+      //   method: "eth_requestAccounts",
+      // });
+      // console.log(accounts);
+      const response = await School.methods
+        .studentGradutaion(id, studAdd, certAdd)
+        .send({
+          from: schoolAddress,
+          gas: 100000,
+          gasPrice: web3.utils.toWei("50", "gwei"),
+        });
+      console.log(response);
+    } catch (error) {
+      console.log(error);
+    }
+  };
+
+  const setCertificate = async (id, honor, status, description) => {
+    try {
+      // const accounts = await window.ethereum.request({
+      //   method: "eth_requestAccounts",
+      // });
+      // console.log(accounts);
+      const response = await School.methods
+        .setStudCert(id, honor, status, description)
+        .send({
+          from: schoolAddress,
+          gas: 100000,
+          gasPrice: web3.utils.toWei("50", "gwei"),
+        });
+      console.log(response);
+    } catch (error) {
+      console.log(error);
+    }
   };
 
   const handleCreateOpen = () => {
@@ -158,14 +215,18 @@ const TableTemplate = ({ headers, data, title, actions }) => {
     event.preventDefault();
     const item = {
       name: event.target.name.value,
-      id: event.target.id.value,
-      nationality: "",
-      nric: "",
-      add: "",
-      passport: "",
+      id: Math.floor(Math.random() * 90000000) + 10000000,
+      nationality: event.target.nationality.value,
+      nric: event.target.nric.value,
+      address: event.target.address.value,
+      passport: event.target.passport.value,
     };
-    console.log(item);
-    createItem(item, event.target.address.value)
+    createItem(
+      item,
+      event.target.candidateContract.value,
+      event.target.category.value,
+      event.target.major.value
+    )
       // .then(() => fetchItem())
       .then(() => setCreateOpen(false));
   };
@@ -199,9 +260,31 @@ const TableTemplate = ({ headers, data, title, actions }) => {
       .then(() => setDeleteOpen(false));
   };
 
-  const handleVerification = (item) => {
-    verifyItem(item.id);
+  const handleVerifyOpen = () => {
+    setVerifyOpen(true);
+  };
+
+  const handleVerifyClose = () => {
+    setVerifyOpen(false);
+  };
+
+  const handleVerification = (event) => {
+    event.preventDefault();
+    setVerifiedStatus(false);
+    verifyItem(
+      event.target.candidateId.value,
+      event.target.certificateIndex.value
+    );
+    handleVerifyResultOpen();
     // .then(() => fetchItem())
+  };
+
+  const handleVerifyResultOpen = () => {
+    setVerifyResult(true);
+  };
+
+  const handleVerifyResultClose = () => {
+    setVerifyResult(false);
   };
 
   const handleGraduationOpen = () => {
@@ -214,9 +297,23 @@ const TableTemplate = ({ headers, data, title, actions }) => {
 
   const handleGraduationItem = (event) => {
     event.preventDefault();
-    graduateItem()
+    graduateItem(
+      event.target.studentId.value,
+      event.target.studentWallet.value,
+      event.target.certificateContract.value
+    )
       // .then(() => fetchItem())
       .then(() => setAdmissionOpen(false));
+  };
+
+  const handleSetCertificate = (event) => {
+    event.preventDefault();
+    setCertificate(
+      event.target.studentId.value,
+      event.target.honor.value,
+      event.target.status.value,
+      event.target.description.value
+    );
   };
 
   return (
@@ -244,18 +341,9 @@ const TableTemplate = ({ headers, data, title, actions }) => {
                       <b>{header}</b>
                     </StyledTableCell>
                   ))}
-                {actions.includes("update") && actions.includes("delete") ? (
-                  <StyledTableCell sx={{ textAlign: "center" }}>
-                    <b>Actions</b>
-                  </StyledTableCell>
-                ) : (
-                  (actions.includes("update") ||
-                    actions.includes("delete")) && (
-                    <StyledTableCell sx={{ textAlign: "center" }}>
-                      <b>Action</b>
-                    </StyledTableCell>
-                  )
-                )}
+                <StyledTableCell sx={{ textAlign: "center" }}>
+                  <b>Actions</b>
+                </StyledTableCell>
               </TableRow>
             </TableHead>
             <TableBody>
@@ -279,19 +367,66 @@ const TableTemplate = ({ headers, data, title, actions }) => {
                           backgroundColor: "darkslategray",
                           color: "white",
                         }}
-                        onClick={() => handleVerification(item)}
+                        onClick={handleVerifyOpen}
                       >
                         Verify
                       </Button>
-                      {verifiedStatus ? (
-                        <IconButton>
-                          <VerifiedIcon />
-                        </IconButton>
-                      ) : (
-                        <IconButton>
-                          <CancelIcon />
-                        </IconButton>
-                      )}
+                      {/* verification dialog */}
+                      <Dialog
+                        open={verifyOpen}
+                        onClose={handleVerifyClose}
+                        componentsProps={{
+                          backdrop: {
+                            style: {
+                              backgroundColor: "rgba(0, 0, 0, 0.2)",
+                            },
+                          },
+                        }}
+                        PaperProps={{
+                          component: "form",
+                          onSubmit: (event) => {
+                            event.preventDefault();
+                            handleVerification(event);
+                          },
+                        }}
+                      >
+                        <DialogTitle>Verify Certificate</DialogTitle>
+                        <DialogContent>
+                          <TextField
+                            defaultValue={item.id}
+                            name="candidateId"
+                            label="Candidate ID"
+                            fullWidth
+                            margin="normal"
+                            color="primary"
+                          />
+                          <TextField
+                            name="certificateIndex"
+                            label="Certificate Index"
+                            fullWidth
+                            margin="normal"
+                            color="primary"
+                          />
+                        </DialogContent>
+                        <DialogActions>
+                          <Button onClick={handleVerifyClose}>Cancel</Button>
+                          <Button type="submit">Verify</Button>
+                        </DialogActions>
+                      </Dialog>
+                      <Dialog
+                        open={verifyResult}
+                        onClose={handleVerifyResultClose}
+                      >
+                        {verifiedStatus ? (
+                          <Alert severity="success">
+                            Certificate is successfully verified.
+                          </Alert>
+                        ) : (
+                          <Alert severity="error">
+                            Certificate is not verified.
+                          </Alert>
+                        )}
+                      </Dialog>
                     </StyledTableCell>
                   )}
                   {/* button for graduation */}
@@ -305,11 +440,15 @@ const TableTemplate = ({ headers, data, title, actions }) => {
                         }}
                         onClick={handleGraduationOpen}
                       >
-                        View
+                        Graduate
                       </Button>
+                      {/* graduation dialog */}
                       <Dialog
                         open={admissionOpen}
-                        onClose={handleGraduationClose}
+                        onClose={() => {
+                          handleGraduationClose();
+                          setStep(0); // Reset step when dialog is closed
+                        }}
                         componentsProps={{
                           backdrop: {
                             style: {
@@ -321,30 +460,93 @@ const TableTemplate = ({ headers, data, title, actions }) => {
                           component: "form",
                           onSubmit: (event) => {
                             event.preventDefault();
-                            handleGraduationItem(event);
+                            if (step === 0) {
+                              // Handle setting certificate
+                              handleSetCertificate(event);
+                              setStep(1); // Move to next step
+                            } else if (step === 1) {
+                              // Handle graduation
+                              handleGraduationItem(event);
+                            }
                           },
                         }}
                       >
-                        <DialogTitle>Student</DialogTitle>
-                        <DialogContent>
-                          {Object.entries(item).map(([key, value]) => (
-                            <TextField
-                              key={key}
-                              id={key}
-                              defaultValue={value}
-                              name={key}
-                              label={key.toUpperCase()}
-                              fullWidth
-                              margin="normal"
-                              color="primary"
-                            />
-                          ))}
-                        </DialogContent>
+                        {step === 0 ? (
+                          <>
+                            <DialogTitle>Set Certificate</DialogTitle>
+                            <DialogContent>
+                              <TextField
+                                defaultValue={item.id}
+                                name="studentId"
+                                label="Student ID"
+                                fullWidth
+                                margin="normal"
+                                color="primary"
+                              />
+                              <TextField
+                                name="honor"
+                                label="Honor"
+                                fullWidth
+                                margin="normal"
+                                color="primary"
+                              />
+                              <TextField
+                                name="status"
+                                label="Status"
+                                fullWidth
+                                margin="normal"
+                                color="primary"
+                              />
+                              <TextField
+                                name="description"
+                                label="Description"
+                                fullWidth
+                                margin="normal"
+                                color="primary"
+                              />
+                            </DialogContent>
+                          </>
+                        ) : (
+                          <>
+                            <DialogTitle>Graduate Student</DialogTitle>
+                            <DialogContent>
+                              <TextField
+                                defaultValue={item.id}
+                                name="studentId"
+                                label="Student ID"
+                                fullWidth
+                                margin="normal"
+                                color="primary"
+                              />
+                              <TextField
+                                name="studentWallet"
+                                label="Student Wallet"
+                                fullWidth
+                                margin="normal"
+                                color="primary"
+                              />
+                              <TextField
+                                name="certificateContract"
+                                label="Certificate Contract"
+                                fullWidth
+                                margin="normal"
+                                color="primary"
+                              />
+                            </DialogContent>
+                          </>
+                        )}
                         <DialogActions>
-                          <Button onClick={handleGraduationClose}>
+                          <Button
+                            onClick={() => {
+                              handleGraduationClose();
+                              setStep(0); // Reset step when dialog is closed
+                            }}
+                          >
                             Cancel
                           </Button>
-                          <Button type="submit">Graduate</Button>
+                          <Button type="submit">
+                            {step === 0 ? "Next" : "Graduate"}
+                          </Button>
                         </DialogActions>
                       </Dialog>
                     </StyledTableCell>
@@ -469,26 +671,68 @@ const TableTemplate = ({ headers, data, title, actions }) => {
           >
             <DialogTitle>Create Item</DialogTitle>
             <DialogContent>
-              {Object.keys(data[0]).map((key) => (
-                <TextField
-                  key={key}
-                  id={key}
-                  name={key}
-                  label={key.toUpperCase()}
-                  fullWidth
-                  margin="normal"
-                  color="primary"
-                />
-              ))}
               <TextField
-                key="address"
-                id="address"
+                name="name"
+                label="NAME"
+                fullWidth
+                margin="normal"
+                color="primary"
+              />
+              <TextField
+                name="nationality"
+                label="NATIONALITY"
+                fullWidth
+                margin="normal"
+                color="primary"
+              />
+              <TextField
+                name="nric"
+                label="NRIC"
+                fullWidth
+                margin="normal"
+                color="primary"
+              />
+              <TextField
+                name="passport"
+                label="PASSPORT"
+                fullWidth
+                margin="normal"
+                color="primary"
+              />
+              <TextField
                 name="address"
                 label="ADDRESS"
                 fullWidth
                 margin="normal"
                 color="primary"
               />
+              {title === "Final Candidate" && (
+                <TextField
+                  name="candidateContract"
+                  label="CANDIDATE CONTRACT"
+                  fullWidth
+                  margin="normal"
+                  color="primary"
+                />
+              )}
+              {title === "Admission" && (
+                <>
+                  <TextField
+                    name="category"
+                    label="CATEGORY"
+                    fullWidth
+                    margin="normal"
+                    color="primary"
+                  />
+                  <TextField
+                    name="major"
+                    label="MAJOR"
+                    fullWidth
+                    margin="normal"
+                    color="primary"
+                  />
+                </>
+              )}
             </DialogContent>
             <DialogActions>
               <Button onClick={handleCreateClose}>Cancel</Button>
