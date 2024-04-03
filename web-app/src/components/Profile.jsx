@@ -18,6 +18,7 @@ function Profile({ type, fields, title, action }) {
     company: ["ID", "UEN", "Name", "Address", "Company Description"],
     school: ["ID", "Name", "Email", "Address", "School Description"],
     person: ["ID", "Name", "Nationality", "NRIC", "Passport", "Address"],
+    admin: ["Address"],
     register: ["Address"],
     verify: ["Address"],
   };
@@ -178,17 +179,8 @@ function Profile({ type, fields, title, action }) {
           {
             from: accounts[0],
             gas: 100000,
-            gasPrice: web3.utils.toWei('50', 'gwei')
-          }
-          );
-      } else if (title === "Register Person") {
-        await Government.methods.registerPerson(formData["Address"].value).send(
-          {
-            from: accounts[0],
-            gas: 100000,
-            gasPrice: web3.utils.toWei('50', 'gwei')
-          }
-          );
+            gasPrice: web3.utils.toWei("50", "gwei"),
+          });
       } else if (title === "Register School") {
         await Government.methods.registerSchool(formData["Address"].value).send(
           {
@@ -197,19 +189,21 @@ function Profile({ type, fields, title, action }) {
             gasPrice: web3.utils.toWei('50', 'gwei')
           }
           );
+      } else if (title === "Add Admin") {
+        await Government.methods.addAdmin(formData["Address"].value).send({
+          from: accounts[0],
+          gas: 100000,
+          gasPrice: web3.utils.toWei("50", "gwei"),
+        });
       }
       setModalOpen(true);
-			
+    } catch (error) {
+      console.log(error);
     }
-    catch(error)
-    {
-      console.log(error)
-    }
-   
-  }
+  };
 
-  const handleVerify = async(e) => {
-    try {      
+  const handleVerify = async (e) => {
+    try {
       if (title === "Verify Company") {
         console.log(formData["Address"].value);
         const accounts = await window.ethereum.enable();
@@ -217,16 +211,20 @@ function Profile({ type, fields, title, action }) {
         console.log("Register:", formData["Address"].value);
         // await Government.methods.isRegisterCompany(formData["Address"].value).send({from: accounts[0]});
         console.log("deployed address =>", governmentAddress);
-        const isRegistered = await Government.methods.isRegisterCompany(formData["Address"].value).call({from: accounts[0]});
+        const isRegistered = await Government.methods
+          .isRegisterCompany(formData["Address"].value)
+          .call({ from: accounts[0] });
         console.log("Is registered:", isRegistered);
-      } else if (title === "Verify Person") {
+      } else if (title === "Verify School") {
         console.log(formData["Address"].value);
         const accounts = await window.ethereum.enable();
         console.log("Accounts:", accounts);
         console.log("Register:", formData["Address"].value);
         // await Government.methods.isRegisterCompany(formData["Address"].value).send({from: accounts[0]});
         console.log("deployed address =>", governmentAddress);
-        const isRegistered = await Government.methods.isRegisterPerson(formData["Address"].value).call({from: accounts[0]});
+        const isRegistered = await Government.methods
+          .isRegisterSchool(formData["Address"].value)
+          .call({ from: accounts[0] });
         console.log("Is registered:", isRegistered);
       } else if (title === "Verify School") {
         console.log(formData["Address"].value);
@@ -239,8 +237,21 @@ function Profile({ type, fields, title, action }) {
         console.log("Is registered:", isRegistered);
       }
       setModalOpen(true);
+    } catch (error) {}
+  };
+
+  const handleDelete = async (e) => {
+    try {
+      const accounts = await window.ethereum.request({
+        method: "eth_requestAccounts",
+      });
+      await Government.methods.removeAdmin(formData["Address"].value).send({
+        from: accounts[0],
+        gas: 100000,
+        gasPrice: web3.utils.toWei("50", "gwei"),
+      });
     } catch (error) {
-      
+      console.log(error);
     }
   }
 
@@ -284,7 +295,7 @@ function Profile({ type, fields, title, action }) {
           </Box>
         </form>
       )}
-      {action === "create" && (
+      {action === "register" && (
         <form onSubmit={handleRegister}>
           <Box display="flex" flexDirection="column" gap={4}>
             {choosenProfile.map((field) => (
@@ -299,8 +310,12 @@ function Profile({ type, fields, title, action }) {
                 helperText={formData[field].errorMessage}
               />
             ))}
-            <Button onClick={handleRegister} variant="contained" color="primary">
-              Create
+            <Button
+              onClick={handleRegister}
+              variant="contained"
+              color="primary"
+            >
+              Register
             </Button>
           </Box>
         </form>
@@ -322,6 +337,27 @@ function Profile({ type, fields, title, action }) {
             ))}
             <Button onClick={handleVerify} variant="contained" color="primary">
               Verify
+            </Button>
+          </Box>
+        </form>
+      )}
+      {action === "delete" && (
+        <form onSubmit={handleDelete}>
+          <Box display="flex" flexDirection="column" gap={4}>
+            {choosenProfile.map((field) => (
+              <TextField
+                key={field}
+                label={field.charAt(0).toUpperCase() + field.slice(1)}
+                variant="outlined"
+                name={field}
+                value={formData[field].value}
+                onChange={handleChange}
+                error={!formData[field].isValid}
+                helperText={formData[field].errorMessage}
+              />
+            ))}
+            <Button onClick={handleDelete} variant="contained" color="primary">
+              Remove
             </Button>
           </Box>
         </form>
