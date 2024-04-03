@@ -286,7 +286,6 @@ function Profile({ type, fields, title, action }) {
               <TextField
                 key={key}
                 label={key}
-                label={key}
                 // variant="filled"
                 variant={isEditable ? "outlined" : "filled"}
                 name={key}
