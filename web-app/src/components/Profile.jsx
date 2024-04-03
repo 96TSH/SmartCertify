@@ -127,17 +127,50 @@ function Profile({ type, fields, title, action }) {
     }
   };
 
-  const handleLogin = (e) => {
-    if (type === "government") {
-      localStorage.setItem("govAddress", formData["Address"].value);
-    } else if (type === "company") {
-      localStorage.setItem("comAddress", formData["Address"].value);
-    } else if (type === "school") {
-      localStorage.setItem("schAddress", formData["Address"].value);
-    } else if (type === "person") {
-      localStorage.setItem("perAddress", formData["Address"].value);
+  // original handle login by James
+  // const handleLogin = (e) => {
+  //   if (type === "government") {
+  //     localStorage.setItem("govAddress", formData["Address"].value);
+  //   } else if (type === "company") {
+  //     localStorage.setItem("comAddress", formData["Address"].value);
+  //   } else if (type === "school") {
+  //     localStorage.setItem("schAddress", formData["Address"].value);
+  //   } else if (type === "person") {
+  //     localStorage.setItem("perAddress", formData["Address"].value);
+  //   }
+  // };
+
+//handleLogin by Shiyong
+  const handleLogin = async (e) => {
+    e.preventDefault(); // Prevent default form submission
+
+    try {
+      if (type === "company") {
+        localStorage.setItem("comAddress", formData["Address"].value);
+        const isAddressValid = await Government.methods.isRegisterCompany(formData["Address"].value).call();
+      } else if (type === "school") {
+        localStorage.setItem("schAddress", formData["Address"].value);
+        const isAddressValid = await Government.methods.isRegisterSchool(formData["Address"].value).call();
+      } else if (type === "person") {
+        localStorage.setItem("perAddress", formData["Address"].value);
+        const isAddressValid = await Government.methods.isRegisterPerson(formData["Address"].value).call();
+      }
+      
+      if (isAddressValid) {
+        // Handle successful verification redirect user to dashboard
+        // how to write this redirect?
+        console.log("Address verified and login successfully!");
+      } else {
+        // Handle invalid address
+        console.error("Invalid login address!");
+      }
     }
-  };
+    catch (error) {
+      console.log(error);
+    }
+  }
+
+
 
   const handleRegister = async(e) => {
     // try {
