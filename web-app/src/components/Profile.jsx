@@ -56,7 +56,7 @@ function Profile({ type, fields, title, action }) {
 
   useEffect(() => {
     getProfileValue();
-  })
+  },[formData])
 
 
 
@@ -263,7 +263,7 @@ function Profile({ type, fields, title, action }) {
       {action === "update" && (
         <form onSubmit={handleSubmit}>
           <Box display="flex" flexDirection="column" gap={4}>
-            {Object.entries(profileValue).map(([key,value]) => (
+            {Object.entries(formData).map(([key,value]) => (
               <TextField
                 key={key}
                 label={key.charAt(0).toUpperCase() + key.slice(1)}
@@ -273,8 +273,8 @@ function Profile({ type, fields, title, action }) {
                 disabled={!isEditable}
                 value={value}
                 onChange={handleChange}
-                error={!formData[field].isValid}
-                helperText={formData[field].errorMessage}
+                error={!formData[key].isValid}
+                helperText={formData[key].errorMessage}
               />
             ))}
             <Button onClick={toggleEdit} variant="contained" color="primary">
