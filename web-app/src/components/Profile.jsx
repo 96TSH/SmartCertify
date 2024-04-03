@@ -70,7 +70,7 @@ function Profile({ type, fields, title, action }) {
   useEffect(() => {
     getProfileValue();
   },[])
-  },[])
+  
 
 
 
