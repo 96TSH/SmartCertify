@@ -4,7 +4,7 @@ const GovRegisterCompany = () => {
 
   return (
     <>
-      <Profile fields="register" title="Register Company" action="create" />
+      <Profile fields="register" title="Register Company" action="register" />
     </>
   );
 };

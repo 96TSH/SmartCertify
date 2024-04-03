@@ -3,21 +3,25 @@ import List from "@mui/material/List";
 import ListItemButton from "@mui/material/ListItemButton";
 import ListItemIcon from "@mui/material/ListItemIcon";
 import ListItemText from "@mui/material/ListItemText";
+import Collapse from "@mui/material/Collapse";
+import ExpandLess from "@mui/icons-material/ExpandLess";
+import ExpandMore from "@mui/icons-material/ExpandMore";
 import { Link } from 'react-router-dom';
 
 import SupervisorAccountIcon from '@mui/icons-material/SupervisorAccount'; //admin icon
 import ContactPageIcon from '@mui/icons-material/ContactPage'; //profile icon
 import ThumbUpAltIcon from '@mui/icons-material/ThumbUpAlt'; //final candidate icon
 import HomeIcon from '@mui/icons-material/Home'; //home icon
+import LooksOneOutlinedIcon from '@mui/icons-material/LooksOneOutlined'; //1
+import LooksTwoOutlinedIcon from '@mui/icons-material/LooksTwoOutlined'; //2
 //import { NavLink } from "react-router-dom";
 
 export default function SideBarCom() {
+  const [openA, setOpenA] = React.useState(false);
 
-//I tried to add this 4 links to the 4 ListItemButton, but error occur
-//component={Link} to="/company"
-//component={Link} to="/company/profile"
-//component={Link} to="/company/admin"
-//component={Link} to="/company/finalcandidate"
+  const handleClickA = () => {
+    setOpenA(!openA);
+  };
 
   return (
     <List
@@ -36,12 +40,39 @@ export default function SideBarCom() {
         </ListItemIcon>
         <ListItemText primary="Profile" />
       </ListItemButton>
-      <ListItemButton component={Link} to="/Company/Admin">
+
+      <ListItemButton onClick={handleClickA}>
         <ListItemIcon>
           <SupervisorAccountIcon />
         </ListItemIcon>
         <ListItemText primary="Admin" />
+        {openA ? <ExpandLess /> : <ExpandMore />}
       </ListItemButton>
+      <Collapse in={openA} timeout="auto" unmountOnExit>
+        <List component="div" disablePadding>
+          <ListItemButton
+            sx={{ pl: 4 }}
+            component={Link}
+            to="/Company/Addadmin"
+          >
+            <ListItemIcon>
+              <LooksOneOutlinedIcon />
+            </ListItemIcon>
+            <ListItemText primary="Add Admin" />
+          </ListItemButton>
+          <ListItemButton
+            sx={{ pl: 4 }}
+            component={Link}
+            to="/Company/Removeadmin"
+          >
+            <ListItemIcon>
+              <LooksTwoOutlinedIcon />
+            </ListItemIcon>
+            <ListItemText primary="Remove Admin" />
+          </ListItemButton>
+        </List>
+      </Collapse>
+
       <ListItemButton component={Link} to="/Company/Finalcandidate"> 
         <ListItemIcon>
           <ThumbUpAltIcon />
