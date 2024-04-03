@@ -16,13 +16,13 @@ const SchStudents = () => {
 
   const fetchData = async () => {
     try {
-      // const accounts = await window.ethereum.request({
-      //   method: "eth_requestAccounts",
-      // });
-      // console.log(accounts);
+      const accounts = await window.ethereum.request({
+        method: "eth_requestAccounts",
+      });
+      console.log(accounts[0]);
       const data = await School.methods.getAllStudent().call({
-        from: schoolAddress,
-        gas: 100000,
+        from: accounts[0],
+        gas: 1000000,
         gasPrice: web3.utils.toWei("50", "gwei"),
       });
       console.log(data);

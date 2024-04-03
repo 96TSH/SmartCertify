@@ -4,7 +4,7 @@ module.exports = async function (deployer, network, accounts) {
   console.log("Deploying contracts...");
 
   // 打印正在使用的部署账户
-  const deployingAccount = accounts[0];
+  const deployingAccount = accounts[3];
   console.log(`Deploying account: ${deployingAccount}`);
 
   // 获取并打印账户余额
@@ -12,5 +12,5 @@ module.exports = async function (deployer, network, accounts) {
   console.log(`Account balance: ${web3.utils.fromWei(balance, 'ether')} ETH`);
 
   // 部署迁移合约
-  await deployer.deploy(contract);
+  await deployer.deploy(contract, { from: deployingAccount });
 };

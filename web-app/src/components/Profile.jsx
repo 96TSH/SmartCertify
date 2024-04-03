@@ -47,16 +47,18 @@ function Profile({ type, fields, title, action }) {
     } else if (fields == "school") {
       const response = await School.methods.getSchoolInfo().call();
       setFormData(response);
+      console.log(response);
     } else if (fields == "person") {
       const response = await Person.methods.getPersonalInfo().call();
       setFormData(response);
+      console.log(formData);
     }
     
   }
 
   useEffect(() => {
     getProfileValue();
-  },[formData])
+  },[])
 
 
 
@@ -152,7 +154,7 @@ function Profile({ type, fields, title, action }) {
   };
 
   const handleClose = () => {
-    setOpen(false);
+    setModalOpen(false);
   };
 
   const handleLogin = (e) => {
@@ -160,6 +162,7 @@ function Profile({ type, fields, title, action }) {
       setCompanyAddress(formData["Address"].value);
     } else if (type === "school") {
       setSchoolAddress(formData["Address"].value);
+      console.log(schoolAddress);
     } else if (type === "person") {
       setPersonAddress(formData["Address"].value);
     }
@@ -263,18 +266,18 @@ function Profile({ type, fields, title, action }) {
       {action === "update" && (
         <form onSubmit={handleSubmit}>
           <Box display="flex" flexDirection="column" gap={4}>
-            {Object.entries(formData).map(([key,value]) => (
+          {Object.entries(formData).map(([key]) => (
               <TextField
                 key={key}
-                label={key.charAt(0).toUpperCase() + key.slice(1)}
+                label={key}
                 // variant="filled"
                 variant={isEditable ? "outlined" : "filled"}
                 name={key}
                 disabled={!isEditable}
-                value={value}
+                value={formData[key]}
                 onChange={handleChange}
-                error={!formData[key].isValid}
-                helperText={formData[key].errorMessage}
+                // error={!formData[key].isValid}
+                // helperText={formData[key].errorMessage}
               />
             ))}
             <Button onClick={toggleEdit} variant="contained" color="primary">
