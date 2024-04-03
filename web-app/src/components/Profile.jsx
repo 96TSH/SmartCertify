@@ -324,7 +324,7 @@ function Profile({ type, fields, title, action }) {
                 // variant="filled"
                 variant={isEditable ? "outlined" : "filled"}
                 name={key}
-                disabled={!isEditable}
+                // disabled={!isEditable}
                 value={formData[key]}
                 onChange={handleChange}
                 // error={!formData[key].isValid}
@@ -353,7 +353,7 @@ function Profile({ type, fields, title, action }) {
                 // variant="filled"
                 variant={isEditable ? "outlined" : "filled"}
                 name={key}
-                disabled={!isEditable}
+                // disabled={!isEditable}
                 value={formData[key]}
                 onChange={handleChange}
                 // error={!formData[key].isValid}
@@ -378,7 +378,7 @@ function Profile({ type, fields, title, action }) {
                 // variant="filled"
                 variant={isEditable ? "outlined" : "filled"}
                 name={key}
-                disabled={!isEditable}
+                // disabled={!isEditable}
                 value={formData[key]}
                 onChange={handleChange}
                 // error={!formData[key].isValid}
@@ -403,7 +403,7 @@ function Profile({ type, fields, title, action }) {
                 // variant="filled"
                 variant={isEditable ? "outlined" : "filled"}
                 name={key}
-                disabled={!isEditable}
+                // disabled={!isEditable}
                 value={formData[key]}
                 onChange={handleChange}
                 // error={!formData[key].isValid}
