@@ -290,7 +290,7 @@ function Profile({ type, fields, title, action }) {
                 variant={isEditable ? "outlined" : "filled"}
                 name={key}
                 disabled={!isEditable}
-                value={formDatas[key]}
+                value={formData[key]}
                 onChange={handleChange}
                 // error={!formData[key].isValid}
                 // helperText={formData[key].errorMessage}
@@ -317,16 +317,20 @@ function Profile({ type, fields, title, action }) {
       {action === "register" && (
         <form onSubmit={handleRegister}>
           <Box display="flex" flexDirection="column" gap={4}>
-            {choosenProfile.map((field) => (
+          {Object.entries(formData).map(([key]) => (
               <TextField
-                key={field}
-                label={field.charAt(0).toUpperCase() + field.slice(1)}
-                variant="outlined"
-                name={field}
-                value={formData[field].value}
+                key={key}
+                label={key}
+                // variant="filled"
+                variant={isEditable ? "outlined" : "filled"}
+                name={key}
+                disabled={!isEditable}
+                value={formData[key]}
                 onChange={handleChange}
-                // error={!formData[field].isValid}
-                // helperText={formData[field].errorMessage}
+                // error={!formData[key].isValid}
+                // helperText={formData[key].errorMessage}
+                // error={!formData[key].isValid}
+                // helperText={formData[key].errorMessage}
               />
             ))}
             <Button
@@ -342,16 +346,20 @@ function Profile({ type, fields, title, action }) {
       {action === "verify" && (
         <form onSubmit={handleVerify}>
           <Box display="flex" flexDirection="column" gap={4}>
-            {choosenProfile.map((field) => (
+          {Object.entries(formData).map(([key]) => (
               <TextField
-                key={field}
-                label={field.charAt(0).toUpperCase() + field.slice(1)}
-                variant="outlined"
-                name={field}
-                value={formData[field].value}
+                key={key}
+                label={key}
+                // variant="filled"
+                variant={isEditable ? "outlined" : "filled"}
+                name={key}
+                disabled={!isEditable}
+                value={formData[key]}
                 onChange={handleChange}
-                // error={!formData[field].isValid}
-                // helperText={formData[field].errorMessage}
+                // error={!formData[key].isValid}
+                // helperText={formData[key].errorMessage}
+                // error={!formData[key].isValid}
+                // helperText={formData[key].errorMessage}
               />
             ))}
             <Button onClick={handleVerify} variant="contained" color="primary">
@@ -363,16 +371,20 @@ function Profile({ type, fields, title, action }) {
       {action === "delete" && (
         <form onSubmit={handleDelete}>
           <Box display="flex" flexDirection="column" gap={4}>
-            {choosenProfile.map((field) => (
+          {Object.entries(formData).map(([key]) => (
               <TextField
-                key={field}
-                label={field.charAt(0).toUpperCase() + field.slice(1)}
-                variant="outlined"
-                name={field}
-                value={formData[field].value}
+                key={key}
+                label={key}
+                // variant="filled"
+                variant={isEditable ? "outlined" : "filled"}
+                name={key}
+                disabled={!isEditable}
+                value={formData[key]}
                 onChange={handleChange}
-                // error={!formData[field].isValid}
-                // helperText={formData[field].errorMessage}
+                // error={!formData[key].isValid}
+                // helperText={formData[key].errorMessage}
+                // error={!formData[key].isValid}
+                // helperText={formData[key].errorMessage}
               />
             ))}
             <Button onClick={handleDelete} variant="contained" color="primary">
@@ -384,16 +396,20 @@ function Profile({ type, fields, title, action }) {
       {action === "login" && (
         <form onSubmit={handleLogin}>
           <Box display="flex" flexDirection="column" gap={4}>
-            {choosenProfile.map((field) => (
+          {Object.entries(formData).map(([key]) => (
               <TextField
-                key={field}
-                label={field.charAt(0).toUpperCase() + field.slice(1)}
-                variant="outlined"
-                name={field}
-                value={formData[field].value}
+                key={key}
+                label={key}
+                // variant="filled"
+                variant={isEditable ? "outlined" : "filled"}
+                name={key}
+                disabled={!isEditable}
+                value={formData[key]}
                 onChange={handleChange}
-                // error={!formData[field].isValid}
-                // helperText={formData[field].errorMessage}
+                // error={!formData[key].isValid}
+                // helperText={formData[key].errorMessage}
+                // error={!formData[key].isValid}
+                // helperText={formData[key].errorMessage}
               />
             ))}
             <Button onClick={handleLogin} variant="contained" color="primary">
