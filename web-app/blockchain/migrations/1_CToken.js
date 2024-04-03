@@ -12,5 +12,5 @@ module.exports = async function (deployer, network, accounts) {
   console.log(`Account balance: ${web3.utils.fromWei(balance, 'ether')} ETH`);
 
   // 部署迁移合约
-  await deployer.deploy(coken);
+  await deployer.deploy(coken, { from: deployingAccount });
 };

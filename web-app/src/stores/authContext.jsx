@@ -31,9 +31,12 @@ export const AuthContextProvider = ({ children }) => {
 
   // const personAddress = PersonArtifact.networks[1688].address;
   const personAbi = PersonArtifact.abi;
+  console.log(personAddress);
+  console.log(personAbi);
   const Person = new web3.eth.Contract(personAbi, personAddress);
 
-  const context = { selectedButton, setSelectedButton, web3, Government, governmentAddress, School, schoolAddress, setSchoolAddress, Company, companyAddress, setCompanyAddress, Person, personAddress, setPersonAddress};
+  const context = { selectedButton, setSelectedButton, web3, Government, governmentAddress, School, 
+    schoolAddress, setSchoolAddress, Company, companyAddress, setCompanyAddress, Person, personAddress, setPersonAddress};
 
   return (
     <AuthContext.Provider value={context}>

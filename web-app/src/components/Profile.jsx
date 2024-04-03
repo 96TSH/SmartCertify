@@ -70,6 +70,7 @@ function Profile({ type, fields, title, action }) {
   useEffect(() => {
     getProfileValue();
   },[])
+  },[])
 
 
 
@@ -169,6 +170,7 @@ function Profile({ type, fields, title, action }) {
 
   const handleClose = () => {
     setModalOpen(false);
+    setModalOpen(false);
   };
 
   const handleLogin = (e) => {
@@ -176,6 +178,7 @@ function Profile({ type, fields, title, action }) {
       setCompanyAddress(formData["Address"].value);
     } else if (type === "school") {
       setSchoolAddress(formData["Address"].value);
+      console.log(schoolAddress);
     } else if (type === "person") {
       setPersonAddress(formData["Address"].value);
     }
@@ -283,12 +286,15 @@ function Profile({ type, fields, title, action }) {
               <TextField
                 key={key}
                 label={key}
+                label={key}
                 // variant="filled"
                 variant={isEditable ? "outlined" : "filled"}
                 name={key}
                 disabled={!isEditable}
                 value={formDatas[key]}
                 onChange={handleChange}
+                // error={!formData[key].isValid}
+                // helperText={formData[key].errorMessage}
                 // error={!formData[key].isValid}
                 // helperText={formData[key].errorMessage}
               />

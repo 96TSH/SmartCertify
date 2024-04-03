@@ -4,7 +4,7 @@ module.exports = async function (deployer, network, accounts) {
   console.log("Deploying contracts...");
 
   // 打印正在使用的部署账户
-  const deployingAccount = accounts[0];
+  const deployingAccount = accounts[3];
   console.log(`Deploying account: ${deployingAccount}`);
 
   // 获取并打印账户余额
@@ -23,6 +23,6 @@ module.exports = async function (deployer, network, accounts) {
   const name = "Nanyang Technological University";
   const add = "50 Nanyang Ave, Singapore 639798";
   const email = "ntu@edu.sg";
-  const eToken = "0x12F4DA9EA5bFb53F81Ce9d4FE2D247b1c136cF75";
-  await deployer.deploy(contract, id, name, add, email, eToken);
+  const eToken = "0xeb19307E403a43825dFE9e00146dE5bF63e39997";
+  await deployer.deploy(contract, id, name, add, email, eToken, { from: deployingAccount });
 };

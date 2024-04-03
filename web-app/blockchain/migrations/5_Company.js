@@ -4,7 +4,7 @@ module.exports = async function (deployer, network, accounts) {
   console.log("Deploying contracts...");
 
   // 打印正在使用的部署账户
-  const deployingAccount = accounts[0];
+  const deployingAccount = accounts[1];
   console.log(`Deploying account: ${deployingAccount}`);
 
   // 获取并打印账户余额
@@ -18,5 +18,5 @@ module.exports = async function (deployer, network, accounts) {
     add = "50 Abc AVE, Singapore 639798";
     email = "office@abc.com";
     eToken = "0x12F4DA9EA5bFb53F81Ce9d4FE2D247b1c136cF75";
-  await deployer.deploy(contract, governmentAdd, uenNo, companyName, add, email, eToken);
+  await deployer.deploy(contract, governmentAdd, uenNo, companyName, add, email, eToken, { from: deployingAccount });
 };
