@@ -3,7 +3,7 @@ import { TextField, Button, Container, Box, Typography, Dialog, DialogActions, D
 import AuthContext from "../stores/authContext";
 
 function Profile({ type, fields, title, action }) {
-  const { Government, web3, governmentAddress, School, schoolAddress, Company, companyAddress, Person, personAddress } = useContext(AuthContext);
+  const { Government, web3, governmentAddress, School, schoolAddress, setSchoolAddress, Company, companyAddress, setCompanyAddress, Person, personAddress, setPersonAddress} = useContext(AuthContext);
 
   const styles = {
     title: {
@@ -156,14 +156,12 @@ function Profile({ type, fields, title, action }) {
   };
 
   const handleLogin = (e) => {
-    if (type === "government") {
-      localStorage.setItem("govAddress", formData["Address"].value);
-    } else if (type === "company") {
-      localStorage.setItem("comAddress", formData["Address"].value);
+    if (type === "company") {
+      setCompanyAddress(formData["Address"].value);
     } else if (type === "school") {
-      localStorage.setItem("schAddress", formData["Address"].value);
+      setSchoolAddress(formData["Address"].value);
     } else if (type === "person") {
-      localStorage.setItem("perAddress", formData["Address"].value);
+      setPersonAddress(formData["Address"].value);
     }
   };
 
