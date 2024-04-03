@@ -1,9 +1,9 @@
 import { useState, useEffect, useContext } from "react";
-import { TextField, Button, Container, Box, Typography } from "@mui/material";
+import { TextField, Button, Container, Box, Typography, Dialog, DialogActions, DialogContent, DialogContentText, DialogTitle } from "@mui/material";
 import AuthContext from "../stores/authContext";
 
 function Profile({ type, fields, title, action }) {
-  const { Government, web3, governmentAddress } = useContext(AuthContext);
+  const { Government, web3, governmentAddress, School, schoolAddress, Company, companyAddress, Person, personAddress } = useContext(AuthContext);
 
   const styles = {
     title: {
@@ -32,33 +32,32 @@ function Profile({ type, fields, title, action }) {
     {}
   );
 
+
+  const [modalOpen, setModalOpen] = useState(false);
   const [formData, setFormData] = useState(initialFormData);
   const [isEditable, setIsEditable] = useState(false);
   const [buttonLabel, setButtonLabel] = useState("Update");
 
-  // useEffect(() => {
-  //   const fetchData = async () => {
-  //     try {
-  //       // const response = await axios.get(`/api/formData/${fields}`);
-  //       const response = {'ID': 999, 'UEN':"999", 'Name':"James", 'Address':"Kane road", 'Company':"swiss"};
-  //       console.log(response);
-  //       const profileFields = fieldsByProfiles[fields] || [];
-  //       const initialFormData = profileFields.reduce((acc, field) => ({
-  //         ...acc,
-  //         [field]: {
-  //           value: response.data[field] || '', // Populate with fetched data or default to empty string
-  //           isValid: true,
-  //           errorMessage: ''
-  //         }
-  //       }), {});
-  //       setFormData(initialFormData);
-  //     } catch (error) {
-  //       console.error('Error fetching form data:', error);
-  //       // Handle error or set fallback state
-  //     }
-  //   };
-  //   fetchData();
-  // }, []);
+
+  const getProfileValue = async () => {
+    if (fields == "company") {
+      const response = await Company.methods.getCompanyInfo().call();
+      setFormData(response);
+    } else if (fields == "school") {
+      const response = await School.methods.getSchoolInfo().call();
+      setFormData(response);
+    } else if (fields == "person") {
+      const response = await Person.methods.getPersonalInfo().call();
+      setFormData(response);
+    }
+    
+  }
+
+  useEffect(() => {
+    getProfileValue();
+  })
+
+
 
   const isValidInput = (value) => value.trim().length >= 2;
 
@@ -97,7 +96,7 @@ function Profile({ type, fields, title, action }) {
     }));
   };
 
-  const handleSubmit = (e) => {
+  const handleSubmit = async(e) => {
     // e.preventDefault();
 
     let isFormValid = true;
@@ -120,11 +119,39 @@ function Profile({ type, fields, title, action }) {
       console.log("Form data:", formData);
       setIsEditable(false);
       setButtonLabel("Update");
-      // Proceed with form submission or further processing
+      if (fields == "company") {
+        await Company.methods.setCompanyInfo(formData).send(
+          {
+            from: accounts[0],
+            gas: 100000,
+            gasPrice: web3.utils.toWei('50', 'gwei')
+          }
+          );
+      } else if (fields == "school") {
+        await School.methods.updateSchoolInfo(formData).send(
+          {
+            from: accounts[0],
+            gas: 100000,
+            gasPrice: web3.utils.toWei('50', 'gwei')
+          }
+          );
+      } else if (fields == "person") {
+        await Person.methods.setPersonalInfo(formData).send(
+          {
+            from: accounts[0],
+            gas: 100000,
+            gasPrice: web3.utils.toWei('50', 'gwei')
+          }
+          );
+      }
     } else {
       console.log("Validation failed");
       // Optionally, handle the case where some fields are invalid
     }
+  };
+
+  const handleClose = () => {
+    setOpen(false);
   };
 
   const handleLogin = (e) => {
@@ -140,17 +167,7 @@ function Profile({ type, fields, title, action }) {
   };
 
   const handleRegister = async(e) => {
-    // try {
-    //   const accounts = await window.ethereum.request({ method: 'eth_requestAccounts' }); // Get the selected account from the metamask plugin.
-		// 	console.log(accounts);
 
-    //   if (title === "Register Company") {
-    //     console.log(formData["Address"].value)
-    //     Government.methods.registerCompany(accounts[0],formData["Address"].value).send(accounts[0]);
-    //   }
-    // } catch (error) {
-      
-    // }
     try{
       const accounts = await window.ethereum.request({ method: 'eth_requestAccounts' });
 			console.log("Accounts:", accounts);
@@ -172,7 +189,16 @@ function Profile({ type, fields, title, action }) {
             gasPrice: web3.utils.toWei('50', 'gwei')
           }
           );
+      } else if (title === "Register School") {
+        await Government.methods.registerSchool(formData["Address"].value).send(
+          {
+            from: accounts[0],
+            gas: 100000,
+            gasPrice: web3.utils.toWei('50', 'gwei')
+          }
+          );
       }
+      setModalOpen(true);
 			
     }
     catch(error)
@@ -202,7 +228,17 @@ function Profile({ type, fields, title, action }) {
         console.log("deployed address =>", governmentAddress);
         const isRegistered = await Government.methods.isRegisterPerson(formData["Address"].value).call({from: accounts[0]});
         console.log("Is registered:", isRegistered);
+      } else if (title === "Verify School") {
+        console.log(formData["Address"].value);
+        const accounts = await window.ethereum.enable();
+        console.log("Accounts:", accounts);
+        console.log("Register:", formData["Address"].value);
+        // await Government.methods.isRegisterCompany(formData["Address"].value).send({from: accounts[0]});
+        console.log("deployed address =>", governmentAddress);
+        const isRegistered = await Government.methods.isRegisterSchool(formData["Address"].value).call({from: accounts[0]});
+        console.log("Is registered:", isRegistered);
       }
+      setModalOpen(true);
     } catch (error) {
       
     }
@@ -218,15 +254,15 @@ function Profile({ type, fields, title, action }) {
       {action === "update" && (
         <form onSubmit={handleSubmit}>
           <Box display="flex" flexDirection="column" gap={4}>
-            {choosenProfile.map((field) => (
+            {Object.entries(profileValue).map(([key,value]) => (
               <TextField
-                key={field}
-                label={field.charAt(0).toUpperCase() + field.slice(1)}
+                key={key}
+                label={key.charAt(0).toUpperCase() + key.slice(1)}
                 // variant="filled"
                 variant={isEditable ? "outlined" : "filled"}
-                name={field}
+                name={key}
                 disabled={!isEditable}
-                value={formData[field].value}
+                value={value}
                 onChange={handleChange}
                 error={!formData[field].isValid}
                 helperText={formData[field].errorMessage}
@@ -311,6 +347,17 @@ function Profile({ type, fields, title, action }) {
           </Box>
         </form>
       )}
+      <Dialog open={modalOpen} onClose={handleClose}>
+        <DialogTitle>Submission Successful</DialogTitle>
+        <DialogContent>
+          <DialogContentText>
+            Successful!
+          </DialogContentText>
+        </DialogContent>
+        <DialogActions>
+          <Button onClick={handleClose}>Close</Button>
+        </DialogActions>
+      </Dialog>
     </Container>
   );
 }

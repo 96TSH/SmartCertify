@@ -2,6 +2,9 @@ import { createContext, useState } from 'react';
 
 import Web3 from 'web3';
 import GovernmentArtifact from '../../blockchain/build/contracts/Government.json'
+import CompanyArtifact from '../../blockchain/build/contracts/Company.json'
+import SchoolArtifact from '../../blockchain/build/contracts/School.json'
+import PersonArtifact from '../../blockchain/build/contracts/Person.json'
 // import SimpleGovernmentArtifact from '../../blockchain/build/contracts/SimpleGovernment.json'
 
 const AuthContext = createContext({
@@ -46,12 +49,25 @@ export const AuthContextProvider = ({ children }) => {
 
 	// Smart Contract Addresses
 	const governmentAddress = GovernmentArtifact.networks[1688].address;
-	// const simpleGovernmentAddress = SimpleGovernmentArtifact.networks[1688].address;
+	const governmentAbi = GovernmentArtifact.abi;
+	const Government = new web3.eth.Contract(governmentAbi, governmentAddress);
 
-	const Government = new web3.eth.Contract(GovernmentArtifact.abi, governmentAddress);
-	// const SimpleGovernment = new web3.eth.Contract(SimpleGovernmentArtifact.abi, simpleGovernmentAddress);
+	const schoolAddress = SchoolArtifact.networks[1688].address;
+	const schoolAbi = SchoolArtifact.abi;
+	const School = new web3.eth.Contract(schoolAbi, schoolAddress);
 
-	const context = { selectedButton, setSelectedButton, web3, Government, governmentAddress };
+	const companyAddress = CompanyArtifact.networks[1688].address;
+	const companyAbi = CompanyArtifact.abi;
+	const Company = new web3.eth.Contract(companyAbi, companyAddress);
+
+	const personAddress = PersonArtifact.networks[1688].address;
+	const personAbi = PersonArtifact.abi;
+	const Person = new web3.eth.Contract(personAbi, personAddress);
+
+
+
+
+	const context = { selectedButton, setSelectedButton, web3, Government, governmentAddress, School, schoolAddress, Company, companyAddress, Person, personAddress};
 
 	return (
 		<AuthContext.Provider value={context}>
