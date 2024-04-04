@@ -11,10 +11,12 @@ export default function ComHome() {
 
   return (
     <MainMenu Entity={"Company"}>
-      <h2>Smart Certify x Company </h2>
+      <div style={{ display: 'flex', justifyContent: 'center', alignItems: 'center' }}>
+      <img src="Organisation4.png" alt="Smart Certify x Organisation" style={{ width: '500px', height: '110px', objectFit: 'cover' } } />
+    </div>
       <Outlet />
       {location.pathname === "/Company" && (
-        <>
+         <div style={{ display: 'flex', justifyContent: 'center', alignItems: 'center' }}>
           {/* <Button
             variant="outlined"
             sx={{
@@ -50,7 +52,7 @@ export default function ComHome() {
             />
           )} */}
           {login && <Login type="company" />}
-        </>
+          </div>
       )}
     </MainMenu>
   );

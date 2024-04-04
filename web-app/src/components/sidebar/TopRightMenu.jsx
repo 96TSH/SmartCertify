@@ -6,6 +6,8 @@ import { useState, useContext } from "react";
 import { useNavigate } from "react-router-dom";
 import AuthContext from "../../stores/authContext";
 
+import { Typography } from "@mui/material";
+
 export default function TopRightMenu({ menuItems }) {
   const { selectedButton, setSelectedButton } = useContext(AuthContext);
 
@@ -18,6 +20,7 @@ export default function TopRightMenu({ menuItems }) {
     setSelectedButton(item);
   }
 
+
   return (
     <PopupState variant="popover">
       {(popupState) => (
@@ -26,9 +29,9 @@ export default function TopRightMenu({ menuItems }) {
             variant="contained"
             defaultValue="select"
             style={{ width: "120px", height: "40px" }}
-            {...bindTrigger(popupState)}
-          >
-            {selectedButton === 'Person' ? 'Individual' :
+            {...bindTrigger(popupState)}>
+              {/* mapped selectedButton to display desired value on button */}
+          {selectedButton === 'Person' ? 'Individual' :
            selectedButton === 'School' ? 'Institution' :
            selectedButton === 'Government' ? 'Government' :
            selectedButton === 'Company' ? 'Organisation' : 'Select'}
@@ -39,10 +42,13 @@ export default function TopRightMenu({ menuItems }) {
                 key={index}
                 onClick={() => (popupState.close(), handleMenuItemClick(item))}
               >
+                {/* mapped item values to display desired value on button */}
+                <Typography style={{ color: '#1876d2' }}>
                 {item === 'Person' ? 'Individual' :
                item === 'School' ? 'Institution' :
                item === 'Government' ? 'Government' :
                item === 'Company' ? 'Organisation' : 'Select'}
+               </Typography>
               </MenuItem>
             ))}
           </Menu>

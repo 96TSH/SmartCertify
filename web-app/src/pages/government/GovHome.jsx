@@ -12,11 +12,11 @@ export default function GovHome() {
   return (
     <MainMenu Entity={"Government"}>
       <div style={{ display: 'flex', justifyContent: 'center', alignItems: 'center' }}>
-      <img src="Government.png" alt="Smart Certify x Organisation" style={{ width: '500px', height: '120px', objectFit: 'cover' } } />
+      <img src="Government4.png" alt="Smart Certify x Government" style={{ width: '500px', height: '110px', objectFit: 'cover' } } />
     </div>
       <Outlet />
-      {location.pathname === "/Government" && (
-        <>
+      {/* {location.pathname === "/Government" && (
+        <div style={{ display: 'flex', justifyContent: 'center', alignItems: 'center' }}>
           <Button
             variant="outlined"
             sx={{
@@ -59,8 +59,8 @@ export default function GovHome() {
               action="login"
             />
           )}
-        </>
-      )}
+        </div>
+      )} */}
     </MainMenu>
   );
 }

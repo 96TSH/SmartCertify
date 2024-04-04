@@ -24,7 +24,6 @@ export default function PerViewers() {
         gasPrice: web3.utils.toWei('50', 'gwei')
       });
       setPublicView(isChecked);
-      console.log(isChecked)
     } catch (error) {
       console.error('Error calling setToPublic:', error);
       // Reset the switch to its previous state on error
