@@ -13,7 +13,7 @@ module.exports = async function (deployer, network, accounts) {
 
   // 部署迁移合约
 
-  const id = 123456;
+  const id = "123456";
   const nationality= "Singapore";
   const nric = "S9999999G";
   const passport = "K9999999G";

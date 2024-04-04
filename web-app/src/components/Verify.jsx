@@ -32,6 +32,35 @@ function Register({ title, action }) {
   };
 
   const [modalOpen, setModalOpen] = useState(false);
+  const [verificationStatus, setVerificationStatus] = useState(false);
+
+  const verifyItem = async (address) => {
+    try {
+      const accounts = await window.ethereum.request({ method: 'eth_requestAccounts' });
+    if (title === "Verify Company") {
+      const response = await Government.methods.isRegisterCompany(address).call(
+          {
+            from: accounts[0],
+            gas: 100000,
+            gasPrice: web3.utils.toWei("50", "gwei"),
+          });
+          setVerificationStatus(response)
+          console.log(response)
+    } else if (title === "Verify School") {
+      const response = await Government.methods.isRegisterSchool(address).call(
+          {
+            from: accounts[0],
+            gas: 100000,
+            gasPrice: web3.utils.toWei("50", "gwei"),
+          });
+          setVerificationStatus(response)
+          console.log(response)
+    }
+    handleOpen();
+  } catch (error) {
+    console.log(error)
+  }
+  }
 
   const handleOpen = () => {
     setModalOpen(true);
@@ -43,25 +72,8 @@ function Register({ title, action }) {
 
   const handleVerify = async (e) => {
     e.preventDefault();
-    try {
-        const accounts = await window.ethereum.request({ method: 'eth_requestAccounts' });
-      if (title === "Verify Company") {
-        await Government.methods.isRegisterCompany(formData["Address"].value).send(
-            {
-              from: accounts[0],
-              gas: 100000,
-              gasPrice: web3.utils.toWei("50", "gwei"),
-            });
-      } else if (title === "Verify School") {
-        await Government.methods.isRegisterSchool(formData["Address"].value).send(
-            {
-              from: accounts[0],
-              gas: 100000,
-              gasPrice: web3.utils.toWei("50", "gwei"),
-            });
-      }
-      handleOpen();
-    } catch (error) {}
+    verifyItem(e.target.elements.address.value)
+    handleOpen();
   };
 
   return (
@@ -75,19 +87,29 @@ function Register({ title, action }) {
             <TextField
               label="Address"
               variant="filled"
-              name="Address"
+              name="address"
             />
             <Button type="submit" variant="contained" color="primary">
-              Register
+              Verify
             </Button>
           </Box>
         </form>
       )}
       <Dialog open={modalOpen} onClose={handleClose}>
-        <DialogTitle>Submission Successful</DialogTitle>
-        <DialogContent>
-          <DialogContentText>Successful!</DialogContentText>
-        </DialogContent>
+        {verificationStatus ? (        
+        <>
+          <DialogTitle>Verification Successful</DialogTitle>
+          <DialogContent>
+            <DialogContentText>Successful!</DialogContentText>
+          </DialogContent>
+        </> ) : (
+        <>
+          <DialogTitle>Verification Failed</DialogTitle>
+          <DialogContent>
+            <DialogContentText>Failed!</DialogContentText>
+          </DialogContent>
+        </>
+        )}
         <DialogActions>
           <Button onClick={handleClose}>Close</Button>
         </DialogActions>

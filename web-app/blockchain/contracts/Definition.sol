@@ -3,7 +3,7 @@ pragma solidity  ^0.8.0;
 
 struct Company_Info
 {
-    uint256 id;
+    // uint256 id;
     string uenNo;
     string name;
     string profile;
@@ -12,7 +12,7 @@ struct Company_Info
 
 struct Personal_Info
 {
-    uint256 id;
+    string id;
     string nationality;
     string nric;
     string passport;
@@ -20,28 +20,28 @@ struct Personal_Info
     string add;
 }
 
-enum ECertificateCategory 
-{
-    Diploma, 
-    Poly,
-    Bachelor,
-    Master,
-    Doctor,
-    Language,
-    Technical,
-    Professional,
-    Others
-}
+// enum ECertificateCategory 
+// {
+//     Diploma, 
+//     Poly,
+//     Bachelor,
+//     Master,
+//     Doctor,
+//     Language,
+//     Technical,
+//     Professional,
+//     Others
+// }
 
-enum EHonor
-{
-    None,
-    FirstClass,
-    SecondUpper,
-    SecondLower,
-    Third,
-    Others
-}
+// enum EHonor
+// {
+//     None,
+//     FirstClass,
+//     SecondUpper,
+//     SecondLower,
+//     Third,
+//     Others
+// }
 
 enum EStudyStatus
 {
@@ -62,7 +62,8 @@ struct School_Info
 struct Student_Info
 {
     // address studentAdd;
-    uint256 id; //provided by school
+    // uint256 id; //provided by school
+    string id;
     string nationality;
     string nric;
     string passport;
@@ -70,11 +71,19 @@ struct Student_Info
     string add; //address
 }
 
+    struct Simplifed_Cert
+    {
+        string schoolName;
+        string cate;
+        string hor;
+        string major;
+    }
+
 struct Certificate_Info
 {
     School_Info schoolInfo;
-    ECertificateCategory category;
-    EHonor honor;
+    string category;
+    string honor;
     EStudyStatus status;
     string major; //Msc Of IS
     string description;

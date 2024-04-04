@@ -19,7 +19,7 @@ export default function PerViewers() {
       console.log("Person contract address:", personAddress);
       const accounts = await window.ethereum.request({ method: 'eth_requestAccounts' });
       await Person.methods.setToPublic(isChecked).send({
-        from: accounts[2],
+        from: accounts[0],
         gas: 100000,
         gasPrice: web3.utils.toWei('50', 'gwei')
       });

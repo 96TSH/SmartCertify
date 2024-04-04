@@ -17,7 +17,7 @@ contract Company
     mapping(address => bool) private adminList;
 
     Personal_Info[] private candidateInfoList;
-    mapping(uint256 => address) private candidateAddresses;
+    mapping(string => address) private candidateAddresses;
     Company_Info public companyInfo;
     IGovernment governmentAddress;
     Certificate_Info public tmpCertifcate;
@@ -32,7 +32,7 @@ contract Company
         companyInfo.name = _name;
         companyInfo.profile = _profile;
         companyInfo.add = _add;
-        companyInfo.id = uint256(keccak256(abi.encodePacked(_uenNo, _name, _profile, _add)));
+        // companyInfo.id = uint256(keccak256(abi.encodePacked(_uenNo, _name, _profile, _add)));
         erc20 = IERC20(_etk);
     }
 
@@ -63,47 +63,49 @@ contract Company
         companyInfo = _info;
     }
 
-    function addCandicator(Personal_Info memory _personalInfo, address _candicator) public onlyAdmin()
+    function getCompanyInfo() public returns (Company_Info memory)
     {
-        candidateInfoList.push(_personalInfo);
-        candidateAddresses[_personalInfo.id] = _candicator;
+        return companyInfo;
     }
 
-    function removeCandicator(uint256 _id) public onlyAdmin() returns (bool)
+    function addCandicator(address _candicator) public
     {
-        for(uint i = 0; i < candidateInfoList.length; i++)
+        IPerson per = IPerson(_candicator);
+        candidateInfoList.push(per.getPersonalInfo());
+        candidateAddresses[per.getPersonalInfo().id] = _candicator;
+    }
+
+    function removeCandicator(string memory _id, uint index) public onlyAdmin() returns (bool)
+    {
+        if (index < candidateInfoList.length)
         {
-            if (candidateInfoList[i].id == _id)
-            {
-                delete candidateAddresses[_id];
-                candidateInfoList[i] = candidateInfoList[candidateInfoList.length - 1];
-                candidateInfoList.pop();
-                return true;
-            }
+            delete candidateAddresses[_id];
+            candidateInfoList[index] = candidateInfoList[candidateInfoList.length - 1];
+            candidateInfoList.pop();
+            return true;
         }
         return false;
     }
 
-    function getAllCandidates() public view onlyAdmin() returns (Personal_Info[] memory)
+    function getAllCandidates() public view returns (Personal_Info[] memory)
     {
         return candidateInfoList;
     }
 
     // id in personal infor;
-    function getSandidateCertifcates(uint256 _id) public view returns (Certificate_Info[] memory)
+    function getSandidateCertifcates(string memory _id) public view returns (Simplifed_Cert[] memory)
     {
         IPerson per = IPerson(candidateAddresses[_id]);
         return per.getAllCertificates();
     }
 
  //step 1
-    function fetchCertificate(uint256 _id, uint8 _index) public returns (bool)
+    function fetchCertificate(string memory _id, uint8 _index) public returns (bool)
     {
         IPerson per = IPerson(candidateAddresses[_id]);
         if (_index < per.getAllCertificates().length)
         {
-            Certificate_Info[] memory _certs = per.getAllCertificates();
-            tmpCertifcate = _certs[_index];
+            tmpCertifcate = per.getCertificateByIndex(_index);
             return true;
         }
         return false;

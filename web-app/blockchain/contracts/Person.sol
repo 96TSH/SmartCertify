@@ -9,10 +9,11 @@ contract Person is IPerson
 {
     Personal_Info private personalInfo;
     Certificate_Info[] certificates;
+    Simplifed_Cert[] simplifedCerts;
     address owner;
     bool isPublic;
 
-    constructor(uint256 _id, string memory _na, string memory _nric, string memory _pass, string memory _name, string memory _add )
+    constructor(string memory _id, string memory _na, string memory _nric, string memory _pass, string memory _name, string memory _add )
     {
         personalInfo.id = _id;
         personalInfo.nationality = _na;
@@ -36,11 +37,17 @@ contract Person is IPerson
     }
 
     // before add certificate to self. please call acceptCertificateContract first. 
-    function addCertificateContract(address _add) public onlyOwner()
+    function addCertificateContract(address _add) public
     {
         ICertificate certContract = ICertificate(_add);
         Certificate_Info memory cert = certContract.getCertificate(msg.sender);
+        Simplifed_Cert memory scert;
+        scert.schoolName = cert.schoolInfo.name;
+        scert.cate = cert.category;
+        scert.hor= cert.honor;
+        scert.major = cert.major;
         certificates.push(cert);
+        simplifedCerts.push(scert);
     }
 
     function setPersonalInfo(Personal_Info memory _info) public onlyOwner()
@@ -61,7 +68,7 @@ contract Person is IPerson
         }
     }
 
-    function getAllCertificates() external override view returns (Certificate_Info[] memory)
+    function getAllFullCertificates() external view returns (Certificate_Info[] memory)
     {
         if (isPublic || msg.sender == owner)
         {
@@ -70,6 +77,19 @@ contract Person is IPerson
         else
         {
             Certificate_Info[] memory _certs;
+            return _certs;
+        }
+    }
+
+    function getAllCertificates() external override view returns (Simplifed_Cert[] memory)
+    {
+        if (isPublic || msg.sender == owner)
+        {
+            return simplifedCerts;
+        }
+        else
+        {
+            Simplifed_Cert[] memory _certs;
             return _certs;
         }
     }
@@ -99,5 +119,10 @@ contract Person is IPerson
             Certificate_Info memory _cert;
             return _cert;
         }
+    }
+
+    function isPubliced() public view returns (bool)
+    {
+        return isPublic;
     }
 }

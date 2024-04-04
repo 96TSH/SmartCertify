@@ -21,6 +21,7 @@ function Register({ title, action }) {
     School,
     Company,
     Person,
+    Certificate
   } = useContext(AuthContext);
 
   const styles = {
@@ -43,7 +44,7 @@ function Register({ title, action }) {
         .addCertificateContract(address)
         .send({
           from: accounts[0],
-          gas: 100000,
+          gas: 1000000,
           gasPrice: web3.utils.toWei("50", "gwei"),
         });
       console.log(response);
@@ -51,6 +52,35 @@ function Register({ title, action }) {
       console.log(error);
     }
   };
+
+  const registerItem = async (address) => {
+    try{
+      const accounts = await window.ethereum.request({ method: 'eth_requestAccounts' });
+      if (title === "Register Company"){
+        await Government.methods.registerCompany(address).send(
+          {
+            from: accounts[0],
+            gas: 100000,
+            gasPrice: web3.utils.toWei("50", "gwei"),
+          });
+      } else if (title === "Register School") {
+        await Government.methods.registerSchool(address).send(
+          {
+            from: accounts[0],
+            gas: 100000,
+            gasPrice: web3.utils.toWei('50', 'gwei')
+          });
+      } else if (title === "Add Admin") {
+        await Government.methods.addAdmin(address).send({
+          from: accounts[0],
+          gas: 100000,
+          gasPrice: web3.utils.toWei("50", "gwei"),
+        });
+      }
+    } catch (error) {
+      console.log(error);
+    }
+  }
 
   const handleOpen = () => {
     setModalOpen(true);
@@ -66,37 +96,34 @@ function Register({ title, action }) {
     handleOpen();
   };
 
-  const handleRegister = async(e) => {
+  const handleRegister = (e) => {
     e.preventDefault();
-    try{
-      const accounts = await window.ethereum.request({ method: 'eth_requestAccounts' });
-      if (title === "Register Company"){
-        await Government.methods.registerCompany(e.target.elements.address.value).send(
-          {
-            from: accounts[0],
-            gas: 100000,
-            gasPrice: web3.utils.toWei("50", "gwei"),
-          });
-      } else if (title === "Register School") {
-        await Government.methods.registerSchool(e.target.elements.address.value).send(
-          {
-            from: accounts[0],
-            gas: 100000,
-            gasPrice: web3.utils.toWei('50', 'gwei')
-          }
-          );
-      } else if (title === "Add Admin") {
-        await Government.methods.addAdmin(e.target.elements.address.value).send({
+    registerItem(e.target.elements.address.value);
+    handleOpen();
+  }
+
+  const handleFetchData = () => {
+    fetchData();
+  }
+
+  const fetchData = async () => {
+    try {
+      const accounts = await window.ethereum.request({
+        method: "eth_requestAccounts",
+      });
+      console.log(accounts);
+      const response = await Certificate.methods
+        .getCertificate(accounts[0])
+        .call({
           from: accounts[0],
           gas: 100000,
           gasPrice: web3.utils.toWei("50", "gwei"),
         });
-      }
-      handleOpen();
+      console.log(response);
     } catch (error) {
       console.log(error);
     }
-  }
+  };
 
   return (
     <Container maxWidth="sm">
@@ -123,7 +150,7 @@ function Register({ title, action }) {
             <TextField
               label="Address"
               variant="filled"
-              name="Address"
+              name="address"
             />
             <Button type="submit" variant="contained" color="primary">
               Register
@@ -140,6 +167,14 @@ function Register({ title, action }) {
           <Button onClick={handleClose}>Close</Button>
         </DialogActions>
       </Dialog>
+      {/* testing button */}
+      {/* <Button
+        variant="outlined"
+        sx={{ backgroundColor: "darkslategray", color: "white" }}
+        onClick={() => handleFetchData()}
+      >
+        Test
+      </Button> */}
     </Container>
   );
 }
