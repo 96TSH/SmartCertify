@@ -14,28 +14,29 @@ function Profile({ type, fields, title, action }) {
   };
 
   const fieldsByProfiles = {
-    government: ["ID", "Name", "Email", "Address", "Government Description"],
-    company: ["ID", "UEN", "Name", "Address", "Company Description"],
-    school: ["ID", "Name", "Email", "Address", "School Description"],
-    person: ["ID", "Name", "Nationality", "NRIC", "Passport", "Address"],
-    admin: ["Address"],
-    register: ["Address"],
-    verify: ["Address"],
+    government: {"ID":"", "Name":"", "Email":"", "Address":"", "Government Description":""},
+    company: {"ID":"", "UEN":"", "Name":"", "Address":"", "Company Description":""},
+    school: {"ID":"", "Name":"", "Email":"", "Address":"", "School Description":""},
+    person: {"ID":"", "Name":"", "Nationality":"", "NRIC":"", "Passport":"", "Address":""},
+    admin: {"Address":""},
+    register: {"Address":""},
+    verify: {"Address":""},
   };
 
   const choosenProfile = fieldsByProfiles[fields] || [];
 
-  const initialFormData = choosenProfile.reduce(
-    (acc, field) => ({
-      ...acc,
-      [field]: { value: "", isValid: true, errorMessage: "" },
-    }),
-    {}
-  );
+  // const initialFormData = choosenProfile.reduce(
+  //   (acc, field) => ({
+  //     ...acc,
+  //     [field]: { value: "", isValid: true, errorMessage: "" },
+  //   }),
+  //   {}
+  // );
+
 
 
   const [modalOpen, setModalOpen] = useState(false);
-  const [formData, setFormData] = useState(initialFormData);
+  const [formData, setFormData] = useState(choosenProfile);
   const [isEditable, setIsEditable] = useState(false);
   const [buttonLabel, setButtonLabel] = useState("Update");
 
@@ -43,24 +44,37 @@ function Profile({ type, fields, title, action }) {
   const getProfileValue = async () => {
     if (fields == "company") {
       const response = await Company.methods.getCompanyInfo().call();
-      setFormData(response);
+      // setFormData(response);
+      Object.keys(formData).forEach(key => {
+        formData[key] = response[key];
+      });
+      console.log("the updated formData is " + formData)
     } else if (fields == "school") {
       const response = await School.methods.getSchoolInfo().call();
-      setFormData(response);
+      // setFormData(response);
+      Object.keys(formData).forEach(key => {
+        formData[key] = response[key];
+      });
+      console.log("the updated formData is " + formData)
     } else if (fields == "person") {
       const response = await Person.methods.getPersonalInfo().call();
-      setFormData(response);
+      // setFormData(response);
+      Object.keys(formData).forEach(key => {
+        formData[key] = response[key];
+      });
+      console.log("the updated formData is " + formData)
     }
     
   }
 
   useEffect(() => {
     getProfileValue();
-  })
+  },[])
+  
 
 
 
-  const isValidInput = (value) => value.trim().length >= 2;
+  // const isValidInput = (value) => value.trim().length >= 2;
 
   const toggleEdit = () => {
     if (isEditable) {
@@ -76,23 +90,25 @@ function Profile({ type, fields, title, action }) {
     setButtonLabel("Update");
     setFormData((prevFormData) => ({
       ...prevFormData,
-      [name]: { ...prevFormData[name], isValid: true },
+      [name]: { ...prevFormData[name],
+        //  isValid: true 
+        },
     }));
-    setFormData(initialFormData);
+    setFormData(choosenProfile);
   };
 
   const handleChange = (e) => {
     const { name, value } = e.target;
-    const isValid = isValidInput(value); // Ensure this is called correctly
-    const errorMessage = isValid ? "" : "Input must be at least 2 characters";
+    // const isValid = isValidInput(value); // Ensure this is called correctly
+    // const errorMessage = isValid ? "" : "Input must be at least 2 characters";
 
     setFormData((prevFormData) => ({
       ...prevFormData,
       [name]: {
         ...prevFormData[name],
         value: value,
-        isValid: isValid,
-        errorMessage: errorMessage,
+        // isValid: isValid,
+        // errorMessage: errorMessage,
       },
     }));
   };
@@ -100,23 +116,24 @@ function Profile({ type, fields, title, action }) {
   const handleSubmit = async(e) => {
     // e.preventDefault();
 
-    let isFormValid = true;
-    const updatedFormData = Object.keys(formData).reduce((acc, field) => {
-      const isValid = isValidInput(formData[field].value);
-      if (!isValid) isFormValid = false;
-      acc[field] = {
-        ...formData[field],
-        isValid: isValid,
-        errorMessage: isValid
-          ? ""
-          : `${field.charAt(0).toUpperCase() + field.slice(1)} must be filled.`,
-      };
-      return acc;
-    }, {});
+    // let isFormValid = true;
+    // const updatedFormData = Object.keys(formData).reduce((acc, field) => {
+    //   const isValid = isValidInput(formData[field].value);
+    //   if (!isValid) isFormValid = false;
+    //   acc[field] = {
+    //     ...formData[field],
+    //     isValid: isValid,
+    //     errorMessage: isValid
+    //       ? ""
+    //       : `${field.charAt(0).toUpperCase() + field.slice(1)} must be filled.`,
+    //   };
+    //   return acc;
+    // }, {});
 
-    setFormData(updatedFormData);
+    // setFormData(updatedFormData);
 
-    if (isFormValid) {
+
+    // if (isFormValid) {
       console.log("Form data:", formData);
       setIsEditable(false);
       setButtonLabel("Update");
@@ -145,14 +162,15 @@ function Profile({ type, fields, title, action }) {
           }
           );
       }
-    } else {
-      console.log("Validation failed");
-      // Optionally, handle the case where some fields are invalid
-    }
+    // } else {
+    //   console.log("Validation failed");
+    //   // Optionally, handle the case where some fields are invalid
+    // }
   };
 
   const handleClose = () => {
-    setOpen(false);
+    setModalOpen(false);
+    setModalOpen(false);
   };
 
   const handleLogin = (e) => {
@@ -160,6 +178,7 @@ function Profile({ type, fields, title, action }) {
       setCompanyAddress(formData["Address"].value);
     } else if (type === "school") {
       setSchoolAddress(formData["Address"].value);
+      console.log(schoolAddress);
     } else if (type === "person") {
       setPersonAddress(formData["Address"].value);
     }
@@ -263,18 +282,20 @@ function Profile({ type, fields, title, action }) {
       {action === "update" && (
         <form onSubmit={handleSubmit}>
           <Box display="flex" flexDirection="column" gap={4}>
-            {Object.entries(profileValue).map(([key,value]) => (
+            {Object.entries(formData).map(([key]) => (
               <TextField
                 key={key}
-                label={key.charAt(0).toUpperCase() + key.slice(1)}
+                label={key}
                 // variant="filled"
                 variant={isEditable ? "outlined" : "filled"}
                 name={key}
                 disabled={!isEditable}
-                value={value}
+                value={formData[key]}
                 onChange={handleChange}
-                error={!formData[field].isValid}
-                helperText={formData[field].errorMessage}
+                // error={!formData[key].isValid}
+                // helperText={formData[key].errorMessage}
+                // error={!formData[key].isValid}
+                // helperText={formData[key].errorMessage}
               />
             ))}
             <Button onClick={toggleEdit} variant="contained" color="primary">
@@ -296,16 +317,20 @@ function Profile({ type, fields, title, action }) {
       {action === "register" && (
         <form onSubmit={handleRegister}>
           <Box display="flex" flexDirection="column" gap={4}>
-            {choosenProfile.map((field) => (
+          {Object.entries(formData).map(([key]) => (
               <TextField
-                key={field}
-                label={field.charAt(0).toUpperCase() + field.slice(1)}
-                variant="outlined"
-                name={field}
-                value={formData[field].value}
+                key={key}
+                label={key}
+                // variant="filled"
+                variant={isEditable ? "outlined" : "filled"}
+                name={key}
+                // disabled={!isEditable}
+                value={formData[key]}
                 onChange={handleChange}
-                error={!formData[field].isValid}
-                helperText={formData[field].errorMessage}
+                // error={!formData[key].isValid}
+                // helperText={formData[key].errorMessage}
+                // error={!formData[key].isValid}
+                // helperText={formData[key].errorMessage}
               />
             ))}
             <Button
@@ -321,16 +346,20 @@ function Profile({ type, fields, title, action }) {
       {action === "verify" && (
         <form onSubmit={handleVerify}>
           <Box display="flex" flexDirection="column" gap={4}>
-            {choosenProfile.map((field) => (
+          {Object.entries(formData).map(([key]) => (
               <TextField
-                key={field}
-                label={field.charAt(0).toUpperCase() + field.slice(1)}
-                variant="outlined"
-                name={field}
-                value={formData[field].value}
+                key={key}
+                label={key}
+                // variant="filled"
+                variant={isEditable ? "outlined" : "filled"}
+                name={key}
+                // disabled={!isEditable}
+                value={formData[key]}
                 onChange={handleChange}
-                error={!formData[field].isValid}
-                helperText={formData[field].errorMessage}
+                // error={!formData[key].isValid}
+                // helperText={formData[key].errorMessage}
+                // error={!formData[key].isValid}
+                // helperText={formData[key].errorMessage}
               />
             ))}
             <Button onClick={handleVerify} variant="contained" color="primary">
@@ -342,16 +371,20 @@ function Profile({ type, fields, title, action }) {
       {action === "delete" && (
         <form onSubmit={handleDelete}>
           <Box display="flex" flexDirection="column" gap={4}>
-            {choosenProfile.map((field) => (
+          {Object.entries(formData).map(([key]) => (
               <TextField
-                key={field}
-                label={field.charAt(0).toUpperCase() + field.slice(1)}
-                variant="outlined"
-                name={field}
-                value={formData[field].value}
+                key={key}
+                label={key}
+                // variant="filled"
+                variant={isEditable ? "outlined" : "filled"}
+                name={key}
+                // disabled={!isEditable}
+                value={formData[key]}
                 onChange={handleChange}
-                error={!formData[field].isValid}
-                helperText={formData[field].errorMessage}
+                // error={!formData[key].isValid}
+                // helperText={formData[key].errorMessage}
+                // error={!formData[key].isValid}
+                // helperText={formData[key].errorMessage}
               />
             ))}
             <Button onClick={handleDelete} variant="contained" color="primary">
@@ -363,16 +396,20 @@ function Profile({ type, fields, title, action }) {
       {action === "login" && (
         <form onSubmit={handleLogin}>
           <Box display="flex" flexDirection="column" gap={4}>
-            {choosenProfile.map((field) => (
+          {Object.entries(formData).map(([key]) => (
               <TextField
-                key={field}
-                label={field.charAt(0).toUpperCase() + field.slice(1)}
-                variant="outlined"
-                name={field}
-                value={formData[field].value}
+                key={key}
+                label={key}
+                // variant="filled"
+                variant={isEditable ? "outlined" : "filled"}
+                name={key}
+                // disabled={!isEditable}
+                value={formData[key]}
                 onChange={handleChange}
-                error={!formData[field].isValid}
-                helperText={formData[field].errorMessage}
+                // error={!formData[key].isValid}
+                // helperText={formData[key].errorMessage}
+                // error={!formData[key].isValid}
+                // helperText={formData[key].errorMessage}
               />
             ))}
             <Button onClick={handleLogin} variant="contained" color="primary">

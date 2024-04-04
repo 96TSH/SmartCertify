@@ -107,13 +107,13 @@ const TableTemplate = ({ headers, data, title, actions }) => {
       console.log(accounts);
       if (title === "Final Candidate") {
         await Company.methods.addCandicator(item, candidateContract).send({
-          from: accounts[0],
+          from: companyAddress,
           gas: 100000,
           gasPrice: web3.utils.toWei("50", "gwei"),
         });
       } else if (title === "Admission") {
         await School.methods.studentAdmission(item, category, major).send({
-          from: accounts[0],
+          from: schoolAddress,
           gas: 100000,
           gasPrice: web3.utils.toWei("50", "gwei"),
         });
@@ -214,20 +214,19 @@ const TableTemplate = ({ headers, data, title, actions }) => {
   const handleCreateItem = (event) => {
     event.preventDefault();
     const item = {
-      name: event.target.name.value,
+      name: event.target.elements.name.value,
       id: Math.floor(Math.random() * 90000000) + 10000000,
       nationality: event.target.nationality.value,
       nric: event.target.nric.value,
-      add: event.target.add.value,
+      address: event.target.address.value,
       passport: event.target.passport.value,
     };
     createItem(
       item,
-      event.target.candidateContract.value,
-      event.target.category.value,
-      event.target.major.value
+      event.target.elements.candidateContract?.value,
+      event.target.elements.category?.value,
+      event.target.elements.major?.value
     )
-      // .then(() => fetchItem())
       .then(() => setCreateOpen(false));
   };
 

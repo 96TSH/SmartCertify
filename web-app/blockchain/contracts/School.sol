@@ -60,6 +60,11 @@ contract School is ISchool
         adminList[_add] = false;
     }
 
+    function getSchoolInfo() public view returns (School_Info memory)
+    {
+        return schoolInfo;
+    }
+
     function updateSchoolInfo(School_Info memory _schInfo) public onlyAdmin()
     {
         schoolInfo = _schInfo;
