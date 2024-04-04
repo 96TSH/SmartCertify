@@ -79,13 +79,13 @@ const TableTemplate = ({ headers, data, title, actions }) => {
 
   const deleteItem = async (id) => {
     try {
-      // const accounts = await window.ethereum.request({
-      //   method: "eth_requestAccounts",
-      // });
-      // console.log(accounts);
+      const accounts = await window.ethereum.request({
+        method: "eth_requestAccounts",
+      });
+      console.log(accounts);
       if (title === "Final Candidate") {
         await Company.methods.removeCandicator(id).send({
-          from: companyAddress,
+          from: accounts[0],
           gas: 100000,
           gasPrice: web3.utils.toWei("50", "gwei"),
         });
@@ -101,19 +101,19 @@ const TableTemplate = ({ headers, data, title, actions }) => {
 
   const createItem = async (item, candidateContract, category, major) => {
     try {
-      // const accounts = await window.ethereum.request({
-      //   method: "eth_requestAccounts",
-      // });
-      // console.log(accounts);
+      const accounts = await window.ethereum.request({
+        method: "eth_requestAccounts",
+      });
+      console.log(accounts);
       if (title === "Final Candidate") {
         await Company.methods.addCandicator(item, candidateContract).send({
-          from: companyAddress,
+          from: accounts[0],
           gas: 100000,
           gasPrice: web3.utils.toWei("50", "gwei"),
         });
       } else if (title === "Admission") {
         await School.methods.studentAdmission(item, category, major).send({
-          from: schoolAddress,
+          from: accounts[0],
           gas: 100000,
           gasPrice: web3.utils.toWei("50", "gwei"),
         });
@@ -125,12 +125,12 @@ const TableTemplate = ({ headers, data, title, actions }) => {
 
   const verifyItem = async (id, index) => {
     try {
-      // const accounts = await window.ethereum.request({
-      //   method: "eth_requestAccounts",
-      // });
-      // console.log(accounts);
+      const accounts = await window.ethereum.request({
+        method: "eth_requestAccounts",
+      });
+      console.log(accounts);
       const response1 = await Company.methods.fetchCertificate(id, index).send({
-        from: companyAddress,
+        from: accounts[0],
         gas: 100000,
         gasPrice: web3.utils.toWei("50", "gwei"),
       });
@@ -139,7 +139,7 @@ const TableTemplate = ({ headers, data, title, actions }) => {
         const response2 = await Company.methods
           .verifyCertificateIssuedSchool()
           .send({
-            from: companyAddress,
+            from: accounts[0],
             gas: 100000,
             gasPrice: web3.utils.toWei("50", "gwei"),
           });
@@ -148,7 +148,7 @@ const TableTemplate = ({ headers, data, title, actions }) => {
           const response3 = await Company.methods
             .verifyStaffCertificate()
             .send({
-              from: companyAddress,
+              from: accounts[0],
               gas: 100000,
               gasPrice: web3.utils.toWei("50", "gwei"),
             });
@@ -167,14 +167,14 @@ const TableTemplate = ({ headers, data, title, actions }) => {
 
   const graduateItem = async (id, studAdd, certAdd) => {
     try {
-      // const accounts = await window.ethereum.request({
-      //   method: "eth_requestAccounts",
-      // });
-      // console.log(accounts);
+      const accounts = await window.ethereum.request({
+        method: "eth_requestAccounts",
+      });
+      console.log(accounts);
       const response = await School.methods
         .studentGradutaion(id, studAdd, certAdd)
         .send({
-          from: schoolAddress,
+          from: accounts[0],
           gas: 100000,
           gasPrice: web3.utils.toWei("50", "gwei"),
         });
@@ -186,14 +186,14 @@ const TableTemplate = ({ headers, data, title, actions }) => {
 
   const setCertificate = async (id, honor, status, description) => {
     try {
-      // const accounts = await window.ethereum.request({
-      //   method: "eth_requestAccounts",
-      // });
-      // console.log(accounts);
+      const accounts = await window.ethereum.request({
+        method: "eth_requestAccounts",
+      });
+      console.log(accounts);
       const response = await School.methods
         .setStudCert(id, honor, status, description)
         .send({
-          from: schoolAddress,
+          from: accounts[0],
           gas: 100000,
           gasPrice: web3.utils.toWei("50", "gwei"),
         });
@@ -218,7 +218,7 @@ const TableTemplate = ({ headers, data, title, actions }) => {
       id: Math.floor(Math.random() * 90000000) + 10000000,
       nationality: event.target.nationality.value,
       nric: event.target.nric.value,
-      address: event.target.address.value,
+      add: event.target.add.value,
       passport: event.target.passport.value,
     };
     createItem(
@@ -700,7 +700,7 @@ const TableTemplate = ({ headers, data, title, actions }) => {
                 color="primary"
               />
               <TextField
-                name="address"
+                name="add"
                 label="ADDRESS"
                 fullWidth
                 margin="normal"
