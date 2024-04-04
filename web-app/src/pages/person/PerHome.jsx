@@ -11,7 +11,9 @@ export default function PerHome() {
 
   return (
     <MainMenu Entity={"Person"}>
-      <h2>Smart Certify x Person </h2>
+      <div style={{ display: 'flex', justifyContent: 'center', alignItems: 'center' }}>
+      <img src="Individual4.png" alt="Smart Certify x Individual" style={{ width: '500px', height: '110px', objectFit: 'cover' } } />
+    </div>
       <Outlet />
       {location.pathname === "/Person" && (
         <>

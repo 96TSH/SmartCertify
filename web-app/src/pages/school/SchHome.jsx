@@ -11,7 +11,9 @@ export default function SchHome() {
 
   return (
     <MainMenu Entity={"School"}>
-      <h2>Smart Certify x School </h2>
+      <div style={{ display: 'flex', justifyContent: 'center', alignItems: 'center' }}>
+      <img src="Institution4.png" alt="Smart Certify x Institution" style={{ width: '500px', height: '110px', objectFit: 'cover' } } />
+    </div>
       <Outlet />
       {location.pathname === "/School" && (
         <>
