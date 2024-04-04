@@ -11,6 +11,7 @@ import {
   DialogContentText,
   DialogTitle,
 } from "@mui/material";
+import CurrencyBitcoinIcon from '@mui/icons-material/CurrencyBitcoin'; //Balance icon
 import AuthContext from "../../stores/authContext";
 
 const GovBalance = () => {
@@ -56,21 +57,31 @@ const GovBalance = () => {
 
   return (
     <>
-      <Button
-            variant="outlined"
-            sx={{
-              backgroundColor: "darkslategray",
-              color: "white",
-            }}
-            onClick={handleGetBalance}
-          >
-            Get Balance
-      </Button>
+      <div style={{ display: 'flex', justifyContent: 'center', alignItems: 'center', marginTop:'60px' }}>
+        <Button
+              variant="outlined"
+              startIcon={<CurrencyBitcoinIcon />}
+              sx={{
+                backgroundColor: "#1876d2",
+                color: "white",
+                width: '200px', // Adjust button width as needed
+                height: '50px', // Adjust button height as needed
+                transition: 'background-color 0.3s',
+                '&:hover': {
+                  backgroundColor: '#0d4e9b', // Make the background slightly darker on hover
+                },
+              }}
+
+              onClick={handleGetBalance}
+            >
+              Get Balance
+        </Button>
+      </div>
       {/* <Typography variant="h6" sx={{ marginTop: 2 }}>
         Balance: {balance}
       </Typography> */}
       <Dialog open={modalOpen} onClose={handleClose}>
-        <DialogTitle>Balance</DialogTitle>
+        <DialogTitle>Token Balance</DialogTitle>
         <DialogContent>
           <DialogContentText>
             <Typography variant="h4" sx={{ marginTop: 2 }}>

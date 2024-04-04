@@ -28,6 +28,7 @@ import { styled } from "@mui/material/styles";
 import PropTypes from "prop-types";
 import AuthContext from "../stores/authContext";
 import FetchContext from "../stores/fetchContext";
+import AddIcon from '@mui/icons-material/Add';//add icon
 
 const TableTemplate = ({ headers, data, title, actions }) => {
   const StyledTableCell = styled(TableCell)(({ theme }) => ({
@@ -577,7 +578,7 @@ const TableTemplate = ({ headers, data, title, actions }) => {
                           aria-label="delete"
                           onClick={handleDeleteOpen}
                         >
-                          <DeleteIcon />
+                          <DeleteIcon style={{ fill: "#dd6b6b" }} />
                         </IconButton>
                       {/* delete dialog */}
                       <Dialog
@@ -611,10 +612,19 @@ const TableTemplate = ({ headers, data, title, actions }) => {
       </Paper>
       {/* button for create */}
       {actions.includes("create") && (
-        <Box sx={{ textAlign: "right", padding: "30px" }}>
+        <Box sx={{ textAlign: "center", paddingTop:"50px"}}>
           <Button
             variant="outlined"
-            sx={{ backgroundColor: "darkslategray", color: "white" }}
+            startIcon={<AddIcon />}
+            sx={{ backgroundColor: '#1876d2', color: "white",
+            width: '300px', // Adjust button width as needed
+            height: '36px', // Adjust button height as needed
+            transition: 'background-color 0.3s',
+            '&:hover': {
+              backgroundColor: '#0d4e9b', // Make the background slightly darker on hover
+            }
+            }}
+          
             onClick={handleCreateOpen}
           >
             Add New
