@@ -133,7 +133,7 @@ const TableTemplate = ({ headers, data, title, actions }) => {
       console.log("index: ", index)
       const response1 = await Company.methods.fetchCertificate(id, index).send({
         from: accounts[0],
-        gas: 100000,
+        gas: 1000000,
         gasPrice: web3.utils.toWei("50", "gwei"),
       });
       console.log("response1: ", response1);
@@ -142,16 +142,16 @@ const TableTemplate = ({ headers, data, title, actions }) => {
           .verifyCertificateIssuedSchool()
           .send({
             from: accounts[0],
-            gas: 100000,
+            gas: 1000000,
             gasPrice: web3.utils.toWei("50", "gwei"),
           });
         console.log("response2: ", response2);
         if (response2) {
           const response3 = await Company.methods
-            .verifyStaffCertificate()
-            .send({
+            .verifyStaffCertificateSignature()
+            .call({
               from: accounts[0],
-              gas: 100000,
+              gas: 1000000,
               gasPrice: web3.utils.toWei("50", "gwei"),
             });
           console.log("response3: ", response3);

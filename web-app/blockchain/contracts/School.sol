@@ -127,27 +127,27 @@ contract School is ISchool
     {
         emit studentIdEvent(_studId);
         if (studsCerts[_studId].status == EStudyStatus.InProgress) //must graduate
-                {
-                    emit graduationResult(false, "not in progress student");
-                    return false;
-                }
-                //get hash
-                studsCerts[_studId].graduationTimestamp =block.timestamp;
-                studsCerts[_studId].signature = CertificateHashLib.hashCertificate(studsCerts[_studId]);
+        {
+            emit graduationResult(false, "not in progress student");
+            return false;
+        }
+        //get hash
+        studsCerts[_studId].graduationTimestamp =block.timestamp;
+        studsCerts[_studId].signature = CertificateHashLib.hashCertificate(studsCerts[_studId]);
                 
-                ICertificate studContract = ICertificate(newStudentContract);
-                studContract.setCertificate(msg.sender, studsCerts[_studId]);
-                if (!studContract.setStudentAddress(msg.sender, _stud))
-                {
-                    emit graduationResult(false, "set Student Address fail");
-                    return false;
-                }
+        ICertificate studContract = ICertificate(newStudentContract);
+        studContract.setCertificate(msg.sender, studsCerts[_studId]);
+        if (!studContract.setStudentAddress(msg.sender, _stud))
+        {
+            emit graduationResult(false, "set Student Address fail");
+            return false;
+        }
                     
-                certSignatures[_studId] = studsCerts[_studId].signature;
-                emit saveCertificates(studsCerts[_studId]);
-                studentArray[index] = studentArray[studentArray.length - 1];
-                studentArray.pop();
-                return true;
+        certSignatures[_studId] = studsCerts[_studId].signature;
+        emit saveCertificates(studsCerts[_studId]);
+        studentArray[index] = studentArray[studentArray.length - 1];
+        studentArray.pop();
+        return true;
 
 
         // for(uint i = 0; i < studentArray.length; i++)
@@ -165,8 +165,7 @@ contract School is ISchool
         //         return true;
         //     }
         // }
-        // emit graduationResult(false, "not in list");
-        return false;
+        // emit graduationResult(false, "not in list");ß
     }
 
     function verifyGraduatedStudentCertificate(Certificate_Info memory _cert) external override returns (bool)
@@ -180,7 +179,7 @@ contract School is ISchool
     // company must pay to school owner, not admin
     function directVerifyGraduatedStudentCertificate(address companyWallet, string memory _studId, uint256 _signature) external view override returns (bool)
     {
-        require(erc20.allowance(companyWallet, owner) > 1000, "not enought");
+        // require(erc20.allowance(companyWallet, owner) > 1000, "not enought");
         return certSignatures[_studId] == _signature;
     }
 

@@ -13,20 +13,21 @@ contract Company
     using CertificateHashLib for * ;
     event VerificationResult(bool result);
     event hasCertificate(uint256);
+    event saveEvent(string, address);
     address owner;
     mapping(address => bool) private adminList;
 
     Personal_Info[] private candidateInfoList;
     mapping(string => address) private candidateAddresses;
     Company_Info public companyInfo;
-    IGovernment governmentAddress;
+    address governmentAddress;
     Certificate_Info public tmpCertifcate;
     IERC20 erc20;
 
     constructor(address _gov, string memory _uenNo, 
         string memory _name, string memory _profile, string memory _add, address _etk)
     {
-        governmentAddress = IGovernment(_gov);
+        governmentAddress = _gov;
         owner = msg.sender;
         companyInfo.uenNo = _uenNo;
         companyInfo.name = _name;
@@ -93,28 +94,29 @@ contract Company
     }
 
     // id in personal infor;
-    function getSandidateCertifcates(string memory _id) public view returns (Simplifed_Cert[] memory)
+    function getCandidateCertifcates(string memory _id) public view returns (Simplifed_Cert[] memory)
     {
         IPerson per = IPerson(candidateAddresses[_id]);
         return per.getAllCertificates();
     }
 
  //step 1
-    function fetchCertificate(string memory _id, uint8 _index) public returns (bool)
+    function fetchCertificate(string memory _id, uint _index) public returns (bool)
     {
         IPerson per = IPerson(candidateAddresses[_id]);
-        if (_index < per.getAllCertificates().length)
-        {
-            tmpCertifcate = per.getCertificateByIndex(_index);
-            return true;
-        }
-        return false;
+        tmpCertifcate = per.getCertificateByIndex(_index);
+        return true;
     }
 
     //step 2
-    function verifyCertificateIssuedSchool() public view returns (bool)
+    function verifyCertificateIssuedSchool() public returns (bool)
     {
-        return governmentAddress.isRegisterSchool(tmpCertifcate.schoolInfo.schoolContractAddress);
+        address _add = tmpCertifcate.schoolInfo.schoolContractAddress;
+        emit saveEvent("verifyCertificateIssuedSchool", _add);
+        emit saveEvent("government address", address(governmentAddress));
+        IGovernment govContract = IGovernment(governmentAddress);
+        return govContract.isRegisterSchool(_add);
+        // return true;
     }
 
     // step 3 opt 1
