@@ -49,14 +49,15 @@ function Login({ type }) {
   };
 
   const handleLogin = (e) => {
+    e.preventDefault();
     if (type === "company") {
-      setCompanyAddress(e.target.element.contractAddress.value);
+      setCompanyAddress(e.target.elements.contractAddress.value);
       console.log(companyAddress);
     } else if (type === "school") {
-      setSchoolAddress(e.target.element.contractAddress.value);
+      setSchoolAddress(e.target.elements.contractAddress.value);
       console.log(schoolAddress);
     } else if (type === "person") {
-      setPersonAddress(e.target.element.contractAddress.value);
+      setPersonAddress(e.target.elements.contractAddress.value);
       console.log(personAddress);
     }
     handleOpen();
@@ -76,7 +77,7 @@ function Login({ type }) {
             //   value={formData[key]}
             //   onChange={handleChange}
           />
-          <Button onClick={handleLogin} variant="contained" color="primary">
+          <Button type="submit" variant="contained" color="primary">
             Login
           </Button>
         </Box>

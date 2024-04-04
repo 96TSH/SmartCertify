@@ -16,10 +16,10 @@ const ComFinalCandidate = () => {
 
   const fetchData = async () => {
     try {
-      // const accounts = await window.ethereum.request({
-      //   method: "eth_requestAccounts",
-      // });
-      // console.log(accounts);
+      const accounts = await window.ethereum.request({
+        method: "eth_requestAccounts",
+      });
+      console.log(accounts);
       const data = await Company.methods.getAllCandicators().call({
         from: companyAddress,
         gas: 100000,
@@ -34,9 +34,9 @@ const ComFinalCandidate = () => {
     }
   };
 
-  // useEffect(() => {
-  //   fetchData();
-  // }, []);
+  useEffect(() => {
+    fetchData();
+  }, []);
 
   const actions = ["create", "delete", "verify"];
 

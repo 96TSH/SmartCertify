@@ -1,10 +1,10 @@
-import Profile from "../../components/Profile";
+import Register from "../../components/Register";
 
 const GovRegisterCompany = () => {
 
   return (
     <>
-      <Profile fields="register" title="Register Company" action="register" />
+      <Register title="Register Company" action="register" />
     </>
   );
 };

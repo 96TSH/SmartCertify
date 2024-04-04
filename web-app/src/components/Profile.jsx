@@ -44,24 +44,25 @@ function Profile({ type, fields, title, action }) {
   const getProfileValue = async () => {
     if (fields == "company") {
       const response = await Company.methods.getCompanyInfo().call();
-      // setFormData(response);
-      Object.keys(formData).forEach(key => {
-        formData[key] = response[key];
-      });
+      setFormData(response);
+      // Object.keys(formData).forEach(key => {
+      //   formData[key] = response[key];
+      // });
       console.log("the updated formData is " + formData)
     } else if (fields == "school") {
       const response = await School.methods.getSchoolInfo().call();
-      // setFormData(response);
-      Object.keys(formData).forEach(key => {
-        formData[key] = response[key];
-      });
+      setFormData(response);
+      // Object.keys(formData).forEach(key => {
+      //   formData[key] = response[key];
+      // });
+      console.log(response)
       console.log("the updated formData is " + formData)
     } else if (fields == "person") {
       const response = await Person.methods.getPersonalInfo().call();
-      // setFormData(response);
-      Object.keys(formData).forEach(key => {
-        formData[key] = response[key];
-      });
+      setFormData(response);
+      // Object.keys(formData).forEach(key => {
+      //   formData[key] = response[key];
+      // });
       console.log("the updated formData is " + formData)
     }
     
@@ -271,7 +272,7 @@ function Profile({ type, fields, title, action }) {
       {action === "update" && (
         <form onSubmit={handleSubmit}>
           <Box display="flex" flexDirection="column" gap={4}>
-            {Object.entries(formData).map(([key]) => (
+            {Object.entries(formData).slice(-5).map(([key]) => (
               <TextField
                 key={key}
                 label={key}
@@ -310,16 +311,10 @@ function Profile({ type, fields, title, action }) {
               <TextField
                 key={key}
                 label={key}
-                // variant="filled"
-                variant={isEditable ? "outlined" : "filled"}
+                variant="outlined"
                 name={key}
-                // disabled={!isEditable}
                 value={formData[key]}
                 onChange={handleChange}
-                // error={!formData[key].isValid}
-                // helperText={formData[key].errorMessage}
-                // error={!formData[key].isValid}
-                // helperText={formData[key].errorMessage}
               />
             ))}
             <Button

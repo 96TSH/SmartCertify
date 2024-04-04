@@ -12,8 +12,14 @@ contract Person is IPerson
     address owner;
     bool isPublic;
 
-    constructor()
+    constructor(uint256 _id, string memory _na, string memory _nric, string memory _pass, string memory _name, string memory _add )
     {
+        personalInfo.id = _id;
+        personalInfo.nationality = _na;
+        personalInfo.nric = _nric;
+        personalInfo.passport = _pass;
+        personalInfo.name = _name;
+        personalInfo.add = _add;
         owner = msg.sender;
         isPublic = false;
     }

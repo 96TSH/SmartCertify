@@ -19,14 +19,25 @@ const SchStudents = () => {
       const accounts = await window.ethereum.request({
         method: "eth_requestAccounts",
       });
-      console.log(accounts[0]);
-      const data = await School.methods.getAllStudent().call({
+      let data = await School.methods.getAllStudent().call({
         from: accounts[0],
         gas: 1000000,
         gasPrice: web3.utils.toWei("50", "gwei"),
       });
       console.log(data);
       if (data && data.length > 0) {
+        data = data.map(item => {
+          const keys = Object.keys(item);
+          const lastTwoKeys = keys.slice(-1);
+          const newItem = {};
+          if (item.id) {
+            newItem.id = item.id.toString().slice(0, -1);
+          }
+          lastTwoKeys.forEach(key => {
+            newItem[key] = item[key];
+          });
+          return newItem;
+        });
         setStudents(data);
       }
     } catch (error) {

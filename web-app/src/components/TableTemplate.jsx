@@ -76,6 +76,7 @@ const TableTemplate = ({ headers, data, title, actions }) => {
   const [admissionOpen, setAdmissionOpen] = useState(false);
   const [step, setStep] = useState(0);
   const [verifiedStatus, setVerifiedStatus] = useState(false);
+  const [studentID, setStudentID] = useState(0);
 
   const deleteItem = async (id) => {
     try {
@@ -95,26 +96,23 @@ const TableTemplate = ({ headers, data, title, actions }) => {
     }
   };
 
-  const updateItem = async () => {
-    return;
-  };
-
   const createItem = async (item, candidateContract, category, major) => {
     try {
       const accounts = await window.ethereum.request({
         method: "eth_requestAccounts",
       });
       console.log(accounts);
+      console.log(item);
       if (title === "Final Candidate") {
         await Company.methods.addCandicator(item, candidateContract).send({
           from: accounts[0],
-          gas: 100000,
+          gas: 1000000,
           gasPrice: web3.utils.toWei("50", "gwei"),
         });
       } else if (title === "Admission") {
         await School.methods.studentAdmission(item, category, major).send({
           from: accounts[0],
-          gas: 100000,
+          gas: 1000000,
           gasPrice: web3.utils.toWei("50", "gwei"),
         });
       }
@@ -167,6 +165,7 @@ const TableTemplate = ({ headers, data, title, actions }) => {
 
   const graduateItem = async (id, studAdd, certAdd) => {
     try {
+      console.log(id, studAdd, certAdd)
       const accounts = await window.ethereum.request({
         method: "eth_requestAccounts",
       });
@@ -175,7 +174,7 @@ const TableTemplate = ({ headers, data, title, actions }) => {
         .studentGradutaion(id, studAdd, certAdd)
         .send({
           from: accounts[0],
-          gas: 100000,
+          gas: 1000000,
           gasPrice: web3.utils.toWei("50", "gwei"),
         });
       console.log(response);
@@ -214,18 +213,18 @@ const TableTemplate = ({ headers, data, title, actions }) => {
   const handleCreateItem = (event) => {
     event.preventDefault();
     const item = {
-      name: event.target.name.value,
+      name: event.target.elements.name.value,
       id: Math.floor(Math.random() * 90000000) + 10000000,
-      nationality: event.target.nationality.value,
-      nric: event.target.nric.value,
-      add: event.target.add.value,
-      passport: event.target.passport.value,
+      nationality: event.target.elements.nationality.value,
+      nric: event.target.elements.nric.value,
+      add: event.target.elements.add.value,
+      passport: event.target.elements.passport.value,
     };
     createItem(
       item,
-      event.target.candidateContract.value,
-      event.target.category.value,
-      event.target.major.value
+      event.target.elements.candidateContract?.value,
+      event.target.elements.category?.value,
+      event.target.elements.major?.value
     )
       // .then(() => fetchItem())
       .then(() => setCreateOpen(false));
@@ -287,7 +286,8 @@ const TableTemplate = ({ headers, data, title, actions }) => {
     setVerifyResult(false);
   };
 
-  const handleGraduationOpen = () => {
+  const handleGraduationOpen = (item) => {
+    setStudentID(item.id);
     setAdmissionOpen(true);
   };
 
@@ -298,9 +298,9 @@ const TableTemplate = ({ headers, data, title, actions }) => {
   const handleGraduationItem = (event) => {
     event.preventDefault();
     graduateItem(
-      event.target.studentId.value,
-      event.target.studentWallet.value,
-      event.target.certificateContract.value
+      event.target.elements.studentId.value,
+      event.target.elements.studentWallet.value,
+      event.target.elements.certificateContract.value
     )
       // .then(() => fetchItem())
       .then(() => setAdmissionOpen(false));
@@ -309,10 +309,10 @@ const TableTemplate = ({ headers, data, title, actions }) => {
   const handleSetCertificate = (event) => {
     event.preventDefault();
     setCertificate(
-      event.target.studentId.value,
-      event.target.honor.value,
-      event.target.status.value,
-      event.target.description.value
+      event.target.elements.studentId.value,
+      event.target.elements.honor.value,
+      event.target.elements.status.value,
+      event.target.elements.description.value
     );
   };
 
@@ -438,7 +438,7 @@ const TableTemplate = ({ headers, data, title, actions }) => {
                           backgroundColor: "darkslategray",
                           color: "white",
                         }}
-                        onClick={handleGraduationOpen}
+                        onClick={() => handleGraduationOpen(item)}
                       >
                         Graduate
                       </Button>
@@ -476,7 +476,7 @@ const TableTemplate = ({ headers, data, title, actions }) => {
                             <DialogTitle>Set Certificate</DialogTitle>
                             <DialogContent>
                               <TextField
-                                defaultValue={item.id}
+                                value={studentID}
                                 name="studentId"
                                 label="Student ID"
                                 fullWidth
@@ -511,7 +511,7 @@ const TableTemplate = ({ headers, data, title, actions }) => {
                             <DialogTitle>Graduate Student</DialogTitle>
                             <DialogContent>
                               <TextField
-                                defaultValue={item.id}
+                                value={studentID}
                                 name="studentId"
                                 label="Student ID"
                                 fullWidth
@@ -552,64 +552,14 @@ const TableTemplate = ({ headers, data, title, actions }) => {
                     </StyledTableCell>
                   )}
                   {/* buttons for update and delete */}
-                  {(actions.includes("update") ||
-                    actions.includes("delete")) && (
+                  {actions.includes("delete") && (
                     <StyledTableCell align="center" width="10%">
-                      {actions.includes("update") && (
-                        <IconButton
-                          aria-label="update"
-                          onClick={handleUpdateOpen}
-                        >
-                          <EditIcon />
-                        </IconButton>
-                      )}
-                      {actions.includes("delete") && (
                         <IconButton
                           aria-label="delete"
                           onClick={handleDeleteOpen}
                         >
                           <DeleteIcon />
                         </IconButton>
-                      )}
-                      {/* update dialog */}
-                      <Dialog
-                        open={updateOpen}
-                        onClose={handleUpdateClose}
-                        componentsProps={{
-                          backdrop: {
-                            style: {
-                              backgroundColor: "rgba(0, 0, 0, 0.2)",
-                            },
-                          },
-                        }}
-                        PaperProps={{
-                          component: "form",
-                          onSubmit: (event) => {
-                            event.preventDefault();
-                            handleUpdateItem(event);
-                          },
-                        }}
-                      >
-                        <DialogTitle>Update Item</DialogTitle>
-                        <DialogContent>
-                          {Object.entries(item).map(([key, value]) => (
-                            <TextField
-                              key={key}
-                              id={key}
-                              defaultValue={value}
-                              name={key}
-                              label={key.toUpperCase()}
-                              fullWidth
-                              margin="normal"
-                              color="primary"
-                            />
-                          ))}
-                        </DialogContent>
-                        <DialogActions>
-                          <Button onClick={handleUpdateClose}>Cancel</Button>
-                          <Button type="submit">Update</Button>
-                        </DialogActions>
-                      </Dialog>
                       {/* delete dialog */}
                       <Dialog
                         open={deleteOpen}

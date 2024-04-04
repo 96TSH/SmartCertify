@@ -1,11 +1,8 @@
-import Profile from "../../components/Profile";
+import Register from "../../components/Register";
 
 const PerCollectCertificate = () => {
-
   return (
-    <>
-      <Profile fields="register" title="Collect New Certificate" action="create" />
-    </>
+    <Register title="Collect New Certificate" action="collect"/>
   );
 };
 

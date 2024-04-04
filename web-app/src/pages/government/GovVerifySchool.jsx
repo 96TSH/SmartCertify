@@ -1,10 +1,10 @@
-import Profile from "../../components/Profile";
+import Verify from "../../components/Verify";
 
 const GovVerifySchool = () => {
 
   return (
     <>
-      <Profile fields="verify" title="Verify School" action="verify" />
+      <Verify title="Verify School" action="verify" />
     </>
   );
 };

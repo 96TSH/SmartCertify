@@ -11,10 +11,10 @@ const PerViewCertificates = () => {
 
   const fetchData = async () => {
     try {
-      // const accounts = await window.ethereum.request({
-      //   method: "eth_requestAccounts",
-      // });
-      // console.log(accounts);
+      const accounts = await window.ethereum.request({
+        method: "eth_requestAccounts",
+      });
+      console.log(accounts);
       const data = await Person.methods.getAllCertificates().call({
         from: personAddress,
         gas: 100000,

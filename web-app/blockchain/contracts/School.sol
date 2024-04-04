@@ -10,7 +10,9 @@ import "./openzeppelin/token/ERC20/IERC20.sol";
 contract School is ISchool
 {
     event hasCertificateResult(uint256);
-    event graduationResult(bool);
+    event graduationResult(bool, string);
+    event studentIdEvent(uint256);
+    event perstudentIdEvent(uint256, string);
     using CertificateHashLib for * ;
 
     struct StudIdNamePair
@@ -73,6 +75,7 @@ contract School is ISchool
     function studentAdmission(Student_Info memory _stdInfo, ECertificateCategory _category, string memory _major) public onlyAdmin()
     {
         uint256 studentId = _stdInfo.id; //school must create a unqiure id for student first;
+        emit studentIdEvent(studentId);
         Certificate_Info memory cert;
         cert.schoolInfo = schoolInfo;
         cert.honor = EHonor.None;
@@ -114,13 +117,16 @@ contract School is ISchool
     //para 3: certifcate address, should deployed by website or manually deployed
     function studentGradutaion(uint256 _studId, address _stud, address newStudentContract) public onlyAdmin() returns (bool)
     {
+        emit studentIdEvent(_studId);
         for(uint i = 0; i < studentArray.length; i++)
         {
-            if (studentArray[i].id == _studId) //must current student
+            emit perstudentIdEvent(studentArray[i].id, studentArray[i].name);
+            //FXXX: no reason why have to divide by 10, remix no need but ganache need.
+            if ((studentArray[i].id/10) == _studId) //must current student
             {
                 if (studsCerts[_studId].status == EStudyStatus.InProgress) //must graduate
                 {
-                    emit graduationResult(false);
+                    emit graduationResult(false, "not in progress student");
                     return false;
                 }
                 //get hash
@@ -131,7 +137,7 @@ contract School is ISchool
                 studContract.setCertificate(msg.sender, studsCerts[_studId]);
                 if (!studContract.setStudentAddress(msg.sender, _stud))
                 {
-                    emit graduationResult(false);
+                    emit graduationResult(false, "set Student Address fail");
                     return false;
                 }
                     
@@ -140,11 +146,11 @@ contract School is ISchool
                 //remove in current student list;
                 studentArray[i] = studentArray[studentArray.length - 1];
                 studentArray.pop();
-                emit graduationResult(true);
+                emit graduationResult(true, "every thing success");
                 return true;
             }
         }
-        emit graduationResult(false);
+        emit graduationResult(false, "not in list");
         return false;
     }
 
