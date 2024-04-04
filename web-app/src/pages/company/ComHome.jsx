@@ -1,12 +1,12 @@
 import { Button } from "@mui/material";
 import MainMenu from "../../components/sidebar/MainMenu";
 import { Outlet, useLocation } from "react-router-dom";
-import Profile from "../../components/Profile";
+import Login from "../../components/Login";
 import { useState } from "react";
 
 export default function ComHome() {
   const location = useLocation();
-  const [register, setRegister] = useState(false);
+  // const [register, setRegister] = useState(false);
   const [login, setLogin] = useState(false);
 
   return (
@@ -15,7 +15,7 @@ export default function ComHome() {
       <Outlet />
       {location.pathname === "/Company" && (
         <>
-          <Button
+          {/* <Button
             variant="outlined"
             sx={{
               backgroundColor: "darkslategray",
@@ -28,7 +28,7 @@ export default function ComHome() {
             }}
           >
             Register
-          </Button>
+          </Button> */}
           <Button
             variant="outlined"
             sx={{
@@ -37,26 +37,19 @@ export default function ComHome() {
             }}
             onClick={() => {
               setLogin(true);
-              setRegister(false);
+              // setRegister(false);
             }}
           >
             Login
           </Button>
-          {register && (
+          {/* {register && (
             <Profile
               fields="company"
               title="Register Company"
               action="create"
             />
-          )}
-          {login && (
-            <Profile
-              type="company"
-              fields="verify"
-              title="Login"
-              action="login"
-            />
-          )}
+          )} */}
+          {login && <Login type="company" />}
         </>
       )}
     </MainMenu>

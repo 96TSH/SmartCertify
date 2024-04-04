@@ -173,17 +173,6 @@ function Profile({ type, fields, title, action }) {
     setModalOpen(false);
   };
 
-  const handleLogin = (e) => {
-    if (type === "company") {
-      setCompanyAddress(formData["Address"].value);
-    } else if (type === "school") {
-      setSchoolAddress(formData["Address"].value);
-      console.log(schoolAddress);
-    } else if (type === "person") {
-      setPersonAddress(formData["Address"].value);
-    }
-  };
-
   const handleRegister = async(e) => {
 
     try{
@@ -389,31 +378,6 @@ function Profile({ type, fields, title, action }) {
             ))}
             <Button onClick={handleDelete} variant="contained" color="primary">
               Remove
-            </Button>
-          </Box>
-        </form>
-      )}
-      {action === "login" && (
-        <form onSubmit={handleLogin}>
-          <Box display="flex" flexDirection="column" gap={4}>
-          {Object.entries(formData).map(([key]) => (
-              <TextField
-                key={key}
-                label={key}
-                // variant="filled"
-                variant={isEditable ? "outlined" : "filled"}
-                name={key}
-                // disabled={!isEditable}
-                value={formData[key]}
-                onChange={handleChange}
-                // error={!formData[key].isValid}
-                // helperText={formData[key].errorMessage}
-                // error={!formData[key].isValid}
-                // helperText={formData[key].errorMessage}
-              />
-            ))}
-            <Button onClick={handleLogin} variant="contained" color="primary">
-              Login
             </Button>
           </Box>
         </form>

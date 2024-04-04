@@ -1,12 +1,12 @@
 import MainMenu from "../../components/sidebar/MainMenu";
 import { Outlet, useLocation } from "react-router-dom";
-import Profile from "../../components/Profile";
+import Login from "../../components/Login";
 import { useState } from "react";
 import { Button } from "@mui/material";
 
 export default function SchHome() {
   const location = useLocation();
-  const [register, setRegister] = useState(false);
+  // const [register, setRegister] = useState(false);
   const [login, setLogin] = useState(false);
 
   return (
@@ -15,7 +15,7 @@ export default function SchHome() {
       <Outlet />
       {location.pathname === "/School" && (
         <>
-          <Button
+          {/* <Button
             variant="outlined"
             sx={{
               backgroundColor: "darkslategray",
@@ -28,7 +28,7 @@ export default function SchHome() {
             }}
           >
             Register
-          </Button>
+          </Button> */}
           <Button
             variant="outlined"
             sx={{
@@ -37,22 +37,15 @@ export default function SchHome() {
             }}
             onClick={() => {
               setLogin(true);
-              setRegister(false);
+              // setRegister(false);
             }}
           >
             Login
           </Button>
-          {register && (
+          {/* {register && (
             <Profile fields="school" title="Register School" action="create" />
-          )}
-          {login && (
-            <Profile
-              type="school"
-              fields="verify"
-              title="Login"
-              action="login"
-            />
-          )}
+          )} */}
+          {login && <Login type="school" />}
         </>
       )}
     </MainMenu>
