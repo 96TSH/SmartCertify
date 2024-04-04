@@ -11,7 +11,9 @@ export default function GovHome() {
 
   return (
     <MainMenu Entity={"Government"}>
-      <h2>Smart Certify x Government </h2>
+      <div style={{ display: 'flex', justifyContent: 'center', alignItems: 'center' }}>
+      <img src="Government.png" alt="Smart Certify x Organisation" style={{ width: '500px', height: '120px', objectFit: 'cover' } } />
+    </div>
       <Outlet />
       {location.pathname === "/Government" && (
         <>

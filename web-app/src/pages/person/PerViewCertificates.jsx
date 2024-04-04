@@ -7,7 +7,7 @@ const PerViewCertificates = () => {
   const [certificates, setCertificates] = useState([]);
 
   const title = "Certificates";
-  const headers = ["No.", "ID", "Cert. Type", "School", "Honours", "Major"];
+  const headers = ["No.", "School", "Cert. Type", "Honours", "Major"];
 
   const fetchData = async () => {
     try {
@@ -15,13 +15,25 @@ const PerViewCertificates = () => {
         method: "eth_requestAccounts",
       });
       console.log(accounts);
-      const data = await Person.methods.getAllCertificates().call({
-        from: personAddress,
+      let data = await Person.methods.getAllCertificates().call({
+        from: accounts[0],
         gas: 100000,
         gasPrice: web3.utils.toWei("50", "gwei"),
       });
       console.log(data);
       if (data && data.length > 0) {
+        data = data.map(item => {
+          const keys = Object.keys(item);
+          const lastTwoKeys = keys.slice(-4);
+          const newItem = {};
+          if (item.id) {
+            newItem.id = item.id;
+          }
+          lastTwoKeys.forEach(key => {
+            newItem[key] = item[key];
+          });
+          return newItem;
+        });
         setCertificates(data);
       }
     } catch (error) {

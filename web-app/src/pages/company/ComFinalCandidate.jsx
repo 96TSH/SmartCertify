@@ -12,7 +12,7 @@ const ComFinalCandidate = () => {
   ]);
 
   const title = "Final Candidate";
-  const headers = ["No.", "Name", "ID", "Status"];
+  const headers = ["No.", "ID", "Nationality", "NRIC", "Passport", "Name", "Address", "Status"];
 
   const fetchData = async () => {
     try {
@@ -20,13 +20,25 @@ const ComFinalCandidate = () => {
         method: "eth_requestAccounts",
       });
       console.log(accounts);
-      const data = await Company.methods.getAllCandicators().call({
+      let data = await Company.methods.getAllCandidates().call({
         from: companyAddress,
         gas: 100000,
         gasPrice: web3.utils.toWei("50", "gwei"),
       });
       console.log(data);
       if (data && data.length > 0) {
+        data = data.map(item => {
+          const keys = Object.keys(item);
+          const lastTwoKeys = keys.slice(-6);
+          const newItem = {};
+          if (item.id) {
+            newItem.id = item.id;
+          }
+          lastTwoKeys.forEach(key => {
+            newItem[key] = item[key];
+          });
+          return newItem;
+        });
         setCandidates(data);
       }
     } catch (error) {

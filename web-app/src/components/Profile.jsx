@@ -42,15 +42,26 @@ function Profile({ type, fields, title, action }) {
 
 
   const getProfileValue = async () => {
+    const accounts = await window.ethereum.request({
+      method: "eth_requestAccounts",
+    });
     if (fields == "company") {
-      const response = await Company.methods.getCompanyInfo().call();
+      const response = await Company.methods.getCompanyInfo().call({
+        from: accounts[0],
+        gas: 100000,
+        gasPrice: web3.utils.toWei("50", "gwei"),
+      });
       setFormData(response);
       // Object.keys(formData).forEach(key => {
       //   formData[key] = response[key];
       // });
       console.log("the updated formData is " + formData)
     } else if (fields == "school") {
-      const response = await School.methods.getSchoolInfo().call();
+      const response = await School.methods.getSchoolInfo().call({
+        from: accounts[0],
+        gas: 100000,
+        gasPrice: web3.utils.toWei("50", "gwei"),
+      });
       setFormData(response);
       // Object.keys(formData).forEach(key => {
       //   formData[key] = response[key];
@@ -58,7 +69,11 @@ function Profile({ type, fields, title, action }) {
       console.log(response)
       console.log("the updated formData is " + formData)
     } else if (fields == "person") {
-      const response = await Person.methods.getPersonalInfo().call();
+      const response = await Person.methods.getPersonalInfo().call({
+        from: accounts[0],
+        gas: 100000,
+        gasPrice: web3.utils.toWei("50", "gwei"),
+      });
       setFormData(response);
       // Object.keys(formData).forEach(key => {
       //   formData[key] = response[key];
@@ -209,44 +224,6 @@ function Profile({ type, fields, title, action }) {
     }
   };
 
-  const handleVerify = async (e) => {
-    try {
-      if (title === "Verify Company") {
-        console.log(formData["Address"].value);
-        const accounts = await window.ethereum.enable();
-        console.log("Accounts:", accounts);
-        console.log("Register:", formData["Address"].value);
-        // await Government.methods.isRegisterCompany(formData["Address"].value).send({from: accounts[0]});
-        console.log("deployed address =>", governmentAddress);
-        const isRegistered = await Government.methods
-          .isRegisterCompany(formData["Address"].value)
-          .call({ from: accounts[0] });
-        console.log("Is registered:", isRegistered);
-      } else if (title === "Verify School") {
-        console.log(formData["Address"].value);
-        const accounts = await window.ethereum.enable();
-        console.log("Accounts:", accounts);
-        console.log("Register:", formData["Address"].value);
-        // await Government.methods.isRegisterCompany(formData["Address"].value).send({from: accounts[0]});
-        console.log("deployed address =>", governmentAddress);
-        const isRegistered = await Government.methods
-          .isRegisterSchool(formData["Address"].value)
-          .call({ from: accounts[0] });
-        console.log("Is registered:", isRegistered);
-      } else if (title === "Verify School") {
-        console.log(formData["Address"].value);
-        const accounts = await window.ethereum.enable();
-        console.log("Accounts:", accounts);
-        console.log("Register:", formData["Address"].value);
-        // await Government.methods.isRegisterCompany(formData["Address"].value).send({from: accounts[0]});
-        console.log("deployed address =>", governmentAddress);
-        const isRegistered = await Government.methods.isRegisterSchool(formData["Address"].value).call({from: accounts[0]});
-        console.log("Is registered:", isRegistered);
-      }
-      setModalOpen(true);
-    } catch (error) {}
-  };
-
   const handleDelete = async (e) => {
     try {
       const accounts = await window.ethereum.request({
@@ -323,31 +300,6 @@ function Profile({ type, fields, title, action }) {
               color="primary"
             >
               Register
-            </Button>
-          </Box>
-        </form>
-      )}
-      {action === "verify" && (
-        <form onSubmit={handleVerify}>
-          <Box display="flex" flexDirection="column" gap={4}>
-          {Object.entries(formData).map(([key]) => (
-              <TextField
-                key={key}
-                label={key}
-                // variant="filled"
-                variant={isEditable ? "outlined" : "filled"}
-                name={key}
-                // disabled={!isEditable}
-                value={formData[key]}
-                onChange={handleChange}
-                // error={!formData[key].isValid}
-                // helperText={formData[key].errorMessage}
-                // error={!formData[key].isValid}
-                // helperText={formData[key].errorMessage}
-              />
-            ))}
-            <Button onClick={handleVerify} variant="contained" color="primary">
-              Verify
             </Button>
           </Box>
         </form>

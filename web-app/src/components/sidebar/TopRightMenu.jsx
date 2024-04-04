@@ -28,7 +28,10 @@ export default function TopRightMenu({ menuItems }) {
             style={{ width: "120px", height: "40px" }}
             {...bindTrigger(popupState)}
           >
-            {selectedButton}
+            {selectedButton === 'Person' ? 'Individual' :
+           selectedButton === 'School' ? 'Institution' :
+           selectedButton === 'Government' ? 'Government' :
+           selectedButton === 'Company' ? 'Organisation' : 'Select'}
           </Button>
           <Menu {...bindMenu(popupState)}>
             {menuItems.map((item, index) => (
@@ -36,7 +39,10 @@ export default function TopRightMenu({ menuItems }) {
                 key={index}
                 onClick={() => (popupState.close(), handleMenuItemClick(item))}
               >
-                {item}
+                {item === 'Person' ? 'Individual' :
+               item === 'School' ? 'Institution' :
+               item === 'Government' ? 'Government' :
+               item === 'Company' ? 'Organisation' : 'Select'}
               </MenuItem>
             ))}
           </Menu>

@@ -31,7 +31,7 @@ const SchStudents = () => {
           const lastTwoKeys = keys.slice(-1);
           const newItem = {};
           if (item.id) {
-            newItem.id = item.id.toString().slice(0, -1);
+            newItem.id = item.id;
           }
           lastTwoKeys.forEach(key => {
             newItem[key] = item[key];

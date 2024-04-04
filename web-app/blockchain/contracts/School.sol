@@ -11,13 +11,17 @@ contract School is ISchool
 {
     event hasCertificateResult(uint256);
     event graduationResult(bool, string);
-    event studentIdEvent(uint256);
-    event perstudentIdEvent(uint256, string);
+    event studentIdEvent(string);
+    event perstudentIdEvent(string, string);
+    event saveCertificates(Certificate_Info);
+
+    event showSchoolInfo(School_Info);
+
     using CertificateHashLib for * ;
 
     struct StudIdNamePair
     {
-        uint256 id;
+        string id;
         string name;
     }
 
@@ -25,9 +29,9 @@ contract School is ISchool
     School_Info public schoolInfo;
     address owner;
     mapping(address => bool) private adminList;
-    mapping(uint256 => Certificate_Info) private studsCerts;
+    mapping(string => Certificate_Info) private studsCerts;
     StudIdNamePair[] studentArray;
-    mapping(uint256 => uint256) private certSignatures; //signature generate after graduate
+    mapping(string => uint256) private certSignatures; //signature generate after graduate
     IERC20 erc20;
     constructor(string memory _schoolId, string memory _name, string memory _phyAdd, string memory _email, address _erc20)
     {
@@ -72,33 +76,37 @@ contract School is ISchool
         schoolInfo = _schInfo;
     }
 
-    function studentAdmission(Student_Info memory _stdInfo, ECertificateCategory _category, string memory _major) public onlyAdmin()
+    function studentAdmission(Student_Info memory _stdInfo, string memory _category, string memory _major) 
+            public onlyAdmin() returns (Certificate_Info memory)
     {
-        uint256 studentId = _stdInfo.id; //school must create a unqiure id for student first;
+        string memory studentId = _stdInfo.id; //school must create a unqiure id for student first;
         emit studentIdEvent(studentId);
         Certificate_Info memory cert;
-        cert.schoolInfo = schoolInfo;
-        cert.honor = EHonor.None;
-        cert.status = EStudyStatus.InProgress;
-        cert.admissionTimestamp = block.timestamp;
-        cert.studentDetails = _stdInfo;
-        cert.certificateId = studentId;
-        cert.category = _category;
-        cert.major = _major;
         studsCerts[studentId] = cert;
+        studsCerts[studentId].schoolInfo = schoolInfo;
+        studsCerts[studentId].honor = "";
+        studsCerts[studentId].status = EStudyStatus.InProgress;
+        studsCerts[studentId].admissionTimestamp = block.timestamp;
+        studsCerts[studentId].studentDetails = _stdInfo;
+        studsCerts[studentId].certificateId = 0;
+        studsCerts[studentId].category = _category;
+        studsCerts[studentId].major = _major;
 
         StudIdNamePair memory pair;
         pair.id = studentId;
         pair.name = _stdInfo.name;
+
+        emit showSchoolInfo(schoolInfo);
         studentArray.push(pair);
+        return studsCerts[studentId];
     }
 
-    function getStudCert(uint256 _studId) public onlyAdmin() view returns (Certificate_Info memory)
+    function getStudCert(string memory _studId) public onlyAdmin() view returns (Certificate_Info memory)
     {
         return studsCerts[_studId];
     }
 
-    function setStudCert(uint256 _stuId, EHonor _honor, EStudyStatus _status,
+    function setStudCert(string memory _stuId, string memory _honor, EStudyStatus _status,
                         string memory _decription) public onlyAdmin()
     {
         studsCerts[_stuId].honor = _honor;
@@ -115,16 +123,10 @@ contract School is ISchool
     //para 1: student id (create by school)
     //para 2: student account
     //para 3: certifcate address, should deployed by website or manually deployed
-    function studentGradutaion(uint256 _studId, address _stud, address newStudentContract) public onlyAdmin() returns (bool)
+    function studentGradutaion(string memory _studId, address _stud, address newStudentContract, uint index) public onlyAdmin() returns (bool)
     {
         emit studentIdEvent(_studId);
-        for(uint i = 0; i < studentArray.length; i++)
-        {
-            emit perstudentIdEvent(studentArray[i].id, studentArray[i].name);
-            //FXXX: no reason why have to divide by 10, remix no need but ganache need.
-            if ((studentArray[i].id/10) == _studId) //must current student
-            {
-                if (studsCerts[_studId].status == EStudyStatus.InProgress) //must graduate
+        if (studsCerts[_studId].status == EStudyStatus.InProgress) //must graduate
                 {
                     emit graduationResult(false, "not in progress student");
                     return false;
@@ -142,15 +144,28 @@ contract School is ISchool
                 }
                     
                 certSignatures[_studId] = studsCerts[_studId].signature;
-
-                //remove in current student list;
-                studentArray[i] = studentArray[studentArray.length - 1];
+                emit saveCertificates(studsCerts[_studId]);
+                studentArray[index] = studentArray[studentArray.length - 1];
                 studentArray.pop();
-                emit graduationResult(true, "every thing success");
                 return true;
-            }
-        }
-        emit graduationResult(false, "not in list");
+
+
+        // for(uint i = 0; i < studentArray.length; i++)
+        // {
+        //     emit perstudentIdEvent(studentArray[i].id, studentArray[i].name);
+        //     uint256 id0 = uint256(keccak256(abi.encode(studentArray[i].id)));
+        //     uint256 id1 = uint256(keccak256(abi.encode(_studId)));
+        //     if (id0 == id1) //must current student
+        //     {
+   
+        //         //remove in current student list;
+        //         studentArray[i] = studentArray[studentArray.length - 1];
+        //         studentArray.pop();
+        //         emit graduationResult(true, "every thing success");
+        //         return true;
+        //     }
+        // }
+        // emit graduationResult(false, "not in list");
         return false;
     }
 
@@ -163,7 +178,7 @@ contract School is ISchool
 
     // need support ERC20 here, this is better, no need check event
     // company must pay to school owner, not admin
-    function directVerifyGraduatedStudentCertificate(address companyWallet, uint256 _studId, uint256 _signature) external view override returns (bool)
+    function directVerifyGraduatedStudentCertificate(address companyWallet, string memory _studId, uint256 _signature) external view override returns (bool)
     {
         require(erc20.allowance(companyWallet, owner) > 1000, "not enought");
         return certSignatures[_studId] == _signature;

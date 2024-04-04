@@ -5,6 +5,7 @@ import GovernmentArtifact from "../../blockchain/build/contracts/Government.json
 import CompanyArtifact from "../../blockchain/build/contracts/Company.json";
 import PersonArtifact from "../../blockchain/build/contracts/Person.json";
 import SchoolArtifact from "../../blockchain/build/contracts/School.json";
+import CertificateArtifact from "../../blockchain/build/contracts/Certificate.json";
 
 const AuthContext = createContext({});
 
@@ -31,9 +32,11 @@ export const AuthContextProvider = ({ children }) => {
 
   // const personAddress = PersonArtifact.networks[1688].address;
   const personAbi = PersonArtifact.abi;
-  console.log(personAddress);
-  console.log(personAbi);
   const Person = new web3.eth.Contract(personAbi, personAddress);
+
+  const certificateAddress = CertificateArtifact.networks[1688].address;
+  const certificateAbi = CertificateArtifact.abi;
+  const Certificate = new web3.eth.Contract(certificateAbi, certificateAddress);
 
   const context = {
     selectedButton,
@@ -50,6 +53,7 @@ export const AuthContextProvider = ({ children }) => {
     Person,
     personAddress,
     setPersonAddress,
+    Certificate,
   };
 
   return (

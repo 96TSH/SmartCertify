@@ -65,7 +65,7 @@ const TableTemplate = ({ headers, data, title, actions }) => {
     },
   };
 
-  const { Company, web3, companyAddress, School, schoolAddress } =
+  const { Company, web3, companyAddress, School, schoolAddress, Person } =
     useContext(AuthContext);
 
   const [deleteOpen, setDeleteOpen] = useState(false);
@@ -78,14 +78,14 @@ const TableTemplate = ({ headers, data, title, actions }) => {
   const [verifiedStatus, setVerifiedStatus] = useState(false);
   const [studentID, setStudentID] = useState(0);
 
-  const deleteItem = async (id) => {
+  const deleteItem = async (id, index) => {
     try {
       const accounts = await window.ethereum.request({
         method: "eth_requestAccounts",
       });
       console.log(accounts);
       if (title === "Final Candidate") {
-        await Company.methods.removeCandicator(id).send({
+        await Company.methods.removeCandicator(id, index).send({
           from: accounts[0],
           gas: 100000,
           gasPrice: web3.utils.toWei("50", "gwei"),
@@ -103,18 +103,20 @@ const TableTemplate = ({ headers, data, title, actions }) => {
       });
       console.log(accounts);
       console.log(item);
+      console.log(candidateContract, category, major);
       if (title === "Final Candidate") {
-        await Company.methods.addCandicator(item, candidateContract).send({
+        await Company.methods.addCandicator(candidateContract).send({
           from: accounts[0],
           gas: 1000000,
           gasPrice: web3.utils.toWei("50", "gwei"),
         });
       } else if (title === "Admission") {
-        await School.methods.studentAdmission(item, category, major).send({
+        const response = await School.methods.studentAdmission(item, category, major).send({
           from: accounts[0],
           gas: 1000000,
           gasPrice: web3.utils.toWei("50", "gwei"),
         });
+        console.log(response);
       }
     } catch (error) {
       console.log(error);
@@ -127,12 +129,14 @@ const TableTemplate = ({ headers, data, title, actions }) => {
         method: "eth_requestAccounts",
       });
       console.log(accounts);
+      console.log("id: ", id)
+      console.log("index: ", index)
       const response1 = await Company.methods.fetchCertificate(id, index).send({
         from: accounts[0],
         gas: 100000,
         gasPrice: web3.utils.toWei("50", "gwei"),
       });
-
+      console.log("response1: ", response1);
       if (response1) {
         const response2 = await Company.methods
           .verifyCertificateIssuedSchool()
@@ -141,7 +145,7 @@ const TableTemplate = ({ headers, data, title, actions }) => {
             gas: 100000,
             gasPrice: web3.utils.toWei("50", "gwei"),
           });
-
+        console.log("response2: ", response2);
         if (response2) {
           const response3 = await Company.methods
             .verifyStaffCertificate()
@@ -150,7 +154,7 @@ const TableTemplate = ({ headers, data, title, actions }) => {
               gas: 100000,
               gasPrice: web3.utils.toWei("50", "gwei"),
             });
-
+          console.log("response3: ", response3);
           if (response3) {
             setVerifiedStatus(true);
           } else {
@@ -163,15 +167,16 @@ const TableTemplate = ({ headers, data, title, actions }) => {
     }
   };
 
-  const graduateItem = async (id, studAdd, certAdd) => {
+  const graduateItem = async (id, studAdd, certAdd, index) => {
     try {
       console.log(id, studAdd, certAdd)
       const accounts = await window.ethereum.request({
         method: "eth_requestAccounts",
       });
       console.log(accounts);
+      console.log("index; ", index)
       const response = await School.methods
-        .studentGradutaion(id, studAdd, certAdd)
+        .studentGradutaion(id, studAdd, certAdd, index)
         .send({
           from: accounts[0],
           gas: 1000000,
@@ -213,12 +218,12 @@ const TableTemplate = ({ headers, data, title, actions }) => {
   const handleCreateItem = (event) => {
     event.preventDefault();
     const item = {
-      name: event.target.elements.name.value,
-      id: Math.floor(Math.random() * 90000000) + 10000000,
-      nationality: event.target.elements.nationality.value,
-      nric: event.target.elements.nric.value,
-      add: event.target.elements.add.value,
-      passport: event.target.elements.passport.value,
+      name: event.target.elements.name?.value,
+      id: (Math.floor(Math.random() * 90000000) + 10000000).toString(),
+      nationality: event.target.elements.nationality?.value,
+      nric: event.target.elements.nric?.value,
+      add: event.target.elements.add?.value,
+      passport: event.target.elements.passport?.value,
     };
     createItem(
       item,
@@ -253,8 +258,8 @@ const TableTemplate = ({ headers, data, title, actions }) => {
     setDeleteOpen(false);
   };
 
-  const handleDeleteItem = (item) => {
-    deleteItem(item.id)
+  const handleDeleteItem = (item, index) => {
+    deleteItem(item.id, index)
       // .then(() => fetchItem())
       .then(() => setDeleteOpen(false));
   };
@@ -295,12 +300,13 @@ const TableTemplate = ({ headers, data, title, actions }) => {
     setAdmissionOpen(false);
   };
 
-  const handleGraduationItem = (event) => {
+  const handleGraduationItem = (event, index) => {
     event.preventDefault();
     graduateItem(
       event.target.elements.studentId.value,
       event.target.elements.studentWallet.value,
-      event.target.elements.certificateContract.value
+      event.target.elements.certificateContract.value,
+      index
     )
       // .then(() => fetchItem())
       .then(() => setAdmissionOpen(false));
@@ -314,6 +320,29 @@ const TableTemplate = ({ headers, data, title, actions }) => {
       event.target.elements.status.value,
       event.target.elements.description.value
     );
+  };
+
+  const handleFetchData = () => {
+    fetchData();
+  }
+
+  const fetchData = async () => {
+    try {
+      const accounts = await window.ethereum.request({
+        method: "eth_requestAccounts",
+      });
+      console.log(accounts);
+      const response = await Person.methods
+        .isPubliced()
+        .call({
+          from: accounts[0],
+          gas: 100000,
+          gasPrice: web3.utils.toWei("50", "gwei"),
+        });
+      console.log(response);
+    } catch (error) {
+      console.log(error);
+    }
   };
 
   return (
@@ -341,9 +370,10 @@ const TableTemplate = ({ headers, data, title, actions }) => {
                       <b>{header}</b>
                     </StyledTableCell>
                   ))}
-                <StyledTableCell sx={{ textAlign: "center" }}>
-                  <b>Actions</b>
-                </StyledTableCell>
+                  {title != "Certificates" && (                
+                  <StyledTableCell sx={{ textAlign: "center" }}>
+                    <b>Actions</b>
+                  </StyledTableCell>)}     
               </TableRow>
             </TableHead>
             <TableBody>
@@ -358,6 +388,14 @@ const TableTemplate = ({ headers, data, title, actions }) => {
                       {value}
                     </StyledTableCell>
                   ))}
+                  {/* testing button */}
+                  {/* <Button
+                    variant="outlined"
+                    sx={{ backgroundColor: "darkslategray", color: "white" }}
+                    onClick={() => handleFetchData()}
+                  >
+                    Test
+                  </Button> */}
                   {/* button for verification */}
                   {actions.includes("verify") && (
                     <StyledTableCell align="center" width="20%">
@@ -466,7 +504,7 @@ const TableTemplate = ({ headers, data, title, actions }) => {
                               setStep(1); // Move to next step
                             } else if (step === 1) {
                               // Handle graduation
-                              handleGraduationItem(event);
+                              handleGraduationItem(event, index);
                             }
                           },
                         }}
@@ -577,7 +615,7 @@ const TableTemplate = ({ headers, data, title, actions }) => {
                         </DialogTitle>
                         <DialogActions>
                           <Button onClick={handleDeleteClose}>No</Button>
-                          <Button onClick={() => handleDeleteItem(item)}>
+                          <Button onClick={() => handleDeleteItem(item, index)}>
                             Yes
                           </Button>
                         </DialogActions>
@@ -621,41 +659,6 @@ const TableTemplate = ({ headers, data, title, actions }) => {
           >
             <DialogTitle>Create Item</DialogTitle>
             <DialogContent>
-              <TextField
-                name="name"
-                label="NAME"
-                fullWidth
-                margin="normal"
-                color="primary"
-              />
-              <TextField
-                name="nationality"
-                label="NATIONALITY"
-                fullWidth
-                margin="normal"
-                color="primary"
-              />
-              <TextField
-                name="nric"
-                label="NRIC"
-                fullWidth
-                margin="normal"
-                color="primary"
-              />
-              <TextField
-                name="passport"
-                label="PASSPORT"
-                fullWidth
-                margin="normal"
-                color="primary"
-              />
-              <TextField
-                name="add"
-                label="ADDRESS"
-                fullWidth
-                margin="normal"
-                color="primary"
-              />
               {title === "Final Candidate" && (
                 <TextField
                   name="candidateContract"
@@ -667,6 +670,41 @@ const TableTemplate = ({ headers, data, title, actions }) => {
               )}
               {title === "Admission" && (
                 <>
+                  <TextField
+                    name="name"
+                    label="NAME"
+                    fullWidth
+                    margin="normal"
+                    color="primary"
+                  />
+                  <TextField
+                    name="nationality"
+                    label="NATIONALITY"
+                    fullWidth
+                    margin="normal"
+                    color="primary"
+                  />
+                  <TextField
+                    name="nric"
+                    label="NRIC"
+                    fullWidth
+                    margin="normal"
+                    color="primary"
+                  />
+                  <TextField
+                    name="passport"
+                    label="PASSPORT"
+                    fullWidth
+                    margin="normal"
+                    color="primary"
+                  />
+                  <TextField
+                    name="add"
+                    label="ADDRESS"
+                    fullWidth
+                    margin="normal"
+                    color="primary"
+                  />
                   <TextField
                     name="category"
                     label="CATEGORY"
