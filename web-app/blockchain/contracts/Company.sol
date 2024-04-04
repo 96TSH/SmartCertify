@@ -97,7 +97,8 @@ contract Company
     function getCandidateCertifcates(string memory _id) public view returns (Simplifed_Cert[] memory)
     {
         IPerson per = IPerson(candidateAddresses[_id]);
-        return per.getAllCertificates();
+        Simplifed_Cert[] memory certs = per.getAllCertificates();
+        return certs;
     }
 
  //step 1

@@ -1,10 +1,10 @@
-import Profile from "../../components/Profile";
+import ProfilePerson from "../../components/ProfilePerson";
 
 const PerProfile = () => {
 
   return (
     <>
-      <Profile fields="person" title="Profile" action="update" />
+      <ProfilePerson fields="person" title="Profile" action="update" />
     </>
   );
 };

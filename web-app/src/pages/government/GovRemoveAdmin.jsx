@@ -1,7 +1,7 @@
-import Profile from "../../components/Profile";
+import ProfileCompany from "../../components/ProfileCompany";
 
 const GovRemoveAdmin = () => {
-  return <Profile fields="admin" title="Remove Admin" action="delete" />;
+  return <ProfileCompany fields="admin" title="Remove Admin" action="delete" />;
 };
 
 export default GovRemoveAdmin;

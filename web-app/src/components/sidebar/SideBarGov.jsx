@@ -12,6 +12,7 @@ import SupervisorAccountIcon from "@mui/icons-material/SupervisorAccount"; //adm
 import AppRegistrationIcon from "@mui/icons-material/AppRegistration"; //registration icon
 import VerifiedUserIcon from "@mui/icons-material/VerifiedUser"; //verify icon
 import HomeIcon from "@mui/icons-material/Home"; //home icon
+import CurrencyBitcoinIcon from '@mui/icons-material/CurrencyBitcoin'; //Balance icon
 import LooksOneOutlinedIcon from "@mui/icons-material/LooksOneOutlined"; //1
 import LooksTwoOutlinedIcon from "@mui/icons-material/LooksTwoOutlined"; //2
 
@@ -141,6 +142,13 @@ export default function SideBarGov() {
           </ListItemButton>
         </List>
       </Collapse>
+
+      <ListItemButton component={Link} to="/Government/Balance">
+        <ListItemIcon>
+          <CurrencyBitcoinIcon />
+        </ListItemIcon>
+        <ListItemText primary="Balance" />
+      </ListItemButton>
     </List>
   );
 }

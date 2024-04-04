@@ -32,7 +32,7 @@ contract School is ISchool
     mapping(string => Certificate_Info) private studsCerts;
     StudIdNamePair[] studentArray;
     mapping(string => uint256) private certSignatures; //signature generate after graduate
-    IERC20 erc20;
+    address erc20;
     constructor(string memory _schoolId, string memory _name, string memory _phyAdd, string memory _email, address _erc20)
     {
         owner = msg.sender;
@@ -41,7 +41,7 @@ contract School is ISchool
         schoolInfo.name = _name;
         schoolInfo.add = _phyAdd;
         schoolInfo.email = _email;
-        erc20 = IERC20(_erc20);
+        erc20 = _erc20;
     }
 
     modifier onlyOwner()
@@ -179,13 +179,14 @@ contract School is ISchool
     // company must pay to school owner, not admin
     function directVerifyGraduatedStudentCertificate(address companyWallet, string memory _studId, uint256 _signature) external view override returns (bool)
     {
-        // require(erc20.allowance(companyWallet, owner) > 1000, "not enought");
+        //require(erc20.allowance(companyWallet, owner) > 1000, "not enought");
         return certSignatures[_studId] == _signature;
     }
 
      // only get the school owner's balance.
     function getBanlance() public view returns (uint256)
     {
-        return erc20.balanceOf(owner);
+        IERC20 _erc20 = IERC20(erc20);
+        return _erc20.balanceOf(owner);
     }
 }

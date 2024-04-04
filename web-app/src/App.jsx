@@ -10,6 +10,7 @@ import GovRegisterSchool from "./pages/government/GovRegisterSchool";
 import GovRegisterCompany from "./pages/government/GovRegisterCompany";
 import GovVerifyCompany from "./pages/government/GovVerifyCompany";
 import GovVerifySchool from "./pages/government/GovVerifySchool";
+import GovBalance from "./pages/government/GovBalance"; 
 import ComHome from "./pages/company/ComHome"; //  company home page
 import ComProfile from "./pages/company/ComProfile"; //company profile page
 import ComFinalCandidate from "./pages/company/ComFinalCandidate"; //company final candidate page
@@ -45,6 +46,7 @@ function App() {
             <Route path="RegisterCompany" element={<GovRegisterCompany />} />
             <Route path="VerifyCompany" element={<GovVerifyCompany />} />
             <Route path="VerifySchool" element={<GovVerifySchool />} />
+            <Route path="Balance" element={<GovBalance />} />
           </Route>
           <Route path="School" element={<SchHome />}>
             <Route path="Profile" element={<SchProfile />} />

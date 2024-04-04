@@ -1,7 +1,7 @@
-import Profile from "../../components/Profile";
+import ProfileSchool from "../../components/ProfileSchool";
 
 const SchAddAdmin = () => {
-  return <Profile fields="admin" title="Add Admin" action="register" />;
+  return <ProfileSchool fields="admin" title="Add Admin" action="register" />;
 };
 
 export default SchAddAdmin;

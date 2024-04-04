@@ -4,14 +4,29 @@ import FormGroup from '@mui/material/FormGroup';
 import FormControlLabel from '@mui/material/FormControlLabel';
 import Switch from '@mui/material/Switch';
 import AuthContext from "../../stores/authContext";
-import { useContext } from 'react';
+import { useContext, useEffect } from 'react';
 
 
 export default function PerViewers() {
   const { Person, personAddress, web3 } = useContext(AuthContext);
-  const [publicView, setPublicView] = React.useState(false); // State to manage the state
+  const [publicView, setPublicView] = React.useState(null);
   
-  
+  useEffect(() => {
+    const fetchData = async () => {
+      try {
+        // Fetch the current status from the smart contract
+        const isPublic = await Person.methods.isPubliced().call();
+        setPublicView(isPublic);
+        console.log("is public view enabled?:", isPublic)
+      } catch (error) {
+        console.error('Error fetching public status:', error);
+      }
+    };
+
+    if (Person && personAddress && web3) {
+      fetchData();
+    }
+  }, [Person, personAddress, web3]);
 
   const handlePublic = async (event) => {
     const isChecked = event.target.checked;

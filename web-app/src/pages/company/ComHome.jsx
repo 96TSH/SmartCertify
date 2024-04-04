@@ -12,7 +12,7 @@ export default function ComHome() {
   return (
     <MainMenu Entity={"Company"}>
       <div style={{ display: 'flex', justifyContent: 'center', alignItems: 'center' }}>
-      <img src="Organisation4.png" alt="Smart Certify x Organisation" style={{ width: '500px', height: '110px', objectFit: 'cover' } } />
+      <img src="/Organisation4.png" alt="Smart Certify x Organisation" style={{ width: '500px', height: '110px', objectFit: 'cover' } } />
     </div>
       <Outlet />
       {location.pathname === "/Company" && (
@@ -31,7 +31,7 @@ export default function ComHome() {
           >
             Register
           </Button> */}
-          <Button
+          {/* <Button
             variant="outlined"
             sx={{
               backgroundColor: "darkslategray",
@@ -43,7 +43,7 @@ export default function ComHome() {
             }}
           >
             Login
-          </Button>
+          </Button> */}
           {/* {register && (
             <Profile
               fields="company"
@@ -51,7 +51,7 @@ export default function ComHome() {
               action="create"
             />
           )} */}
-          {login && <Login type="company" />}
+          <Login type="company" />
           </div>
       )}
     </MainMenu>

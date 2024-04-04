@@ -19,12 +19,15 @@ import {
   DialogContent,
   TextField,
   Alert,
+  Select,
+  MenuItem
 } from "@mui/material";
 import EditIcon from "@mui/icons-material/Edit";
 import DeleteIcon from "@mui/icons-material/Delete";
 import { styled } from "@mui/material/styles";
 import PropTypes from "prop-types";
 import AuthContext from "../stores/authContext";
+import FetchContext from "../stores/fetchContext";
 
 const TableTemplate = ({ headers, data, title, actions }) => {
   const StyledTableCell = styled(TableCell)(({ theme }) => ({
@@ -68,8 +71,9 @@ const TableTemplate = ({ headers, data, title, actions }) => {
   const { Company, web3, companyAddress, School, schoolAddress, Person } =
     useContext(AuthContext);
 
+  const { fetchCandidates, fetchStudents, fetchCertificates, fetchCertificatesCompany, certificates } = useContext(FetchContext);
+
   const [deleteOpen, setDeleteOpen] = useState(false);
-  const [updateOpen, setUpdateOpen] = useState(false);
   const [createOpen, setCreateOpen] = useState(false);
   const [verifyOpen, setVerifyOpen] = useState(false);
   const [verifyResult, setVerifyResult] = useState(false);
@@ -77,6 +81,7 @@ const TableTemplate = ({ headers, data, title, actions }) => {
   const [step, setStep] = useState(0);
   const [verifiedStatus, setVerifiedStatus] = useState(false);
   const [studentID, setStudentID] = useState(0);
+  const [selectedCertificate, setSelectedCertificate] = useState('');
 
   const deleteItem = async (id, index) => {
     try {
@@ -110,7 +115,7 @@ const TableTemplate = ({ headers, data, title, actions }) => {
           gas: 1000000,
           gasPrice: web3.utils.toWei("50", "gwei"),
         });
-      } else if (title === "Admission") {
+      } else if (title === "Matriculated Students") {
         const response = await School.methods.studentAdmission(item, category, major).send({
           from: accounts[0],
           gas: 1000000,
@@ -235,21 +240,6 @@ const TableTemplate = ({ headers, data, title, actions }) => {
       .then(() => setCreateOpen(false));
   };
 
-  const handleUpdateOpen = () => {
-    setUpdateOpen(true);
-  };
-
-  const handleUpdateClose = () => {
-    setUpdateOpen(false);
-  };
-
-  const handleUpdateItem = (event) => {
-    event.preventDefault();
-    updateItem()
-      // .then(() => fetchItem())
-      .then(() => setUpdateOpen(false));
-  };
-
   const handleDeleteOpen = () => {
     setDeleteOpen(true);
   };
@@ -264,7 +254,8 @@ const TableTemplate = ({ headers, data, title, actions }) => {
       .then(() => setDeleteOpen(false));
   };
 
-  const handleVerifyOpen = () => {
+  const handleVerifyOpen = (item) => {
+    fetchCertificatesCompany(item.id);
     setVerifyOpen(true);
   };
 
@@ -274,7 +265,7 @@ const TableTemplate = ({ headers, data, title, actions }) => {
 
   const handleVerification = (event) => {
     event.preventDefault();
-    setVerifiedStatus(false);
+    // setVerifiedStatus(false);
     verifyItem(
       event.target.candidateId.value,
       event.target.certificateIndex.value
@@ -320,29 +311,6 @@ const TableTemplate = ({ headers, data, title, actions }) => {
       event.target.elements.status.value,
       event.target.elements.description.value
     );
-  };
-
-  const handleFetchData = () => {
-    fetchData();
-  }
-
-  const fetchData = async () => {
-    try {
-      const accounts = await window.ethereum.request({
-        method: "eth_requestAccounts",
-      });
-      console.log(accounts);
-      const response = await Person.methods
-        .isPubliced()
-        .call({
-          from: accounts[0],
-          gas: 100000,
-          gasPrice: web3.utils.toWei("50", "gwei"),
-        });
-      console.log(response);
-    } catch (error) {
-      console.log(error);
-    }
   };
 
   return (
@@ -405,7 +373,7 @@ const TableTemplate = ({ headers, data, title, actions }) => {
                           backgroundColor: "darkslategray",
                           color: "white",
                         }}
-                        onClick={handleVerifyOpen}
+                        onClick={() => handleVerifyOpen(item)}
                       >
                         Verify
                       </Button>
@@ -438,13 +406,26 @@ const TableTemplate = ({ headers, data, title, actions }) => {
                             margin="normal"
                             color="primary"
                           />
-                          <TextField
+                          {/* <TextField
                             name="certificateIndex"
                             label="Certificate Index"
                             fullWidth
                             margin="normal"
                             color="primary"
-                          />
+                          /> */}
+                          <Select
+                            fullWidth
+                            name="certificateIndex"
+                            value={selectedCertificate}
+                            onChange={(event) => setSelectedCertificate(parseInt(event.target.value, 10))}
+                            color="primary"
+                          >
+                            {certificates.map((certificate, index) => (
+                              <MenuItem key={index} value={index}>
+                                {certificate.schoolName}, {certificate.cate}, {certificate.major}
+                              </MenuItem>
+                            ))}
+                          </Select>
                         </DialogContent>
                         <DialogActions>
                           <Button onClick={handleVerifyClose}>Cancel</Button>
@@ -660,15 +641,17 @@ const TableTemplate = ({ headers, data, title, actions }) => {
             <DialogTitle>Create Item</DialogTitle>
             <DialogContent>
               {title === "Final Candidate" && (
-                <TextField
-                  name="candidateContract"
-                  label="CANDIDATE CONTRACT"
-                  fullWidth
-                  margin="normal"
-                  color="primary"
-                />
+                <>
+                  <TextField
+                    name="candidateContract"
+                    label="CANDIDATE CONTRACT"
+                    fullWidth
+                    margin="normal"
+                    color="primary"
+                  />
+                </>
               )}
-              {title === "Admission" && (
+              {title === "Matriculated Students" && (
                 <>
                   <TextField
                     name="name"

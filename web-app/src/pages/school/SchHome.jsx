@@ -12,7 +12,7 @@ export default function SchHome() {
   return (
     <MainMenu Entity={"School"}>
       <div style={{ display: 'flex', justifyContent: 'center', alignItems: 'center' }}>
-      <img src="Institution4.png" alt="Smart Certify x Institution" style={{ width: '500px', height: '110px', objectFit: 'cover' } } />
+      <img src="/Institution4.png" alt="Smart Certify x Institution" style={{ width: '500px', height: '110px', objectFit: 'cover' } } />
     </div>
       <Outlet />
       {location.pathname === "/School" && (
@@ -31,7 +31,7 @@ export default function SchHome() {
           >
             Register
           </Button> */}
-          <Button
+          {/* <Button
             variant="outlined"
             sx={{
               backgroundColor: "darkslategray",
@@ -43,11 +43,11 @@ export default function SchHome() {
             }}
           >
             Login
-          </Button>
+          </Button> */}
           {/* {register && (
             <Profile fields="school" title="Register School" action="create" />
           )} */}
-          {login && <Login type="school" />}
+          <Login type="school" />
         </>
       )}
     </MainMenu>

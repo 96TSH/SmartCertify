@@ -1,7 +1,7 @@
-import Profile from "../../components/Profile";
+import ProfileSchool from "../../components/ProfileSchool";
 
 const SchRemoveAdmin = () => {
-  return <Profile fields="admin" title="Remove Admin" action="delete" />;
+  return <ProfileSchool fields="admin" title="Remove Admin" action="delete" />;
 };
 
 export default SchRemoveAdmin;

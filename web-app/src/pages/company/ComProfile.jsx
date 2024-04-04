@@ -1,10 +1,10 @@
-import Profile from "../../components/Profile";
+import ProfileCompany from "../../components/ProfileCompany";
 
 const ComProfile = () => {
 
   return (
     <>
-      <Profile fields="company" title="Profile" action="update" />
+      <ProfileCompany fields="company" title="Profile" action="update" />
     </>
   );
 };

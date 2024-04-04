@@ -2,7 +2,7 @@ import { useState, useEffect, useContext } from "react";
 import { TextField, Button, Container, Box, Typography, Dialog, DialogActions, DialogContent, DialogContentText, DialogTitle } from "@mui/material";
 import AuthContext from "../stores/authContext";
 
-function Profile({ type, fields, title, action }) {
+function ProfileSchool({ type, fields, title, action }) {
   const { Government, web3, governmentAddress, School, schoolAddress, setSchoolAddress, Company, companyAddress, setCompanyAddress, Person, personAddress, setPersonAddress} = useContext(AuthContext);
 
   const styles = {
@@ -55,7 +55,9 @@ function Profile({ type, fields, title, action }) {
       // Object.keys(formData).forEach(key => {
       //   formData[key] = response[key];
       // });
-      console.log("the updated formData is " + formData)
+      console.log("the updated formData is " + formData);
+
+
     } else if (fields == "school") {
       const response = await School.methods.getSchoolInfo().call({
         from: accounts[0],
@@ -63,11 +65,13 @@ function Profile({ type, fields, title, action }) {
         gasPrice: web3.utils.toWei("50", "gwei"),
       });
       setFormData(response);
+
       // Object.keys(formData).forEach(key => {
       //   formData[key] = response[key];
       // });
       console.log(response)
       console.log("the updated formData is " + formData)
+
     } else if (fields == "person") {
       const response = await Person.methods.getPersonalInfo().call({
         from: accounts[0],
@@ -75,6 +79,7 @@ function Profile({ type, fields, title, action }) {
         gasPrice: web3.utils.toWei("50", "gwei"),
       });
       setFormData(response);
+
       // Object.keys(formData).forEach(key => {
       //   formData[key] = response[key];
       // });
@@ -120,12 +125,10 @@ function Profile({ type, fields, title, action }) {
 
     setFormData((prevFormData) => ({
       ...prevFormData,
-      [name]: {
-        ...prevFormData[name],
-        value: value,
+      [name]:value,
         // isValid: isValid,
         // errorMessage: errorMessage,
-      },
+      
     }));
   };
 
@@ -147,7 +150,9 @@ function Profile({ type, fields, title, action }) {
     // }, {});
 
     // setFormData(updatedFormData);
-
+      const accounts = await window.ethereum.request({
+        method: "eth_requestAccounts",
+      });
 
     // if (isFormValid) {
       console.log("Form data:", formData);
@@ -344,4 +349,4 @@ function Profile({ type, fields, title, action }) {
   );
 }
 
-export default Profile;
+export default ProfileSchool;

@@ -12,7 +12,7 @@ export default function PerHome() {
   return (
     <MainMenu Entity={"Person"}>
       <div style={{ display: 'flex', justifyContent: 'center', alignItems: 'center' }}>
-      <img src="Individual4.png" alt="Smart Certify x Individual" style={{ width: '500px', height: '110px', objectFit: 'cover' } } />
+      <img src="/Individual4.png" alt="Smart Certify x Individual" style={{ width: '500px', height: '110px', objectFit: 'cover' } } />
     </div>
       <Outlet />
       {location.pathname === "/Person" && (
@@ -32,7 +32,7 @@ export default function PerHome() {
           >
             Register
           </Button> */}
-          <Button
+          {/* <Button
             variant="outlined"
             sx={{
               backgroundColor: "darkslategray",
@@ -44,11 +44,11 @@ export default function PerHome() {
             }}
           >
             Login
-          </Button>
+          </Button> */}
           {/* {register && (
             <Profile fields="person" title="Register Person" action="create" />
           )} */}
-          {login && <Login type="person" />}
+          <Login type="person" />
         </>
       )}
     </MainMenu>

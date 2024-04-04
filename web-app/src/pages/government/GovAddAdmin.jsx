@@ -1,7 +1,7 @@
-import Profile from "../../components/Profile";
+import ProfileCompany from "../../components/ProfileCompany";
 
 const GovAddAdmin = () => {
-  return <Profile fields="admin" title="Add Admin" action="register" />;
+  return <ProfileCompany fields="admin" title="Add Admin" action="register" />;
 };
 
 export default GovAddAdmin;

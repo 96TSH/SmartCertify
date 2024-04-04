@@ -11,13 +11,13 @@ contract Government is IGovernment
     mapping(address => bool) private registeredPersons;
     mapping(address => bool) private registeredCompanies;
     mapping(address => bool) private registeredSchools;
-    IERC20 erc20;
+    address erc20;
 
     constructor(address _eth)
     {
         owner = msg.sender;
         adminList[msg.sender] = true;
-        erc20 = IERC20(_eth);
+        erc20 = _eth;
     }
 
     modifier onlyOwner()
@@ -73,8 +73,9 @@ contract Government is IGovernment
         registeredPersons[_add] = true;
     }
 
-    function getBanlance() public view returns (uint256)
+    function getBalance() public view returns (uint256)
     {
-        return erc20.balanceOf(owner);
+        IERC20 _erc20 = IERC20(erc20);
+        return _erc20.balanceOf(owner);
     }
 }

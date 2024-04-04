@@ -11,6 +11,6 @@ contract CToken is ERC20 {
     constructor()
     ERC20("Certicate Token", "CTH")
     {
-        _mint(msg.sender, 100 * 10 ** 18);
+        _mint(msg.sender, 1000000 * 10**18);
     }
 }

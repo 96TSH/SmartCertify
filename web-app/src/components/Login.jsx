@@ -72,7 +72,7 @@ function Login({ type }) {
         <Box display="flex" flexDirection="column" gap={4}>
           <TextField
             label="Contract Address"
-            variant="filled"
+            variant="outlined"
             name="contractAddress"
             //   value={formData[key]}
             //   onChange={handleChange}

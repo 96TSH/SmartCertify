@@ -12,7 +12,7 @@ const Homepage = () => {
         <b>Welcome to Smart Certify</b>
       </h2> */}
      <div style={{ display: 'flex', justifyContent: 'center', alignItems: 'center' }}>
-      <img src="Home3.png" alt="Smart Certify x Individual" style={{ width: '900px', height: '550px', objectFit: 'cover' } } />
+      <img src="/Home3.png" alt="Smart Certify x Individual" style={{ width: '900px', height: '550px', objectFit: 'cover' } } />
     </div>
     </MainMenu>
   );
