@@ -49,7 +49,6 @@ contract Government is IGovernment
 
     function registerCompany(address _add) public onlyAdmin()
     {
-        // erc20.approve(_add, 1*10**18);
         registeredCompanies[_add] = true;
     }
 

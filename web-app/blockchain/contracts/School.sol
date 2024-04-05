@@ -149,24 +149,6 @@ contract School is ISchool
         studentArray[index] = studentArray[studentArray.length - 1];
         studentArray.pop();
         return true;
-
-
-        // for(uint i = 0; i < studentArray.length; i++)
-        // {
-        //     emit perstudentIdEvent(studentArray[i].id, studentArray[i].name);
-        //     uint256 id0 = uint256(keccak256(abi.encode(studentArray[i].id)));
-        //     uint256 id1 = uint256(keccak256(abi.encode(_studId)));
-        //     if (id0 == id1) //must current student
-        //     {
-   
-        //         //remove in current student list;
-        //         studentArray[i] = studentArray[studentArray.length - 1];
-        //         studentArray.pop();
-        //         emit graduationResult(true, "every thing success");
-        //         return true;
-        //     }
-        // }
-        // emit graduationResult(false, "not in list");ß
     }
 
     function verifyGraduatedStudentCertificate(Certificate_Info memory _cert) external override returns (bool)

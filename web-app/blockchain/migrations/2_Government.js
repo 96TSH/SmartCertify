@@ -16,6 +16,6 @@ module.exports = async function (deployer, network, accounts) {
   // const companySource = "0x6E90a0E04036499673Dd1a9D847C55E169046d68";
   // const schoolSource = "0x6E90a0E04036499673Dd1a9D847C55E169046d68";
   // const personSource = "0x6E90a0E04036499673Dd1a9D847C55E169046d68";
-  const eToken = "0x31FDDD79781F0D4462e41eAF2e5FA9aa78298060";
+  const eToken = "0x3bBC5292a218F2182CF80bc7Ff10f380F59eAD34";
   await deployer.deploy(contract,eToken, { from: deployingAccount });
 };

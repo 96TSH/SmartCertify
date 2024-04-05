@@ -17,7 +17,7 @@ module.exports = async function (deployer, network, accounts) {
   const nationality= "Singapore";
   const nric = "S9999999G";
   const passport = "K9999999G";
-  const name = "TT TTTT";
+  const name = "JASPER";
   const address = "555 Abc AVE, Singapore 555555";
   await deployer.deploy(contract, id, nationality, nric, passport, name, address, { from: deployingAccount });
 };

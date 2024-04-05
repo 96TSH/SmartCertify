@@ -125,16 +125,7 @@ contract Company
         // return true;
     }
 
-    // step 3 opt 1
-    // function verifyStaffCertificate() public returns (bool)
-    // {
-    //     ISchool schoolContract = ISchool(tmpCertifcate.schoolInfo.schoolContractAddress);
-    //     bool result = schoolContract.verifyGraduatedStudentCertificate(tmpCertifcate);
-    //     emit VerificationResult(result);
-    //     return result;
-    // }
-
-    //step 3 opt 2.  ///better, should use this
+    //step 3 ///better, should use this
     function verifyStaffCertificateSignature() public onlyAdmin() view returns (bool)
     {
         uint256 hc = CertificateHashLib.hashCertificate(tmpCertifcate);
