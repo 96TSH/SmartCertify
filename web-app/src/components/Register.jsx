@@ -21,7 +21,8 @@ function Register({ title, action }) {
     School,
     Company,
     Person,
-    Certificate
+    Certificate,
+    CToken
   } = useContext(AuthContext);
 
   const styles = {
@@ -33,6 +34,7 @@ function Register({ title, action }) {
   };
 
   const [modalOpen, setModalOpen] = useState(false);
+  const [transferStatus, setTransferStatus] = useState(false);
 
   const collectCertificate = async (address) => {
     try {
@@ -53,25 +55,34 @@ function Register({ title, action }) {
     }
   };
 
-  const registerItem = async (address) => {
+  const registerItem = async (contractAddress, walletAddress) => {
     try{
       const accounts = await window.ethereum.request({ method: 'eth_requestAccounts' });
       if (title === "Register Company"){
-        await Government.methods.registerCompany(address).send(
+        await Government.methods.registerCompany(contractAddress).send(
           {
             from: accounts[0],
             gas: 100000,
             gasPrice: web3.utils.toWei("50", "gwei"),
           });
+        await window.ethereum.enable();
+        const response = await CToken.methods.transfer(walletAddress, 100*10**18)
+          .send({
+            from: accounts[0],
+            gas: 100000,
+            gasPrice: web3.utils.toWei("50", "gwei"),
+          });          
+        console.log(response);
+        // setTransferStatus(response);
       } else if (title === "Register School") {
-        await Government.methods.registerSchool(address).send(
+        await Government.methods.registerSchool(contractAddress).send(
           {
             from: accounts[0],
             gas: 100000,
             gasPrice: web3.utils.toWei('50', 'gwei')
           });
       } else if (title === "Add Admin") {
-        await Government.methods.addAdmin(address).send({
+        await Government.methods.addAdmin(contractAddress).send({
           from: accounts[0],
           gas: 100000,
           gasPrice: web3.utils.toWei("50", "gwei"),
@@ -98,7 +109,7 @@ function Register({ title, action }) {
 
   const handleRegister = (e) => {
     e.preventDefault();
-    registerItem(e.target.elements.address.value);
+    registerItem(e.target.elements.contractAddress.value, e.target.elements.walletAddress?.value);
     handleOpen();
   }
 
@@ -148,10 +159,17 @@ function Register({ title, action }) {
         <form onSubmit={handleRegister}>
           <Box display="flex" flexDirection="column" gap={4}>
             <TextField
-              label="Address"
-              variant="filled"
-              name="address"
+              label="Contract Address"
+              variant="outlined"
+              name="contractAddress"
             />
+            {title === "Register Company" && (            
+            <TextField
+              label="Wallet Address"
+              variant="outlined"
+              name="walletAddress"
+            />
+          )}
             <Button type="submit" variant="contained" color="primary">
               Register
             </Button>

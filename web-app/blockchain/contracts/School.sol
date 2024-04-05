@@ -33,6 +33,7 @@ contract School is ISchool
     StudIdNamePair[] studentArray;
     mapping(string => uint256) private certSignatures; //signature generate after graduate
     address erc20;
+    address[] paymentList;
     constructor(string memory _schoolId, string memory _name, string memory _phyAdd, string memory _email, address _erc20)
     {
         owner = msg.sender;
@@ -175,11 +176,17 @@ contract School is ISchool
         return certSignatures[_cert.studentDetails.id] == sig;
     }
 
+    function addWallet(address _add) external override
+    {
+        paymentList.push(_add);
+    }
+
     // need support ERC20 here, this is better, no need check event
     // company must pay to school owner, not admin
     function directVerifyGraduatedStudentCertificate(address companyWallet, string memory _studId, uint256 _signature) external view override returns (bool)
     {
-        //require(erc20.allowance(companyWallet, owner) > 1000, "not enought");
+        IERC20 _erc20 = IERC20(erc20);
+        require(_erc20.allowance(companyWallet, owner) >= 1*10**18, "not enough etoken");
         return certSignatures[_studId] == _signature;
     }
 
@@ -188,5 +195,21 @@ contract School is ISchool
     {
         IERC20 _erc20 = IERC20(erc20);
         return _erc20.balanceOf(owner);
+    }
+
+    function getSchoolWalletAddress() external override view returns (address)
+    {
+        return owner;
+    }
+    
+    function getWallets() public onlyAdmin() view returns (address[] memory)
+    {
+        return paymentList;
+    }
+
+    function cleanWallets() public onlyAdmin()
+    {
+        address[] memory _paymentList;
+        paymentList = _paymentList;
     }
 }

@@ -14,6 +14,7 @@ import ContactPageIcon from '@mui/icons-material/ContactPage'; //profile icon
 import SchoolIcon from '@mui/icons-material/School'; //student icon
 import LooksOneOutlinedIcon from '@mui/icons-material/LooksOneOutlined'; //1
 import LooksTwoOutlinedIcon from '@mui/icons-material/LooksTwoOutlined';//2
+import CurrencyBitcoinIcon from '@mui/icons-material/CurrencyBitcoin'; //balance icon
 //import Looks3OutlinedIcon from '@mui/icons-material/Looks3Outlined'; //3
 
 export default function SideBarSch() {
@@ -78,6 +79,13 @@ export default function SideBarSch() {
           <SchoolIcon />
         </ListItemIcon>
         <ListItemText primary="Student" />
+      </ListItemButton>
+
+      <ListItemButton component={Link} to="/School/Balance">
+        <ListItemIcon>
+          <CurrencyBitcoinIcon />
+        </ListItemIcon>
+        <ListItemText primary="Balance" />
       </ListItemButton>
 
     </List>

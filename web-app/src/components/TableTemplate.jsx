@@ -69,7 +69,7 @@ const TableTemplate = ({ headers, data, title, actions }) => {
     },
   };
 
-  const { Company, web3, companyAddress, School, schoolAddress, Person } =
+  const { Company, web3, companyAddress, School, schoolAddress, Person, CToken } =
     useContext(AuthContext);
 
   const { fetchCandidates, fetchStudents, fetchCertificates, fetchCertificatesCompany, certificates } = useContext(FetchContext);
@@ -146,13 +146,26 @@ const TableTemplate = ({ headers, data, title, actions }) => {
       if (response1) {
         const response2 = await Company.methods
           .verifyCertificateIssuedSchool()
-          .send({
+          .call({
             from: accounts[0],
             gas: 1000000,
             gasPrice: web3.utils.toWei("50", "gwei"),
           });
         console.log("response2: ", response2);
-        if (response2) {
+        if (response2[0]) {
+          console.log("schoolWalletAddress: ", response2[1])
+          await CToken.methods.approve(response2[1], 1*10**18).send({
+            from: accounts[0],
+            gas: 1000000,
+            gasPrice: web3.utils.toWei("50", "gwei"),
+          });
+          const balance = await CToken.methods.allowance(accounts[0], response2[1]).call({
+            from: accounts[0],
+            gas: 1000000,
+            gasPrice: web3.utils.toWei("50", "gwei"),
+          });
+          console.log("transfer successs");
+          console.log(balance)
           const response3 = await Company.methods
             .verifyStaffCertificateSignature()
             .call({
@@ -237,7 +250,7 @@ const TableTemplate = ({ headers, data, title, actions }) => {
       event.target.elements.category?.value,
       event.target.elements.major?.value
     )
-      // .then(() => fetchItem())
+      .then(() => Promise.all([fetchCandidates(), fetchStudents()]))
       .then(() => setCreateOpen(false));
   };
 
@@ -251,7 +264,7 @@ const TableTemplate = ({ headers, data, title, actions }) => {
 
   const handleDeleteItem = (item, index) => {
     deleteItem(item.id, index)
-      // .then(() => fetchItem())
+      .then(() => fetchCandidates())
       .then(() => setDeleteOpen(false));
   };
 
@@ -268,11 +281,10 @@ const TableTemplate = ({ headers, data, title, actions }) => {
     event.preventDefault();
     // setVerifiedStatus(false);
     verifyItem(
-      event.target.candidateId.value,
-      event.target.certificateIndex.value
+      event.target.elements.candidateId.value,
+      event.target.elements.certificateIndex.value
     );
     handleVerifyResultOpen();
-    // .then(() => fetchItem())
   };
 
   const handleVerifyResultOpen = () => {
@@ -300,7 +312,7 @@ const TableTemplate = ({ headers, data, title, actions }) => {
       event.target.elements.certificateContract.value,
       index
     )
-      // .then(() => fetchItem())
+      .then(() => fetchStudents())
       .then(() => setAdmissionOpen(false));
   };
 
@@ -352,8 +364,8 @@ const TableTemplate = ({ headers, data, title, actions }) => {
                   <StyledTableCell component="th" scope="row" align="center">
                     {index + 1}
                   </StyledTableCell>
-                  {Object.values(item).map((value) => (
-                    <StyledTableCell align="center" key={value}>
+                  {Object.values(item).map((value, innerIndex) => (
+                    <StyledTableCell align="center" key={innerIndex}>
                       {value}
                     </StyledTableCell>
                   ))}
@@ -407,13 +419,6 @@ const TableTemplate = ({ headers, data, title, actions }) => {
                             margin="normal"
                             color="primary"
                           />
-                          {/* <TextField
-                            name="certificateIndex"
-                            label="Certificate Index"
-                            fullWidth
-                            margin="normal"
-                            color="primary"
-                          /> */}
                           <Select
                             fullWidth
                             name="certificateIndex"
@@ -571,7 +576,7 @@ const TableTemplate = ({ headers, data, title, actions }) => {
                       </Dialog>
                     </StyledTableCell>
                   )}
-                  {/* buttons for update and delete */}
+                  {/* buttons for delete */}
                   {actions.includes("delete") && (
                     <StyledTableCell align="center" width="10%">
                         <IconButton

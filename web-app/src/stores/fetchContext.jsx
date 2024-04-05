@@ -34,7 +34,7 @@ export const FetchContextProvider = ({ children }) => {
         gasPrice: web3.utils.toWei("50", "gwei"),
       });
       console.log(data);
-      if (data && data.length > 0) {
+      if (data) {
         data = data.map(item => {
           const keys = Object.keys(item);
           const lastTwoKeys = keys.slice(-1);
@@ -66,7 +66,7 @@ export const FetchContextProvider = ({ children }) => {
         gasPrice: web3.utils.toWei("50", "gwei"),
       });
       console.log(data);
-      if (data && data.length > 0) {
+      if (data) {
         data = data.map(item => {
           const keys = Object.keys(item);
           const lastTwoKeys = keys.slice(-6);
@@ -98,7 +98,7 @@ export const FetchContextProvider = ({ children }) => {
         gasPrice: web3.utils.toWei("50", "gwei"),
       });
       console.log(data);
-      if (data && data.length > 0) {
+      if (data) {
         data = data.map(item => {
           const keys = Object.keys(item);
           const lastTwoKeys = keys.slice(-4);

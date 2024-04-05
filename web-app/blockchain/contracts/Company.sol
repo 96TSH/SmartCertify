@@ -69,7 +69,7 @@ contract Company
         return companyInfo;
     }
 
-    function addCandicator(address _candicator) public
+    function addCandicator(address _candicator) onlyAdmin() public
     {
         IPerson per = IPerson(_candicator);
         candidateInfoList.push(per.getPersonalInfo());
@@ -102,41 +102,47 @@ contract Company
     }
 
  //step 1
-    function fetchCertificate(string memory _id, uint _index) public returns (bool)
+    function fetchCertificate(string memory _id, uint _index) public onlyAdmin() returns (bool)
     {
         IPerson per = IPerson(candidateAddresses[_id]);
         tmpCertifcate = per.getCertificateByIndex(_index);
+        ISchool schoolContract = ISchool(tmpCertifcate.schoolInfo.schoolContractAddress);
+        schoolContract.addWallet(msg.sender);
         return true;
     }
 
     //step 2
-    function verifyCertificateIssuedSchool() public returns (bool)
+    function verifyCertificateIssuedSchool() public onlyAdmin() view returns (bool, address)
     {
         address _add = tmpCertifcate.schoolInfo.schoolContractAddress;
-        emit saveEvent("verifyCertificateIssuedSchool", _add);
-        emit saveEvent("government address", address(governmentAddress));
+        // emit saveEvent("verifyCertificateIssuedSchool", _add);
+        // emit saveEvent("government address", address(governmentAddress));
         IGovernment govContract = IGovernment(governmentAddress);
-        return govContract.isRegisterSchool(_add);
+        bool rtn = govContract.isRegisterSchool(_add);
+        ISchool _sch = ISchool(_add);
+        address _wallet = _sch.getSchoolWalletAddress();
+        return (rtn, _wallet);
         // return true;
     }
 
     // step 3 opt 1
-    function verifyStaffCertificate() public returns (bool)
-    {
-        ISchool schoolContract = ISchool(tmpCertifcate.schoolInfo.schoolContractAddress);
-        bool result = schoolContract.verifyGraduatedStudentCertificate(tmpCertifcate);
-        emit VerificationResult(result);
-        return result;
-    }
+    // function verifyStaffCertificate() public returns (bool)
+    // {
+    //     ISchool schoolContract = ISchool(tmpCertifcate.schoolInfo.schoolContractAddress);
+    //     bool result = schoolContract.verifyGraduatedStudentCertificate(tmpCertifcate);
+    //     emit VerificationResult(result);
+    //     return result;
+    // }
 
     //step 3 opt 2.  ///better, should use this
-    function verifyStaffCertificateSignature() public view returns (bool)
+    function verifyStaffCertificateSignature() public onlyAdmin() view returns (bool)
     {
         uint256 hc = CertificateHashLib.hashCertificate(tmpCertifcate);
         ISchool schoolContract = ISchool(tmpCertifcate.schoolInfo.schoolContractAddress);
         bool result = schoolContract.directVerifyGraduatedStudentCertificate(msg.sender, tmpCertifcate.studentDetails.id, hc);
         return result;
     }
+
 
     //any admin or owner can check balance, however, only the owner can receive register company rewards.
     function getBanlance() public view returns (uint256)

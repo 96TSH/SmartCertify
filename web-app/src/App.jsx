@@ -16,11 +16,13 @@ import ComProfile from "./pages/company/ComProfile"; //company profile page
 import ComFinalCandidate from "./pages/company/ComFinalCandidate"; //company final candidate page
 import ComAddAdmin from "./pages/company/ComAddAdmin";
 import ComRemoveAdmin from "./pages/company/ComRemoveAdmin";
+import ComBalance from "./pages/company/ComBalance";
 import SchHome from "./pages/school/SchHome"; //school home page
 import SchProfile from "./pages/school/SchProfile";
 import SchStudents from "./pages/school/SchStudents";
 import SchAddAdmin from "./pages/school/SchAddAdmin";
 import SchRemoveAdmin from "./pages/school/SchRemoveAdmin";
+import SchBalance from "./pages/school/SchBalance";
 import PerHome from "./pages/person/PerHome"; // person home page\
 import PerProfile from "./pages/person/PerProfile"; // person profile page
 import PerViewCertificates from "./pages/person/PerViewCertificates"; // person view certificates page
@@ -38,6 +40,7 @@ function App() {
             <Route path="AddAdmin" element={<ComAddAdmin />} />
             <Route path="RemoveAdmin" element={<ComRemoveAdmin />} />
             <Route path="Finalcandidate" element={<ComFinalCandidate />} />
+            <Route path="Balance" element={<ComBalance />} />
           </Route>
           <Route path="Government" element={<GovHome />}>
             <Route path="AddAdmin" element={<GovAddAdmin />} />
@@ -53,6 +56,7 @@ function App() {
             <Route path="AddAdmin" element={<SchAddAdmin />} />
             <Route path="RemoveAdmin" element={<SchRemoveAdmin />} />
             <Route path="Students" element={<SchStudents />} />
+            <Route path="Balance" element={<SchBalance />} />
           </Route>
           <Route path="Person" element={<PerHome />}>
             <Route path="Profile" element={<PerProfile />} />

@@ -14,6 +14,7 @@ import ThumbUpAltIcon from '@mui/icons-material/ThumbUpAlt'; //final candidate i
 import HomeIcon from '@mui/icons-material/Home'; //home icon
 import LooksOneOutlinedIcon from '@mui/icons-material/LooksOneOutlined'; //1
 import LooksTwoOutlinedIcon from '@mui/icons-material/LooksTwoOutlined'; //2
+import CurrencyBitcoinIcon from '@mui/icons-material/CurrencyBitcoin'; //balance icon
 //import { NavLink } from "react-router-dom";
 
 export default function SideBarCom() {
@@ -78,6 +79,13 @@ export default function SideBarCom() {
           <ThumbUpAltIcon />
         </ListItemIcon>
         <ListItemText primary="Final Candidate" />
+      </ListItemButton>
+
+      <ListItemButton component={Link} to="/Company/Balance">
+        <ListItemIcon>
+          <CurrencyBitcoinIcon />
+        </ListItemIcon>
+        <ListItemText primary="Balance" />
       </ListItemButton>
     </List>
   );

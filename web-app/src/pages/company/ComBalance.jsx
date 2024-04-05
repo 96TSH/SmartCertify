@@ -15,7 +15,7 @@ import CurrencyBitcoinIcon from '@mui/icons-material/CurrencyBitcoin'; //Balance
 import AuthContext from "../../stores/authContext";
 
 const GovBalance = () => {
-  const { Government, web3 } = useContext(AuthContext);
+  const { Company, web3 } = useContext(AuthContext);
 
   const [modalOpen, setModalOpen] = useState(false);
   const [balance, setBalance] = useState(0);
@@ -39,8 +39,8 @@ const GovBalance = () => {
         method: "eth_requestAccounts",
       });
       console.log(accounts);
-      const data = await Government.methods
-        .getBalance()
+      const data = await Company.methods
+        .getBanlance()
         .call({
           from: accounts[0],
           gas: 1000000,
