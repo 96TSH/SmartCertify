@@ -299,8 +299,6 @@ function ProfileCompany({ type, fields, title, action }) {
                 label="ADDRESS"
                 variant="outlined"
                 name="address"
-                // value={formData[key]}
-                // onChange={handleChange}
               />
             <Button
               type="submit"

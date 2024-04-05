@@ -194,30 +194,19 @@ function ProfileSchool({ type, fields, title, action }) {
     setModalOpen(false);
   };
 
-  const handleRegister = async(e) => {
+  const addAdmin = async(address) => {
 
     try{
       const accounts = await window.ethereum.request({ method: 'eth_requestAccounts' });
 			console.log("Accounts:", accounts);
-      console.log("Register:", formData["Address"].value);
-      console.log("deployed address =>", governmentAddress);
-      if (title === "Register Company"){
-        await Government.methods.registerCompany(formData["Address"].value).send(
-          {
-            from: accounts[0],
-            gas: 100000,
-            gasPrice: web3.utils.toWei("50", "gwei"),
-          });
-      } else if (title === "Register School") {
-        await Government.methods.registerSchool(formData["Address"].value).send(
-          {
-            from: accounts[0],
-            gas: 100000,
-            gasPrice: web3.utils.toWei('50', 'gwei')
-          }
-          );
-      } else if (title === "Add Admin") {
-        await Government.methods.addAdmin(formData["Address"].value).send({
+      if (title === "Add Company Admin") {
+        await Company.methods.addAdmin(address).send({
+          from: accounts[0],
+          gas: 100000,
+          gasPrice: web3.utils.toWei("50", "gwei"),
+        });
+      } else if (title === "Add Government Admin") {
+        await Government.methods.addAdmin(address).send({
           from: accounts[0],
           gas: 100000,
           gasPrice: web3.utils.toWei("50", "gwei"),
@@ -229,19 +218,32 @@ function ProfileSchool({ type, fields, title, action }) {
     }
   };
 
-  const handleDelete = async (e) => {
+  const handleAddAdmin = (e) => {
+    e.preventDefault();
+    addAdmin(e.target.elements.address.value);
+  };
+
+  const removeAdmin = async (address) => {
     try {
       const accounts = await window.ethereum.request({
         method: "eth_requestAccounts",
       });
-      await Government.methods.removeAdmin(formData["Address"].value).send({
-        from: accounts[0],
-        gas: 100000,
-        gasPrice: web3.utils.toWei("50", "gwei"),
-      });
+      if (title === "Add School Admin") {
+        await Company.methods.removeAdmin(address).send({
+          from: accounts[0],
+          gas: 100000,
+          gasPrice: web3.utils.toWei("50", "gwei"),
+        });
+      }
+      setModalOpen(true);
     } catch (error) {
       console.log(error);
     }
+  }
+
+  const handleRemoveAdmin = (e) => {
+    e.preventDefault();
+    removeAdmin(e.target.elements.address.value);
   }
 
   return (
@@ -287,48 +289,32 @@ function ProfileSchool({ type, fields, title, action }) {
         </form>
       )}
       {action === "register" && (
-        <form onSubmit={handleRegister}>
+        <form onSubmit={handleAddAdmin}>
           <Box display="flex" flexDirection="column" gap={4}>
-          {Object.entries(formData).map(([key]) => (
               <TextField
-                key={key}
-                label={key}
+                label="ADDRESS"
                 variant="outlined"
-                name={key}
-                value={formData[key]}
-                onChange={handleChange}
+                name="address"
               />
-            ))}
             <Button
-              onClick={handleRegister}
+              type="submit"
               variant="contained"
               color="primary"
             >
-              Register
+              Add Admin
             </Button>
           </Box>
         </form>
       )}
       {action === "delete" && (
-        <form onSubmit={handleDelete}>
+        <form onSubmit={handleRemoveAdmin}>
           <Box display="flex" flexDirection="column" gap={4}>
-          {Object.entries(formData).map(([key]) => (
               <TextField
-                key={key}
-                label={key}
-                // variant="filled"
-                variant={isEditable ? "outlined" : "filled"}
-                name={key}
-                // disabled={!isEditable}
-                value={formData[key]}
-                onChange={handleChange}
-                // error={!formData[key].isValid}
-                // helperText={formData[key].errorMessage}
-                // error={!formData[key].isValid}
-                // helperText={formData[key].errorMessage}
+                label="ADDRESS"
+                variant="outlined"
+                name="address"
               />
-            ))}
-            <Button onClick={handleDelete} variant="contained" color="primary">
+            <Button type="submit" variant="contained" color="primary">
               Remove
             </Button>
           </Box>
